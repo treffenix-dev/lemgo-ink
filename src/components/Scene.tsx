@@ -3,7 +3,6 @@
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Environment } from "@react-three/drei";
-import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import * as THREE from "three";
 
 /* Shared chrome materials — created once, reused across all meshes */
@@ -32,11 +31,10 @@ function useChromeMaterials() {
     }),
     glow: new THREE.MeshPhysicalMaterial({
       color: new THREE.Color("#ffffff"),
-      metalness: 1.0,
+      metalness: 0.0,
       roughness: 0.0,
       emissive: new THREE.Color("#ffffff"),
-      emissiveIntensity: 1.5,
-      envMapIntensity: 1.0,
+      emissiveIntensity: 4.0,
     }),
   }), []);
 }
@@ -288,17 +286,6 @@ export default function Scene() {
       <InkDust />
       <CameraRig />
 
-      <EffectComposer>
-        {/* Cinematic bloom — highlights glow, needle tip blazes */}
-        <Bloom
-          luminanceThreshold={0.5}
-          luminanceSmoothing={0.9}
-          intensity={0.5}
-          mipmapBlur
-        />
-        {/* Dark vignette corners */}
-        <Vignette offset={0.3} darkness={0.7} />
-      </EffectComposer>
     </Canvas>
   );
 }
