@@ -33,7 +33,7 @@ export default function Contact() {
 
   return (
     <section id="kontakt" className="py-28 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(201,162,39,0.04)_0%,transparent_65%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(255,255,255,0.04)_0%,transparent_65%)] pointer-events-none" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-transparent to-gold/30" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-16">
@@ -257,7 +257,7 @@ export default function Contact() {
 
                 <button
                   type="submit"
-                  className="w-full py-4 bg-gold text-black font-sans font-bold text-xs tracking-[0.25em] uppercase hover:bg-gold/85 transition-all duration-300 hover:shadow-[0_0_30px_rgba(201,162,39,0.25)]"
+                  className="w-full py-4 bg-gold text-black font-sans font-bold text-xs tracking-[0.25em] uppercase hover:bg-gold/85 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.25)]"
                 >
                   Anfrage per WhatsApp senden →
                 </button>

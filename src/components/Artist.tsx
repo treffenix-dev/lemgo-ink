@@ -108,13 +108,13 @@ export default function Artist() {
               ))}
             </div>
 
-            <a
-              href="#kontakt"
+            <button
+              onClick={() => document.getElementById("kontakt")?.scrollIntoView({ behavior: "smooth" })}
               className="inline-flex items-center gap-3 font-sans text-[11px] tracking-[0.22em] uppercase text-gold border-b border-gold/40 pb-1 hover:border-gold transition-colors duration-300"
             >
               Jetzt Termin anfragen
               <span>→</span>
-            </a>
+            </button>
           </motion.div>
         </div>
       </div>

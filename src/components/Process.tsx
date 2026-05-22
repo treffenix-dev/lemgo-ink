@@ -44,7 +44,7 @@ export default function Process() {
 
   return (
     <section className="py-28 bg-[#060606] relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(201,162,39,0.04)_0%,transparent_60%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(255,255,255,0.02)_0%,transparent_60%)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-16">
         <div ref={ref} className="mb-16">

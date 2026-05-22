@@ -242,7 +242,7 @@ function GalleryCard({ work, index }: { work: typeof works[0]; index: number }) 
       <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-gold/0 group-hover:border-gold/50 transition-all duration-400" />
 
       {/* Subtle gold glow on hover */}
-      <div className={`absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(201,162,39,0.06)_0%,transparent_70%)] transition-opacity duration-500 ${hovered ? "opacity-100" : "opacity-0"}`} />
+      <div className={`absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(255,255,255,0.06)_0%,transparent_70%)] transition-opacity duration-500 ${hovered ? "opacity-100" : "opacity-0"}`} />
 
       {/* Tag */}
       <div className={`absolute top-3 right-3 px-2.5 py-1 bg-black/70 backdrop-blur-sm border border-gold/30 transition-all duration-300 ${hovered ? "opacity-100" : "opacity-0"}`}>

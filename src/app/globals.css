@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --gold: #c9a227;
-  --crimson: #8b0000;
+  --gold: #ffffff;
+  --crimson: #1c1c1c;
   --bg: #080808;
-  --cream: #f5f0e8;
+  --cream: #f0ece6;
 }
 
 * {
@@ -25,9 +25,9 @@ body {
   overflow-x: hidden;
 }
 
-/* Gold gradient text */
+/* White gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #c9a227 0%, #f5d56e 50%, #8a6d00 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #d0ccc8 50%, #909090 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -45,11 +45,11 @@ body::after {
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar { width: 2px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
 
-/* Gold divider line */
+/* Divider line */
 .gold-line {
   display: inline-flex;
   align-items: center;
@@ -60,7 +60,7 @@ body::after {
   display: inline-block;
   width: 32px;
   height: 1px;
-  background: var(--gold);
+  background: rgba(255,255,255,0.3);
 }
 
 /* Section label */
@@ -69,8 +69,7 @@ body::after {
   font-size: 10px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0.7;
+  color: rgba(240,236,230,0.45);
 }
 
 /* Reveal on scroll */

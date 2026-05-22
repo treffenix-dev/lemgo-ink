@@ -1,4 +1,6 @@
 import ScrollReset from "@/components/ScrollReset";
+import ScrollProgress from "@/components/ScrollProgress";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Artist from "@/components/Artist";
@@ -15,6 +17,8 @@ export default function Home() {
   return (
     <main className="relative">
       <ScrollReset />
+      <ScrollProgress />
+      <WhatsAppButton />
       <Navbar />
       <Hero />
       <Stats />
