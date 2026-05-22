@@ -2,116 +2,112 @@
 
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, MeshDistortMaterial } from "@react-three/drei";
+import { Float } from "@react-three/drei";
 import * as THREE from "three";
 
-/* Central ink blob — dark metallic morphing sphere */
-function InkBlob() {
-  const meshRef = useRef<THREE.Mesh>(null);
-  useFrame((state) => {
-    if (!meshRef.current) return;
-    meshRef.current.rotation.y = state.clock.elapsedTime * 0.08;
-    meshRef.current.rotation.z = state.clock.elapsedTime * 0.03;
-  });
+/* Tattoo machine grip — dark chrome cylinder with texture rings */
+function MachinGrip() {
   return (
-    <Float speed={0.7} floatIntensity={0.35} rotationIntensity={0.15}>
-      <mesh ref={meshRef} position={[0, 0, 0]}>
-        <sphereGeometry args={[1.9, 128, 128]} />
-        <MeshDistortMaterial
-          color="#121212"
-          emissive="#000000"
-          emissiveIntensity={0.05}
-          distort={0.75}
-          speed={1.8}
-          roughness={0.02}
-          metalness={0.99}
+    <group>
+      {/* Main grip body */}
+      <mesh>
+        <cylinderGeometry args={[0.21, 0.25, 2.6, 32]} />
+        <meshStandardMaterial
+          color="#0e0e0e"
+          metalness={0.98}
+          roughness={0.03}
+          emissive="#ffffff"
+          emissiveIntensity={0.008}
         />
       </mesh>
-    </Float>
+
+      {/* Knurling rings on grip */}
+      {[-0.85, -0.4, 0.05, 0.5].map((y, i) => (
+        <mesh key={i} position={[0, y, 0]}>
+          <torusGeometry args={[0.26, 0.02, 8, 32]} />
+          <meshStandardMaterial color="#1c1c1c" metalness={1} roughness={0.01} />
+        </mesh>
+      ))}
+
+      {/* Bottom cap */}
+      <mesh position={[0, -1.4, 0]}>
+        <cylinderGeometry args={[0.16, 0.21, 0.2, 16]} />
+        <meshStandardMaterial color="#0a0a0a" metalness={0.97} roughness={0.05} />
+      </mesh>
+
+      {/* Needle tube */}
+      <mesh position={[0, -2.05, 0]}>
+        <cylinderGeometry args={[0.048, 0.03, 1.5, 16]} />
+        <meshStandardMaterial color="#181818" metalness={0.99} roughness={0.01} />
+      </mesh>
+
+      {/* Motor housing */}
+      <mesh position={[0, 1.55, 0]}>
+        <cylinderGeometry args={[0.27, 0.21, 0.55, 32]} />
+        <meshStandardMaterial color="#0c0c0c" metalness={0.95} roughness={0.07} />
+      </mesh>
+
+      {/* Coil body */}
+      <mesh position={[0, 1.94, 0]}>
+        <cylinderGeometry args={[0.19, 0.19, 0.52, 20]} />
+        <meshStandardMaterial
+          color="#131313"
+          metalness={0.9}
+          roughness={0.15}
+          emissive="#ffffff"
+          emissiveIntensity={0.004}
+        />
+      </mesh>
+
+      {/* Top cap */}
+      <mesh position={[0, 2.22, 0]}>
+        <sphereGeometry args={[0.15, 16, 16]} />
+        <meshStandardMaterial color="#0a0a0a" metalness={0.95} roughness={0.08} />
+      </mesh>
+    </group>
   );
 }
 
-/* Inner glow sphere */
-function GlowCore() {
+/* Rapidly vibrating needle tip — mimics tattoo machine motion */
+function NeedleTip() {
   const ref = useRef<THREE.Mesh>(null);
-  useFrame((state) => {
-    if (!ref.current) return;
-    const s = 0.9 + Math.sin(state.clock.elapsedTime * 0.8) * 0.08;
-    ref.current.scale.setScalar(s);
-  });
-  return (
-    <mesh ref={ref} position={[0, 0, 0]}>
-      <sphereGeometry args={[1.2, 32, 32]} />
-      <meshBasicMaterial color="#ffffff" transparent opacity={0.02} />
-    </mesh>
-  );
-}
 
-/* Gold orbital ring 1 */
-function GoldRing1() {
-  const ref = useRef<THREE.Mesh>(null);
   useFrame((state) => {
     if (!ref.current) return;
-    ref.current.rotation.x = state.clock.elapsedTime * 0.25;
-    ref.current.rotation.y = state.clock.elapsedTime * 0.12;
+    // Rapid oscillation ~20 cycles/sec for visual clarity
+    const v = Math.abs(Math.sin(state.clock.elapsedTime * 20)) * 0.055;
+    ref.current.position.y = -2.88 + v;
   });
+
   return (
-    <mesh ref={ref}>
-      <torusGeometry args={[2.9, 0.018, 8, 200]} />
+    <mesh ref={ref} position={[0, -2.88, 0]}>
+      <coneGeometry args={[0.026, 0.44, 8]} />
       <meshStandardMaterial
-        color="#ffffff"
+        color="#282828"
+        metalness={1}
+        roughness={0}
         emissive="#ffffff"
-        emissiveIntensity={0.6}
-        metalness={1}
-        roughness={0}
+        emissiveIntensity={0.07}
       />
     </mesh>
   );
 }
 
-/* Crimson orbital ring 2 — blood red, slower */
-function GoldRing2() {
-  const ref = useRef<THREE.Mesh>(null);
-  useFrame((state) => {
-    if (!ref.current) return;
-    ref.current.rotation.x = Math.PI / 3 + state.clock.elapsedTime * 0.15;
-    ref.current.rotation.y = state.clock.elapsedTime * 0.2;
-    ref.current.rotation.z = state.clock.elapsedTime * 0.08;
-  });
-  return (
-    <mesh ref={ref}>
-      <torusGeometry args={[3.7, 0.012, 8, 200]} />
-      <meshStandardMaterial
-        color="#aaaaaa"
-        emissive="#aaaaaa"
-        emissiveIntensity={0.5}
-        metalness={1}
-        roughness={0}
-        transparent
-        opacity={0.4}
-      />
-    </mesh>
-  );
-}
+/* Ink droplets falling from needle — local space so they trail with tilt */
+function InkDrips() {
+  const count = 90;
 
-/* Ink drop particles — fall downward like dripping ink */
-function InkParticles() {
-  const count = 1800;
-  const { positions, speeds, offsets } = useMemo(() => {
+  const { positions, speeds } = useMemo(() => {
     const pos = new Float32Array(count * 3);
     const spd = new Float32Array(count);
-    const off = new Float32Array(count);
     for (let i = 0; i < count; i++) {
-      const r = 4 + Math.random() * 14;
-      const theta = Math.random() * Math.PI * 2;
-      pos[i * 3] = (Math.random() - 0.5) * 26;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 26;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 16;
-      spd[i] = 0.003 + Math.random() * 0.008;
-      off[i] = Math.random() * Math.PI * 2;
-      void r; void theta;
+      const spread = 0.09;
+      pos[i * 3] = (Math.random() - 0.5) * spread;
+      pos[i * 3 + 1] = -2.9 - Math.random() * 4.5;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * spread;
+      spd[i] = 0.009 + Math.random() * 0.018;
     }
-    return { positions: pos, speeds: spd, offsets: off };
+    return { positions: pos, speeds: spd };
   }, []);
 
   const ref = useRef<THREE.Points>(null);
@@ -122,10 +118,10 @@ function InkParticles() {
     const arr = posRef.current;
     for (let i = 0; i < count; i++) {
       arr[i * 3 + 1] -= speeds[i];
-      if (arr[i * 3 + 1] < -13) {
-        arr[i * 3 + 1] = 13;
-        arr[i * 3] = (Math.random() - 0.5) * 26;
-        arr[i * 3 + 2] = (Math.random() - 0.5) * 16;
+      if (arr[i * 3 + 1] < -7.5) {
+        arr[i * 3 + 1] = -2.9;
+        arr[i * 3] = (Math.random() - 0.5) * 0.09;
+        arr[i * 3 + 2] = (Math.random() - 0.5) * 0.09;
       }
     }
     (ref.current.geometry.attributes.position as THREE.BufferAttribute).array = arr;
@@ -142,24 +138,79 @@ function InkParticles() {
           itemSize={3}
         />
       </bufferGeometry>
-      <pointsMaterial
-        size={0.028}
-        color="#ffffff"
-        transparent
-        opacity={0.22}
-        sizeAttenuation
-      />
+      <pointsMaterial size={0.055} color="#ffffff" transparent opacity={0.75} sizeAttenuation />
     </points>
   );
 }
 
-/* Camera follows mouse subtly */
+/* Full tattoo machine — grip + needle + drips, tilted like an artist holds it */
+function TattooMachine() {
+  return (
+    <Float speed={0.45} floatIntensity={0.18} rotationIntensity={0.05}>
+      {/* Position right-center; tilt ~35° = -0.61 rad on Z */}
+      <group position={[2.4, 0.4, 0]} rotation={[0.08, 0.3, -0.61]}>
+        <MachinGrip />
+        <NeedleTip />
+        <InkDrips />
+      </group>
+    </Float>
+  );
+}
+
+/* Ambient ink mist — tiny particles drifting downward across full scene */
+function InkMist() {
+  const count = 700;
+
+  const { positions, speeds } = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    const spd = new Float32Array(count);
+    for (let i = 0; i < count; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * 24;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 22;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 14;
+      spd[i] = 0.002 + Math.random() * 0.005;
+    }
+    return { positions: pos, speeds: spd };
+  }, []);
+
+  const ref = useRef<THREE.Points>(null);
+  const posRef = useRef(positions.slice());
+
+  useFrame(() => {
+    if (!ref.current) return;
+    const arr = posRef.current;
+    for (let i = 0; i < count; i++) {
+      arr[i * 3 + 1] -= speeds[i];
+      if (arr[i * 3 + 1] < -11) {
+        arr[i * 3 + 1] = 11;
+        arr[i * 3] = (Math.random() - 0.5) * 24;
+        arr[i * 3 + 2] = (Math.random() - 0.5) * 14;
+      }
+    }
+    (ref.current.geometry.attributes.position as THREE.BufferAttribute).array = arr;
+    ref.current.geometry.attributes.position.needsUpdate = true;
+  });
+
+  return (
+    <points ref={ref}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={count}
+          array={positions}
+          itemSize={3}
+        />
+      </bufferGeometry>
+      <pointsMaterial size={0.022} color="#ffffff" transparent opacity={0.16} sizeAttenuation />
+    </points>
+  );
+}
+
+/* Camera subtly follows mouse */
 function CameraRig() {
   useFrame((state) => {
-    state.camera.position.x +=
-      (state.mouse.x * 0.6 - state.camera.position.x) * 0.025;
-    state.camera.position.y +=
-      (state.mouse.y * 0.4 - state.camera.position.y) * 0.025;
+    state.camera.position.x += (state.mouse.x * 0.5 - state.camera.position.x) * 0.022;
+    state.camera.position.y += (state.mouse.y * 0.35 - state.camera.position.y) * 0.022;
     state.camera.lookAt(0, 0, 0);
   });
   return null;
@@ -168,22 +219,28 @@ function CameraRig() {
 export default function Scene() {
   return (
     <Canvas
-      camera={{ position: [0, 0, 8], fov: 55 }}
+      camera={{ position: [0, 0, 9], fov: 55 }}
       style={{ background: "transparent" }}
       gl={{ antialias: true, alpha: true }}
     >
-      {/* Gothic tattoo-studio lighting */}
-      <ambientLight intensity={0.06} />
-      <pointLight position={[0, 10, 3]} intensity={4} color="#ffffff" />
-      <pointLight position={[0, -8, 2]} intensity={1.5} color="#666666" />
-      <pointLight position={[-5, 2, 5]} intensity={0.8} color="#ffffff" />
-      <fog attach="fog" args={["#030303", 12, 38]} />
+      <ambientLight intensity={0.05} />
+      {/* Key light from upper-right — reveals chrome surface */}
+      <pointLight position={[5, 7, 4]} intensity={6} color="#ffffff" />
+      {/* Fill light from left */}
+      <pointLight position={[-4, -3, 3]} intensity={2} color="#999999" />
+      {/* Rim light behind */}
+      <pointLight position={[0, 3, 7]} intensity={1.8} color="#ffffff" />
+      <spotLight
+        position={[6, 9, 4]}
+        intensity={10}
+        color="#ffffff"
+        angle={0.35}
+        penumbra={0.9}
+      />
+      <fog attach="fog" args={["#030303", 15, 42]} />
 
-      <InkBlob />
-      <GlowCore />
-      <GoldRing1 />
-      <GoldRing2 />
-      <InkParticles />
+      <TattooMachine />
+      <InkMist />
       <CameraRig />
     </Canvas>
   );
