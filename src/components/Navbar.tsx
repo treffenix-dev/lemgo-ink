@@ -48,14 +48,24 @@ export default function Navbar() {
             className="flex items-center gap-2 group flex-shrink-0"
           >
             <svg width="18" height="22" viewBox="0 0 24 28" fill="none">
-              <path d="M12 1 L12 4" stroke="rgba(255,255,255,0.6)" strokeWidth="1.2" strokeLinecap="round"/>
-              <path d="M10 4 L10 8 L12 6 L14 8 L14 4 Z" fill="rgba(255,255,255,0.7)"/>
-              <rect x="9" y="8" width="6" height="3" fill="rgba(255,255,255,0.65)"/>
-              <path d="M7 11 L17 11 L17 14 L7 14 Z" fill="rgba(255,255,255,0.5)"/>
-              <rect x="5" y="14" width="14" height="12" rx="0.5" fill="rgba(255,255,255,0.35)"/>
-              <rect x="10.5" y="18" width="3" height="5" rx="0.5" fill="#080808"/>
-              <rect x="7" y="16" width="2.5" height="3" rx="0.5" fill="#080808" fillOpacity="0.6"/>
-              <rect x="14.5" y="16" width="2.5" height="3" rx="0.5" fill="#080808" fillOpacity="0.6"/>
+              {/* Crescent moon — the Lemgo INK Halbmond */}
+              <path d="M12 1 C9.5 1.8 8 4 9 6.2 C9.8 4.2 11.5 3 13.2 3.2 C12.2 2 12 1 12 1 Z" fill="rgba(255,255,255,0.8)" stroke="none"/>
+              {/* Gothic spire */}
+              <path d="M10.5 3.5 L10.5 9 L12 6.5 L13.5 9 L13.5 3.5 Z" fill="rgba(255,255,255,0.75)"/>
+              {/* Roof eave */}
+              <rect x="7.5" y="9" width="9" height="1.8" fill="rgba(255,255,255,0.6)"/>
+              {/* Tower body */}
+              <rect x="8.5" y="10.8" width="7" height="7" fill="rgba(255,255,255,0.45)"/>
+              {/* Gothic arched window */}
+              <path d="M10.5 12 Q12 11 13.5 12 L13.5 16.5 L10.5 16.5 Z" fill="#080808" fillOpacity="0.75"/>
+              {/* Buttress wings */}
+              <path d="M6.5 14 L8.5 12 L8.5 17.8 Z" fill="rgba(255,255,255,0.25)"/>
+              <path d="M17.5 14 L15.5 12 L15.5 17.8 Z" fill="rgba(255,255,255,0.25)"/>
+              {/* Base platform */}
+              <rect x="5" y="17.8" width="14" height="2.2" fill="rgba(255,255,255,0.35)"/>
+              {/* Steps */}
+              <rect x="6.5" y="20" width="11" height="1.5" fill="rgba(255,255,255,0.2)"/>
+              <rect x="8" y="21.5" width="8" height="1.5" fill="rgba(255,255,255,0.15)"/>
             </svg>
             <span className="font-display text-sm font-bold tracking-widest">
               <span className="text-white/80 group-hover:text-white transition-colors">LEMGO</span>

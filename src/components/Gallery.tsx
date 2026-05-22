@@ -3,7 +3,7 @@
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect, useMemo } from "react";
 
-const filters = ["ALLE", "DARK ART", "MYSTISCH", "BLACK & GREY", "NEO TRADITIONAL", "SENTIMENTAL"];
+const filters = ["ALLE", "BLACK & GREY", "REALISM", "DARK ART", "FINE LINE", "COLOR"];
 
 function SkullRoseSVG() {
   return (
@@ -31,18 +31,45 @@ function SkullRoseSVG() {
   );
 }
 
-function MoonHandSVG() {
+function CompassRoseSVG() {
   return (
     <svg viewBox="0 0 160 200" fill="none" className="w-full h-full" stroke="currentColor">
-      <path d="M55 185 L55 155 Q55 148 48 140 L48 115 Q48 108 55 108 L55 95 Q55 88 62 88 L62 80 Q62 73 69 73 L69 68 Q69 61 76 61 L76 55 Q76 48 83 48 L85 48 Q92 48 92 55 L92 100 L94 75 Q94 68 101 68 Q108 68 108 75 L108 100 L108 80 Q108 73 115 73 Q122 73 122 80 L122 105 L122 95 Q122 88 129 88 Q136 88 136 95 L136 130 L136 155 L105 185 Z" strokeWidth="2" strokeLinejoin="round"/>
-      <path d="M80 20 C65 25 55 38 60 52 C65 38 78 30 92 32 C84 25 80 20 80 20 Z" strokeWidth="1.5" fill="currentColor" fillOpacity="0.2"/>
-      <path d="M40 30 L42 26 L44 30 L40 28 L44 28 Z" fill="currentColor" strokeWidth="0.5"/>
-      <path d="M120 18 L122 14 L124 18 L120 16 L124 16 Z" fill="currentColor" strokeWidth="0.5"/>
-      <circle cx="135" cy="45" r="2" fill="currentColor" stroke="none"/>
-      <circle cx="28" cy="42" r="1.5" fill="currentColor" stroke="none"/>
-      <circle cx="108" cy="10" r="1.5" fill="currentColor" stroke="none"/>
-      <path d="M68 170 Q80 165 92 170" strokeWidth="1" strokeLinecap="round"/>
-      <path d="M72 176 Q80 172 88 176" strokeWidth="1" strokeLinecap="round"/>
+      {/* Outer ring */}
+      <circle cx="80" cy="108" r="66" strokeWidth="1" opacity="0.3"/>
+      <circle cx="80" cy="108" r="52" strokeWidth="0.8" opacity="0.2"/>
+      {/* N point */}
+      <path d="M80 42 L73 108 L80 94 L87 108 Z" strokeWidth="1.5" fill="currentColor" fillOpacity="0.75"/>
+      {/* S point */}
+      <path d="M80 174 L73 108 L80 122 L87 108 Z" strokeWidth="1.5" fill="currentColor" fillOpacity="0.75"/>
+      {/* E point */}
+      <path d="M146 108 L80 101 L94 108 L80 115 Z" strokeWidth="1.5" fill="currentColor" fillOpacity="0.75"/>
+      {/* W point */}
+      <path d="M14 108 L80 101 L66 108 L80 115 Z" strokeWidth="1.5" fill="currentColor" fillOpacity="0.75"/>
+      {/* NE */}
+      <path d="M127 61 L84 104 L91 97 L97 104 Z" strokeWidth="1" fill="currentColor" fillOpacity="0.42"/>
+      {/* NW */}
+      <path d="M33 61 L76 104 L69 97 L63 104 Z" strokeWidth="1" fill="currentColor" fillOpacity="0.42"/>
+      {/* SE */}
+      <path d="M127 155 L84 112 L91 119 L97 112 Z" strokeWidth="1" fill="currentColor" fillOpacity="0.42"/>
+      {/* SW */}
+      <path d="M33 155 L76 112 L69 119 L63 112 Z" strokeWidth="1" fill="currentColor" fillOpacity="0.42"/>
+      {/* Center disc */}
+      <circle cx="80" cy="108" r="13" strokeWidth="1.2" fill="currentColor" fillOpacity="0.07"/>
+      <circle cx="80" cy="108" r="5.5" strokeWidth="1" fill="currentColor" fillOpacity="0.3"/>
+      <circle cx="80" cy="108" r="2" fill="currentColor" fillOpacity="0.9" stroke="none"/>
+      {/* Rose between N and center */}
+      <circle cx="80" cy="68" r="10" strokeWidth="1.2"/>
+      <path d="M74 68 Q80 61 86 68 Q80 74 74 68" strokeWidth="0.9" fill="currentColor" fillOpacity="0.15"/>
+      <path d="M77 63 Q80 59 83 63" strokeWidth="0.8"/>
+      <path d="M80 78 Q73 80 72 74" strokeWidth="1" strokeLinecap="round"/>
+      <path d="M80 78 Q87 80 88 74" strokeWidth="1" strokeLinecap="round"/>
+      {/* N cardinal mark */}
+      <path d="M76 29 L76 37 L84 29 L84 37" strokeWidth="1.5" strokeLinecap="round"/>
+      {/* Tick marks on outer ring */}
+      <line x1="80" y1="42" x2="80" y2="46" strokeWidth="0.8" opacity="0.4"/>
+      <line x1="80" y1="170" x2="80" y2="166" strokeWidth="0.8" opacity="0.4"/>
+      <line x1="14" y1="108" x2="18" y2="108" strokeWidth="0.8" opacity="0.4"/>
+      <line x1="146" y1="108" x2="142" y2="108" strokeWidth="0.8" opacity="0.4"/>
     </svg>
   );
 }
@@ -66,23 +93,51 @@ function WolfSVG() {
   );
 }
 
-function ButterflyMoonSVG() {
+function LionPortraitSVG() {
   return (
     <svg viewBox="0 0 160 200" fill="none" className="w-full h-full" stroke="currentColor">
-      <path d="M80 100 C70 90 40 70 25 55 C20 40 30 25 45 28 C60 31 75 60 80 100 Z" strokeWidth="1.8" fill="currentColor" fillOpacity="0.1"/>
-      <path d="M80 100 C90 90 120 70 135 55 C140 40 130 25 115 28 C100 31 85 60 80 100 Z" strokeWidth="1.8" fill="currentColor" fillOpacity="0.1"/>
-      <path d="M80 100 C72 108 48 118 35 135 C30 148 38 158 50 152 C65 145 75 120 80 100 Z" strokeWidth="1.8" fill="currentColor" fillOpacity="0.08"/>
-      <path d="M80 100 C88 108 112 118 125 135 C130 148 122 158 110 152 C95 145 85 120 80 100 Z" strokeWidth="1.8" fill="currentColor" fillOpacity="0.08"/>
-      <ellipse cx="80" cy="100" rx="4" ry="18" strokeWidth="1.5" fill="currentColor" fillOpacity="0.3"/>
-      <path d="M48 52 C40 56 38 66 44 72 C44 62 50 56 58 56 C52 54 48 52 48 52 Z" strokeWidth="1.2" fill="currentColor" fillOpacity="0.25"/>
-      <circle cx="105" cy="48" r="2" fill="currentColor" stroke="none"/>
-      <circle cx="115" cy="38" r="1.5" fill="currentColor" stroke="none"/>
-      <circle cx="32" cy="40" r="2" fill="currentColor" stroke="none"/>
-      <path d="M95 35 L96.5 31 L98 35 L94 33 L98 33 Z" fill="currentColor" strokeWidth="0.5"/>
-      <path d="M78 82 Q68 65 65 52" strokeWidth="1.2" strokeLinecap="round"/>
-      <circle cx="65" cy="52" r="2.5" strokeWidth="1.2"/>
-      <path d="M82 82 Q92 65 95 52" strokeWidth="1.2" strokeLinecap="round"/>
-      <circle cx="95" cy="52" r="2.5" strokeWidth="1.2"/>
+      {/* Outer mane halo */}
+      <ellipse cx="80" cy="100" rx="62" ry="60" strokeWidth="1" fill="currentColor" fillOpacity="0.05" opacity="0.5"/>
+      {/* Mane fur strokes */}
+      <path d="M80 38 Q72 30 64 39" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M80 38 Q88 30 96 39" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M50 50 Q40 42 38 54" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M110 50 Q120 42 122 54" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M28 72 Q18 66 20 78" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M132 72 Q142 66 140 78" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M24 98 Q14 93 17 105" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M136 98 Q146 93 143 105" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M28 124 Q18 122 22 132" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M132 124 Q142 122 138 132" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M44 148 Q37 150 41 158" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M116 148 Q123 150 119 158" strokeWidth="1.2" strokeLinecap="round"/>
+      {/* Inner mane layer */}
+      <ellipse cx="80" cy="98" rx="46" ry="44" strokeWidth="0.8" opacity="0.3"/>
+      {/* Face outline */}
+      <ellipse cx="80" cy="97" rx="37" ry="37" strokeWidth="1.5" fill="currentColor" fillOpacity="0.04"/>
+      {/* Eyes */}
+      <ellipse cx="61" cy="86" rx="12" ry="9" strokeWidth="1.5"/>
+      <ellipse cx="99" cy="86" rx="12" ry="9" strokeWidth="1.5"/>
+      <ellipse cx="61" cy="86" rx="5" ry="7" fill="currentColor" fillOpacity="0.55" stroke="none"/>
+      <ellipse cx="99" cy="86" rx="5" ry="7" fill="currentColor" fillOpacity="0.55" stroke="none"/>
+      <circle cx="64" cy="83" r="1.8" fill="rgba(255,255,255,0.55)" stroke="none"/>
+      <circle cx="102" cy="83" r="1.8" fill="rgba(255,255,255,0.55)" stroke="none"/>
+      {/* Brow furrows */}
+      <path d="M54 77 Q61 74 69 77" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M91 77 Q99 74 106 77" strokeWidth="1.2" strokeLinecap="round"/>
+      {/* Nose */}
+      <path d="M71 105 Q80 111 89 105 L80 100 Z" strokeWidth="1.5" fill="currentColor" fillOpacity="0.4"/>
+      {/* Mouth */}
+      <path d="M80 111 Q80 115 80 115" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M80 115 Q72 121 67 119" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M80 115 Q88 121 93 119" strokeWidth="1.5" strokeLinecap="round"/>
+      {/* Whisker dots */}
+      <circle cx="61" cy="116" r="1.5" fill="currentColor" fillOpacity="0.5" stroke="none"/>
+      <circle cx="61" cy="120" r="1.5" fill="currentColor" fillOpacity="0.5" stroke="none"/>
+      <circle cx="61" cy="124" r="1.5" fill="currentColor" fillOpacity="0.5" stroke="none"/>
+      <circle cx="99" cy="116" r="1.5" fill="currentColor" fillOpacity="0.5" stroke="none"/>
+      <circle cx="99" cy="120" r="1.5" fill="currentColor" fillOpacity="0.5" stroke="none"/>
+      <circle cx="99" cy="124" r="1.5" fill="currentColor" fillOpacity="0.5" stroke="none"/>
     </svg>
   );
 }
@@ -109,34 +164,70 @@ function RoseDaggerSVG() {
   );
 }
 
-function MotherChildSVG() {
+function RealisticEyeSVG() {
   return (
     <svg viewBox="0 0 160 200" fill="none" className="w-full h-full" stroke="currentColor">
-      <path d="M80 175 C20 135 15 80 40 60 C55 50 68 55 80 70 C92 55 105 50 120 60 C145 80 140 135 80 175 Z" strokeWidth="2"/>
-      <circle cx="72" cy="88" r="10" strokeWidth="1.5"/>
-      <path d="M62 98 C58 118 60 138 68 150" strokeWidth="1.5" strokeLinecap="round"/>
-      <path d="M82 98 C86 108 86 128 80 148" strokeWidth="1.5" strokeLinecap="round"/>
-      <path d="M62 110 Q72 118 88 112" strokeWidth="1.5" strokeLinecap="round"/>
-      <circle cx="90" cy="100" r="7" strokeWidth="1.5"/>
-      <path d="M90 107 Q95 115 92 122" strokeWidth="1.2" strokeLinecap="round"/>
-      <path d="M45 100 L46.5 96 L48 100 L44 98 L48 98 Z" fill="currentColor" strokeWidth="0.5"/>
-      <path d="M108 88 L109.5 84 L111 88 L107 86 L111 86 Z" fill="currentColor" strokeWidth="0.5"/>
-      <circle cx="55" cy="130" r="1.5" fill="currentColor" stroke="none"/>
-      <circle cx="112" cy="120" r="1.5" fill="currentColor" stroke="none"/>
-      <circle cx="80" cy="80" r="1" fill="currentColor" stroke="none"/>
-      <circle cx="32" cy="90" r="1" fill="currentColor" stroke="none"/>
-      <circle cx="128" cy="90" r="1" fill="currentColor" stroke="none"/>
+      {/* Eyebrow */}
+      <path d="M28 68 Q80 54 132 68" strokeWidth="2.2" strokeLinecap="round" fill="currentColor" fillOpacity="0.6"/>
+      <path d="M36 69 Q44 63 54 67" strokeWidth="0.9" strokeLinecap="round" opacity="0.5"/>
+      <path d="M58 65 Q66 59 74 63" strokeWidth="0.9" strokeLinecap="round" opacity="0.5"/>
+      <path d="M78 63 Q86 57 94 61" strokeWidth="0.9" strokeLinecap="round" opacity="0.5"/>
+      <path d="M98 64 Q106 59 114 64" strokeWidth="0.9" strokeLinecap="round" opacity="0.5"/>
+      {/* Eye socket area */}
+      <path d="M15 112 Q80 80 145 112 Q80 144 15 112 Z" fill="currentColor" fillOpacity="0.05" stroke="none"/>
+      {/* Upper eyelid */}
+      <path d="M15 112 Q48 80 80 78 Q112 80 145 112" strokeWidth="2" strokeLinecap="round"/>
+      {/* Lower eyelid */}
+      <path d="M15 112 Q48 134 80 136 Q112 134 145 112" strokeWidth="1.5" strokeLinecap="round"/>
+      {/* Iris */}
+      <circle cx="80" cy="107" r="28" strokeWidth="1.5" fill="currentColor" fillOpacity="0.07"/>
+      {/* Iris radial lines */}
+      <line x1="80" y1="81" x2="80" y2="91" strokeWidth="0.7" opacity="0.35"/>
+      <line x1="94" y1="84" x2="89" y2="93" strokeWidth="0.7" opacity="0.35"/>
+      <line x1="105" y1="93" x2="97" y2="99" strokeWidth="0.7" opacity="0.35"/>
+      <line x1="108" y1="107" x2="98" y2="107" strokeWidth="0.7" opacity="0.35"/>
+      <line x1="105" y1="121" x2="97" y2="115" strokeWidth="0.7" opacity="0.35"/>
+      <line x1="94" y1="130" x2="89" y2="121" strokeWidth="0.7" opacity="0.35"/>
+      <line x1="80" y1="133" x2="80" y2="123" strokeWidth="0.7" opacity="0.35"/>
+      <line x1="66" y1="130" x2="71" y2="121" strokeWidth="0.7" opacity="0.35"/>
+      <line x1="55" y1="121" x2="63" y2="115" strokeWidth="0.7" opacity="0.35"/>
+      <line x1="52" y1="107" x2="62" y2="107" strokeWidth="0.7" opacity="0.35"/>
+      <line x1="55" y1="93" x2="63" y2="99" strokeWidth="0.7" opacity="0.35"/>
+      <line x1="66" y1="84" x2="71" y2="93" strokeWidth="0.7" opacity="0.35"/>
+      {/* Iris outer ring */}
+      <circle cx="80" cy="107" r="28" strokeWidth="1.8" opacity="0.45"/>
+      {/* Pupil */}
+      <circle cx="80" cy="107" r="12" fill="currentColor" fillOpacity="0.88" strokeWidth="0.8"/>
+      {/* Catch lights */}
+      <circle cx="87" cy="100" r="4.5" fill="rgba(255,255,255,0.55)" stroke="none"/>
+      <circle cx="76" cy="114" r="2" fill="rgba(255,255,255,0.2)" stroke="none"/>
+      {/* Upper lashes */}
+      <path d="M22 104 Q19 91 25 85" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M36 94 Q35 81 43 76" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M52 87 Q53 74 61 70" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M67 83 Q70 70 77 69" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M80 82 Q83 69 90 70" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M93 84 Q98 71 104 74" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M106 89 Q112 77 118 81" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M119 97 Q125 87 130 91" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M130 106 Q136 99 139 103" strokeWidth="1.2" strokeLinecap="round"/>
+      {/* Lower lashes (subtle) */}
+      <path d="M32 122 Q30 130 35 132" strokeWidth="0.8" strokeLinecap="round" opacity="0.45"/>
+      <path d="M54 130 Q54 138 59 139" strokeWidth="0.8" strokeLinecap="round" opacity="0.45"/>
+      <path d="M76 133 Q77 141 82 141" strokeWidth="0.8" strokeLinecap="round" opacity="0.45"/>
+      <path d="M98 130 Q99 138 104 137" strokeWidth="0.8" strokeLinecap="round" opacity="0.45"/>
+      <path d="M118 122 Q120 130 124 128" strokeWidth="0.8" strokeLinecap="round" opacity="0.45"/>
     </svg>
   );
 }
 
 const works = [
-  { tag: "DARK ART", label: "Skull & Rose", size: "large", SVG: SkullRoseSVG },
-  { tag: "MYSTISCH", label: "Moon Hand", size: "small", SVG: MoonHandSVG },
-  { tag: "BLACK & GREY", label: "Wolf Silhouette", size: "small", SVG: WolfSVG },
-  { tag: "NEO TRADITIONAL", label: "Rose & Dagger", size: "large", SVG: RoseDaggerSVG },
-  { tag: "SENTIMENTAL", label: "Mutter & Kind", size: "small", SVG: MotherChildSVG },
-  { tag: "MYSTISCH", label: "Luna Moth", size: "small", SVG: ButterflyMoonSVG },
+  { tag: "BLACK & GREY", label: "Kompass & Rosen", size: "large", SVG: CompassRoseSVG },
+  { tag: "REALISM", label: "Realistisches Auge", size: "small", SVG: RealisticEyeSVG },
+  { tag: "DARK ART", label: "Wolf Realism", size: "small", SVG: WolfSVG },
+  { tag: "REALISM", label: "Löwen-Portrait", size: "large", SVG: LionPortraitSVG },
+  { tag: "DARK ART", label: "Skull & Rose", size: "small", SVG: SkullRoseSVG },
+  { tag: "BLACK & GREY", label: "Rose & Dolch", size: "small", SVG: RoseDaggerSVG },
 ];
 
 function GalleryCard({
