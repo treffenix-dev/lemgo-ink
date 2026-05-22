@@ -10,6 +10,9 @@ const styles = [
     desc: "Tiefe Schwarzwerte, sanfte Übergänge — zeitlos und ausdrucksstark. Die Königsdisziplin der Tätowierkunst.",
     keywords: ["Realism", "Schattierungen", "Tiefe"],
     color: "from-[#1a1a1a] to-[#2a2a2a]",
+    imgGradient: "from-[#0a0a0a] via-[#1c1c1c] to-[#141414]",
+    imgPattern: "radial-gradient(circle at 30% 40%, rgba(255,255,255,0.04) 0%, transparent 60%), radial-gradient(circle at 70% 70%, rgba(255,255,255,0.02) 0%, transparent 50%)",
+    imgLabel: "Black & Grey Realism",
   },
   {
     num: "02",
@@ -17,6 +20,9 @@ const styles = [
     desc: "Fotorealistisch bis auf die Pore. Portraits, Tiere, Szenen — so lebendig, dass man zweimal hinschaut.",
     keywords: ["Portrait", "Tier", "Foto-echt"],
     color: "from-[#1a1208] to-[#2a1e0a]",
+    imgGradient: "from-[#1a1008] via-[#251808] to-[#1a1208]",
+    imgPattern: "radial-gradient(ellipse at 50% 30%, rgba(201,162,39,0.08) 0%, transparent 60%)",
+    imgLabel: "Portrait & Realism",
   },
   {
     num: "03",
@@ -24,6 +30,9 @@ const styles = [
     desc: "Zarte, präzise Linienführung. Minimalistisch, elegant und zeitlos — perfekt für filigrane Motive.",
     keywords: ["Filigran", "Minimalist", "Elegant"],
     color: "from-[#0d0d14] to-[#1a1a24]",
+    imgGradient: "from-[#0a0a12] via-[#12121e] to-[#0d0d18]",
+    imgPattern: "radial-gradient(circle at 50% 50%, rgba(200,200,255,0.04) 0%, transparent 70%)",
+    imgLabel: "Fine Line",
   },
   {
     num: "04",
@@ -31,6 +40,9 @@ const styles = [
     desc: "Kräftige Konturen, satte Farben. Die Verbindung aus klassischer Tradition und modernem Design-Gefühl.",
     keywords: ["Farbe", "Bold", "Klassisch"],
     color: "from-[#140808] to-[#1e1010]",
+    imgGradient: "from-[#120808] via-[#1c0c0c] to-[#140808]",
+    imgPattern: "radial-gradient(circle at 40% 40%, rgba(139,0,0,0.12) 0%, transparent 60%)",
+    imgLabel: "Neo Traditional",
   },
   {
     num: "05",
@@ -38,6 +50,9 @@ const styles = [
     desc: "Altes überarbeiten oder komplett abdecken — ein neues Kapitel auf deiner Haut. Kein Tattoo ist verloren.",
     keywords: ["Überarbeitung", "Neustart", "Kreativ"],
     color: "from-[#0a0a0a] to-[#1a1a1a]",
+    imgGradient: "from-[#080808] via-[#141414] to-[#0c0c0c]",
+    imgPattern: "radial-gradient(circle at 60% 50%, rgba(201,162,39,0.06) 0%, transparent 55%)",
+    imgLabel: "Cover-Up",
   },
   {
     num: "06",
@@ -45,6 +60,9 @@ const styles = [
     desc: "Professionelles Piercing mit höchster Sorgfalt, Hygiene und dem richtigen Gespür für Ästhetik und Platzierung.",
     keywords: ["Steril", "Präzise", "Ästhetisch"],
     color: "from-[#0d1208] to-[#1a201a]",
+    imgGradient: "from-[#0a0f0a] via-[#111a11] to-[#0d1508]",
+    imgPattern: "radial-gradient(circle at 50% 40%, rgba(180,255,180,0.04) 0%, transparent 60%)",
+    imgLabel: "Piercing",
   },
 ];
 
@@ -67,21 +85,39 @@ function StyleCard({ style, index }: { style: typeof styles[0]; index: number })
       <div className={`absolute inset-0 bg-gradient-to-br ${style.color} transition-opacity duration-500 ${hovered ? "opacity-100" : "opacity-0"}`} />
       <div className={`absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(201,162,39,0.1)_0%,transparent_70%)] transition-opacity duration-500 ${hovered ? "opacity-100" : "opacity-0"}`} />
 
+      {/* Reference image area */}
+      <div className="aspect-[4/3] overflow-hidden relative mb-0 -mx-7 -mt-7 mb-6">
+        {/* Gradient placeholder — replace with <img src="..." /> when photos are ready */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${style.imgGradient}`} />
+        <div className="absolute inset-0" style={{ background: style.imgPattern }} />
+        {/* Style indicator overlay */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-8 h-px bg-gold/30 mx-auto mb-3" />
+            <span className="font-sans text-[9px] tracking-[0.3em] uppercase text-cream/20">{style.imgLabel}</span>
+            <div className="w-8 h-px bg-gold/30 mx-auto mt-3" />
+          </div>
+        </div>
+        {/* Number badge */}
+        <span className="absolute top-4 left-4 font-sans text-[10px] tracking-[0.2em] text-cream/20">{style.num}</span>
+        {/* Hover shimmer */}
+        <div className={`absolute inset-0 bg-gold/5 transition-opacity duration-500 ${hovered ? "opacity-100" : "opacity-0"}`} />
+      </div>
+
       <div className="relative z-10">
-        <div className="flex items-start justify-between mb-5">
-          <span className="font-sans text-[10px] tracking-[0.2em] text-cream/20">{style.num}</span>
+        <div className="flex items-start justify-between mb-4">
+          <h3 className="font-display text-xl font-bold group-hover:text-gold transition-colors duration-300">
+            {style.name}
+          </h3>
           <motion.div
             animate={{ rotate: hovered ? 45 : 0 }}
             transition={{ duration: 0.3 }}
-            className="w-8 h-8 border border-gold/20 flex items-center justify-center group-hover:border-gold/60 transition-colors"
+            className="w-7 h-7 border border-gold/20 flex items-center justify-center group-hover:border-gold/60 transition-colors flex-shrink-0 ml-3"
           >
-            <span className="text-gold/60 text-sm leading-none">+</span>
+            <span className="text-gold/60 text-xs leading-none">+</span>
           </motion.div>
         </div>
 
-        <h3 className="font-display text-xl font-bold mb-3 group-hover:text-gold transition-colors duration-300">
-          {style.name}
-        </h3>
         <p className="font-sans text-sm text-cream/35 leading-[1.8] mb-5 font-light">{style.desc}</p>
 
         <div className="flex flex-wrap gap-2">

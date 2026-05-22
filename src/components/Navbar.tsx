@@ -33,9 +33,16 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-16 h-16 md:h-20 flex items-center justify-between">
         {/* Logo */}
-        <a href="/" className="font-display text-xl md:text-2xl font-bold tracking-widest group">
-          <span className="text-cream/90 group-hover:text-cream transition-colors">LEMGO</span>
-          <span className="text-gold"> INK</span>
+        <a href="/" className="flex items-center gap-2.5 group">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
+            <path d="M11 2C11 2 7 6.5 7 10.5C7 12.985 8.79 15 11 15C13.21 15 15 12.985 15 10.5C15 6.5 11 2 11 2Z" fill="#c9a227" fillOpacity="0.85"/>
+            <path d="M11 15V20" stroke="#c9a227" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.5"/>
+            <circle cx="11" cy="10.5" r="2" fill="#080808"/>
+          </svg>
+          <span className="font-display text-xl md:text-2xl font-bold tracking-widest">
+            <span className="text-cream/90 group-hover:text-cream transition-colors">LEMGO</span>
+            <span className="text-gold"> INK</span>
+          </span>
         </a>
 
         {/* Desktop links */}

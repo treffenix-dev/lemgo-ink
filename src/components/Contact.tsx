@@ -20,13 +20,13 @@ export default function Contact() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   const [form, setForm] = useState({
-    name: "", email: "", phone: "", style: "", placement: "", message: "",
+    name: "", email: "", phone: "", style: "", placement: "", size: "", message: "",
   });
   const [sent, setSent] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const msg = `Hallo Natascha!\n\nTerminanfrage von ${form.name}\nEmail: ${form.email}\nTelefon: ${form.phone || "—"}\nStil: ${form.style || "—"}\nPlatzierung: ${form.placement || "—"}\n\nNachricht: ${form.message}`;
+    const msg = `Hallo Natascha!\n\nTerminanfrage von ${form.name}\nEmail: ${form.email}\nTelefon: ${form.phone || "—"}\nStil: ${form.style || "—"}\nPlatzierung: ${form.placement || "—"}\nGewünschte Größe: ${form.size || "—"}\n\nMotiv: ${form.message}`;
     window.open(`https://wa.me/4915257668403?text=${encodeURIComponent(msg)}`, "_blank");
     setSent(true);
   };
@@ -233,14 +233,25 @@ export default function Contact() {
                 </div>
 
                 <div>
-                  <label className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/30 block mb-2">Deine Idee *</label>
+                  <label className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/30 block mb-2">Gewünschte Größe (ca.)</label>
+                  <input
+                    type="text"
+                    value={form.size}
+                    onChange={(e) => setForm({ ...form, size: e.target.value })}
+                    className="w-full bg-surface/50 border border-cream/8 focus:border-gold/40 text-cream font-sans text-sm px-4 py-3 outline-none transition-colors placeholder:text-cream/15"
+                    placeholder="z.B. 10 x 8 cm oder Handteller groß"
+                  />
+                </div>
+
+                <div>
+                  <label className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/30 block mb-2">Beschreibe dein Motiv *</label>
                   <textarea
                     required
                     rows={4}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     className="w-full bg-surface/50 border border-cream/8 focus:border-gold/40 text-cream font-sans text-sm px-4 py-3 outline-none transition-colors resize-none placeholder:text-cream/15"
-                    placeholder="Beschreib dein Motiv so detailliert wie möglich — Referenzbilder können direkt per WhatsApp geschickt werden."
+                    placeholder="Was soll gestochen werden? Stil, Details, Idee — Referenzbilder direkt per WhatsApp schicken."
                   />
                 </div>
 
