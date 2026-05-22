@@ -1,4 +1,5 @@
 import ScrollReset from "@/components/ScrollReset";
+import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ScrollProgress";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Navbar from "@/components/Navbar";
@@ -16,6 +17,7 @@ import Footer from "@/components/Footer";
 export default function Home() {
   return (
     <main className="relative">
+      <SmoothScroll />
       <ScrollReset />
       <ScrollProgress />
       <WhatsAppButton />

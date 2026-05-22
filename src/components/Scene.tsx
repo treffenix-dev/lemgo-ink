@@ -18,9 +18,9 @@ function InkBlob() {
       <mesh ref={meshRef} position={[0, 0, 0]}>
         <sphereGeometry args={[1.9, 128, 128]} />
         <MeshDistortMaterial
-          color="#080808"
-          emissive="#8b0000"
-          emissiveIntensity={0.12}
+          color="#121212"
+          emissive="#000000"
+          emissiveIntensity={0.05}
           distort={0.75}
           speed={1.8}
           roughness={0.02}
@@ -42,7 +42,7 @@ function GlowCore() {
   return (
     <mesh ref={ref} position={[0, 0, 0]}>
       <sphereGeometry args={[1.2, 32, 32]} />
-      <meshBasicMaterial color="#c9a227" transparent opacity={0.03} />
+      <meshBasicMaterial color="#ffffff" transparent opacity={0.02} />
     </mesh>
   );
 }
@@ -59,9 +59,9 @@ function GoldRing1() {
     <mesh ref={ref}>
       <torusGeometry args={[2.9, 0.018, 8, 200]} />
       <meshStandardMaterial
-        color="#c9a227"
-        emissive="#c9a227"
-        emissiveIntensity={1.2}
+        color="#ffffff"
+        emissive="#ffffff"
+        emissiveIntensity={0.6}
         metalness={1}
         roughness={0}
       />
@@ -82,13 +82,13 @@ function GoldRing2() {
     <mesh ref={ref}>
       <torusGeometry args={[3.7, 0.012, 8, 200]} />
       <meshStandardMaterial
-        color="#8b0000"
-        emissive="#8b0000"
-        emissiveIntensity={1.4}
+        color="#aaaaaa"
+        emissive="#aaaaaa"
+        emissiveIntensity={0.5}
         metalness={1}
         roughness={0}
         transparent
-        opacity={0.7}
+        opacity={0.4}
       />
     </mesh>
   );
@@ -144,9 +144,9 @@ function InkParticles() {
       </bufferGeometry>
       <pointsMaterial
         size={0.028}
-        color="#8b0000"
+        color="#ffffff"
         transparent
-        opacity={0.35}
+        opacity={0.22}
         sizeAttenuation
       />
     </points>
@@ -173,10 +173,10 @@ export default function Scene() {
       gl={{ antialias: true, alpha: true }}
     >
       {/* Gothic tattoo-studio lighting */}
-      <ambientLight intensity={0.04} />
-      <pointLight position={[0, 10, 3]} intensity={4} color="#c9a227" />
-      <pointLight position={[0, -8, 2]} intensity={2.5} color="#8b0000" />
-      <pointLight position={[-5, 2, 5]} intensity={0.6} color="#ffffff" />
+      <ambientLight intensity={0.06} />
+      <pointLight position={[0, 10, 3]} intensity={4} color="#ffffff" />
+      <pointLight position={[0, -8, 2]} intensity={1.5} color="#666666" />
+      <pointLight position={[-5, 2, 5]} intensity={0.8} color="#ffffff" />
       <fog attach="fog" args={["#030303", 12, 38]} />
 
       <InkBlob />

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Cinzel } from "next/font/google";
+import { Plus_Jakarta_Sans, Cinzel } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const inter = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const cinzel = Cinzel({

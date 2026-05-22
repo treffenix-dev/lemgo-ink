@@ -1,7 +1,10 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
+
+const Scene = dynamic(() => import("./Scene"), { ssr: false });
 
 const stagger = {
   hidden: {},
@@ -21,8 +24,26 @@ function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 }
 
+function useMagnetic() {
+  const handleMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const btn = e.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const x = (e.clientX - rect.left - rect.width / 2) * 0.25;
+    const y = (e.clientY - rect.top - rect.height / 2) * 0.25;
+    btn.style.transform = `translate(${x}px, ${y}px)`;
+    btn.style.transition = "transform 0.1s ease-out";
+  };
+  const handleLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.style.transform = "translate(0px, 0px)";
+    e.currentTarget.style.transition = "transform 0.5s cubic-bezier(0.22,1,0.36,1)";
+  };
+  return { onMouseMove: handleMove, onMouseLeave: handleLeave };
+}
+
 export default function Hero() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const magnetic = useMagnetic();
+
   useEffect(() => {
     const onScroll = () => {
       if (!scrollRef.current) return;
@@ -35,19 +56,27 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen w-full flex items-center overflow-hidden">
-      {/* Pure black background */}
+    <section className="relative min-h-[100dvh] w-full flex items-center overflow-hidden">
+      {/* Pure black base */}
       <div className="absolute inset-0 bg-[#080808]" />
 
-      {/* Very subtle depth — white/transparent only, no colors */}
+      {/* Subtle depth gradients */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_65%_40%,rgba(255,255,255,0.018)_0%,transparent_65%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_15%_85%,rgba(255,255,255,0.012)_0%,transparent_55%)]" />
 
-      {/* Thin vertical accent line — right side */}
-      <div className="absolute right-[12%] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/5 to-transparent hidden lg:block" />
+      {/* 3D Ink Scene — behind content */}
+      <div className="absolute inset-0 z-[1] opacity-75 pointer-events-none">
+        <Scene />
+      </div>
+
+      {/* Left-side text vignette — keeps headline readable */}
+      <div className="absolute inset-0 z-[2] bg-[linear-gradient(to_right,rgba(8,8,8,0.75)_0%,rgba(8,8,8,0.4)_50%,transparent_75%)] pointer-events-none" />
+
+      {/* Thin vertical accent line */}
+      <div className="absolute right-[12%] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/5 to-transparent hidden lg:block z-[2]" />
 
       {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-bg to-transparent z-[1] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-bg to-transparent z-[3] pointer-events-none" />
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-16 w-full pt-24 pb-32">
@@ -87,15 +116,19 @@ export default function Hero() {
           <motion.div variants={fadeUp} className="flex flex-wrap gap-4 mb-12">
             <button
               onClick={() => scrollTo("kontakt")}
-              className="px-8 py-4 bg-white text-black font-sans font-bold text-xs tracking-[0.22em] uppercase hover:bg-white/90 transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(255,255,255,0.12)]"
+              {...magnetic}
+              className="flex items-center gap-2.5 px-7 py-3.5 bg-white text-black font-sans font-bold text-xs tracking-[0.18em] uppercase rounded-full hover:bg-white/90 transition-colors duration-300 active:scale-[0.98]"
             >
               Termin anfragen
+              <span className="w-6 h-6 rounded-full bg-black/10 flex items-center justify-center text-[11px] leading-none">→</span>
             </button>
             <button
               onClick={() => scrollTo("portfolio")}
-              className="px-8 py-4 border border-white/12 text-white/60 font-sans font-medium text-xs tracking-[0.2em] uppercase hover:border-white/35 hover:text-white transition-all duration-300"
+              {...magnetic}
+              className="flex items-center gap-2.5 px-7 py-3.5 border border-white/15 text-white/60 hover:text-white hover:border-white/30 font-sans font-medium text-xs tracking-[0.2em] uppercase rounded-full transition-colors duration-300"
             >
               Portfolio ansehen
+              <span className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-[11px] leading-none">↓</span>
             </button>
           </motion.div>
 

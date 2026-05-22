@@ -257,9 +257,10 @@ export default function Contact() {
 
                 <button
                   type="submit"
-                  className="w-full py-4 bg-gold text-black font-sans font-bold text-xs tracking-[0.25em] uppercase hover:bg-gold/85 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.25)]"
+                  className="w-full flex items-center justify-center gap-2.5 py-4 bg-white text-black font-sans font-bold text-xs tracking-[0.22em] uppercase rounded-full hover:bg-white/90 active:scale-[0.98] transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
                 >
-                  Anfrage per WhatsApp senden →
+                  Anfrage per WhatsApp senden
+                  <span className="w-6 h-6 rounded-full bg-black/10 flex items-center justify-center text-[11px] leading-none">→</span>
                 </button>
 
                 <p className="font-sans text-[10px] text-cream/20 text-center leading-[1.7]">
