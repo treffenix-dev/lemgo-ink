@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 }
@@ -60,8 +62,8 @@ export default function Footer() {
             © {year} Lemgo INK · Natascha Wehr · Alle Rechte vorbehalten
           </p>
           <div className="flex gap-6">
-            <span className="font-sans text-[11px] text-cream/15 tracking-wide">Impressum</span>
-            <span className="font-sans text-[11px] text-cream/15 tracking-wide">Datenschutz</span>
+            <Link href="/impressum" className="font-sans text-[11px] text-cream/20 tracking-wide hover:text-white/50 transition-colors">Impressum</Link>
+            <Link href="/datenschutz" className="font-sans text-[11px] text-cream/20 tracking-wide hover:text-white/50 transition-colors">Datenschutz</Link>
           </div>
         </div>
       </div>
