@@ -18,13 +18,13 @@ function InkBlob() {
       <mesh ref={meshRef} position={[0, 0, 0]}>
         <sphereGeometry args={[1.9, 128, 128]} />
         <MeshDistortMaterial
-          color="#0d0d0d"
-          emissive="#c9a227"
-          emissiveIntensity={0.06}
-          distort={0.55}
-          speed={1.4}
-          roughness={0.05}
-          metalness={0.98}
+          color="#080808"
+          emissive="#8b0000"
+          emissiveIntensity={0.12}
+          distort={0.75}
+          speed={1.8}
+          roughness={0.02}
+          metalness={0.99}
         />
       </mesh>
     </Float>
@@ -69,7 +69,7 @@ function GoldRing1() {
   );
 }
 
-/* Gold orbital ring 2 — thinner, slower */
+/* Crimson orbital ring 2 — blood red, slower */
 function GoldRing2() {
   const ref = useRef<THREE.Mesh>(null);
   useFrame((state) => {
@@ -80,41 +80,56 @@ function GoldRing2() {
   });
   return (
     <mesh ref={ref}>
-      <torusGeometry args={[3.7, 0.01, 8, 200]} />
+      <torusGeometry args={[3.7, 0.012, 8, 200]} />
       <meshStandardMaterial
-        color="#c9a227"
-        emissive="#c9a227"
-        emissiveIntensity={0.6}
+        color="#8b0000"
+        emissive="#8b0000"
+        emissiveIntensity={1.4}
         metalness={1}
         roughness={0}
         transparent
-        opacity={0.6}
+        opacity={0.7}
       />
     </mesh>
   );
 }
 
-/* Gold dust particles */
-function GoldParticles() {
-  const count = 2200;
-  const positions = useMemo(() => {
+/* Ink drop particles — fall downward like dripping ink */
+function InkParticles() {
+  const count = 1800;
+  const { positions, speeds, offsets } = useMemo(() => {
     const pos = new Float32Array(count * 3);
+    const spd = new Float32Array(count);
+    const off = new Float32Array(count);
     for (let i = 0; i < count; i++) {
-      const r = 4 + Math.random() * 12;
+      const r = 4 + Math.random() * 14;
       const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
-      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      pos[i * 3 + 2] = r * Math.cos(phi);
+      pos[i * 3] = (Math.random() - 0.5) * 26;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 26;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 16;
+      spd[i] = 0.003 + Math.random() * 0.008;
+      off[i] = Math.random() * Math.PI * 2;
+      void r; void theta;
     }
-    return pos;
+    return { positions: pos, speeds: spd, offsets: off };
   }, []);
 
   const ref = useRef<THREE.Points>(null);
-  useFrame((state) => {
+  const posRef = useRef(positions.slice());
+
+  useFrame(() => {
     if (!ref.current) return;
-    ref.current.rotation.y = state.clock.elapsedTime * 0.007;
-    ref.current.rotation.x = state.clock.elapsedTime * 0.003;
+    const arr = posRef.current;
+    for (let i = 0; i < count; i++) {
+      arr[i * 3 + 1] -= speeds[i];
+      if (arr[i * 3 + 1] < -13) {
+        arr[i * 3 + 1] = 13;
+        arr[i * 3] = (Math.random() - 0.5) * 26;
+        arr[i * 3 + 2] = (Math.random() - 0.5) * 16;
+      }
+    }
+    (ref.current.geometry.attributes.position as THREE.BufferAttribute).array = arr;
+    ref.current.geometry.attributes.position.needsUpdate = true;
   });
 
   return (
@@ -128,10 +143,10 @@ function GoldParticles() {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.022}
-        color="#c9a227"
+        size={0.028}
+        color="#8b0000"
         transparent
-        opacity={0.3}
+        opacity={0.35}
         sizeAttenuation
       />
     </points>
@@ -157,18 +172,18 @@ export default function Scene() {
       style={{ background: "transparent" }}
       gl={{ antialias: true, alpha: true }}
     >
-      {/* Dramatic tattoo-studio lighting */}
-      <ambientLight intensity={0.08} />
-      <pointLight position={[0, 8, 3]} intensity={3} color="#c9a227" />
-      <pointLight position={[0, -6, 2]} intensity={1.5} color="#8b0000" />
-      <pointLight position={[-6, 2, 4]} intensity={1} color="#ffffff" />
-      <pointLight position={[6, -2, -2]} intensity={0.5} color="#c9a227" />
+      {/* Gothic tattoo-studio lighting */}
+      <ambientLight intensity={0.04} />
+      <pointLight position={[0, 10, 3]} intensity={4} color="#c9a227" />
+      <pointLight position={[0, -8, 2]} intensity={2.5} color="#8b0000" />
+      <pointLight position={[-5, 2, 5]} intensity={0.6} color="#ffffff" />
+      <fog attach="fog" args={["#030303", 12, 38]} />
 
       <InkBlob />
       <GlowCore />
       <GoldRing1 />
       <GoldRing2 />
-      <GoldParticles />
+      <InkParticles />
       <CameraRig />
     </Canvas>
   );

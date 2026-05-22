@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Artist from "@/components/Artist";
 import Stats from "@/components/Stats";
+import FlashDesigns from "@/components/FlashDesigns";
 import Styles from "@/components/Styles";
 import Gallery from "@/components/Gallery";
 import Reviews from "@/components/Reviews";
@@ -16,6 +17,7 @@ export default function Home() {
       <Hero />
       <Stats />
       <Artist />
+      <FlashDesigns />
       <Styles />
       <Gallery />
       <Reviews />

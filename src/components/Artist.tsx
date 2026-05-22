@@ -20,7 +20,7 @@ export default function Artist() {
       <div className="overflow-hidden border-y border-gold/10 bg-[#050505] py-3">
         <div className="flex gap-8 animate-marquee whitespace-nowrap">
           {[...Array(4)].map((_, i) =>
-            ["✦ BLACK & GREY", "✦ REALISM", "✦ FINE LINE", "✦ PORTRAITS", "✦ COVER-UP", "✦ PIERCING", "✦ LEMGO NRW", "✦ SEIT 2020"].map(
+            ["✦ DARK ART", "✦ WANNA DOs", "✦ SKULLS", "✦ MYSTISCH", "✦ BLACK & GREY", "✦ NEO TRADITIONAL", "✦ LEMGO NRW", "✦ SEIT 2020", "✦ CUSTOM DESIGNS"].map(
               (item) => (
                 <span
                   key={`${i}-${item}`}

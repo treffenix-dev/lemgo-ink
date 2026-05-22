@@ -34,10 +34,16 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 lg:px-16 h-16 md:h-20 flex items-center justify-between">
         {/* Logo */}
         <a href="/" className="flex items-center gap-2.5 group">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
-            <path d="M11 2C11 2 7 6.5 7 10.5C7 12.985 8.79 15 11 15C13.21 15 15 12.985 15 10.5C15 6.5 11 2 11 2Z" fill="#c9a227" fillOpacity="0.85"/>
-            <path d="M11 15V20" stroke="#c9a227" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.5"/>
-            <circle cx="11" cy="10.5" r="2" fill="#080808"/>
+          <svg width="24" height="28" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
+            {/* Gothic church tower / Lemgo Nikolaikirche silhouette */}
+            <path d="M12 1 L12 4" stroke="#c9a227" strokeWidth="1.2" strokeLinecap="round"/>
+            <path d="M10 4 L10 8 L12 6 L14 8 L14 4 Z" fill="#c9a227" fillOpacity="0.9"/>
+            <rect x="9" y="8" width="6" height="3" fill="#c9a227" fillOpacity="0.85"/>
+            <path d="M7 11 L17 11 L17 14 L7 14 Z" fill="#c9a227" fillOpacity="0.7"/>
+            <rect x="5" y="14" width="14" height="12" rx="0.5" fill="#c9a227" fillOpacity="0.55"/>
+            <rect x="10.5" y="18" width="3" height="5" rx="0.5" fill="#080808"/>
+            <rect x="7" y="16" width="2.5" height="3" rx="0.5" fill="#080808" fillOpacity="0.6"/>
+            <rect x="14.5" y="16" width="2.5" height="3" rx="0.5" fill="#080808" fillOpacity="0.6"/>
           </svg>
           <span className="font-display text-xl md:text-2xl font-bold tracking-widest">
             <span className="text-cream/90 group-hover:text-cream transition-colors">LEMGO</span>
