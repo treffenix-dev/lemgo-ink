@@ -221,13 +221,14 @@ function RealisticEyeSVG() {
   );
 }
 
+// img: add real photos to /public/images/gallery/ — filenames below
 const works = [
-  { tag: "BLACK & GREY", label: "Kompass & Rosen", size: "large", SVG: CompassRoseSVG },
-  { tag: "REALISM", label: "Realistisches Auge", size: "small", SVG: RealisticEyeSVG },
-  { tag: "DARK ART", label: "Wolf Realism", size: "small", SVG: WolfSVG },
-  { tag: "REALISM", label: "Löwen-Portrait", size: "large", SVG: LionPortraitSVG },
-  { tag: "DARK ART", label: "Skull & Rose", size: "small", SVG: SkullRoseSVG },
-  { tag: "BLACK & GREY", label: "Rose & Dolch", size: "small", SVG: RoseDaggerSVG },
+  { tag: "BLACK & GREY", label: "Kompass & Rosen", size: "large", SVG: CompassRoseSVG, img: "/images/gallery/01.jpg" },
+  { tag: "REALISM", label: "Realistisches Auge", size: "small", SVG: RealisticEyeSVG, img: "/images/gallery/02.jpg" },
+  { tag: "DARK ART", label: "Wolf Realism", size: "small", SVG: WolfSVG, img: "/images/gallery/03.jpg" },
+  { tag: "REALISM", label: "Löwen-Portrait", size: "large", SVG: LionPortraitSVG, img: "/images/gallery/04.jpg" },
+  { tag: "DARK ART", label: "Skull & Rose", size: "small", SVG: SkullRoseSVG, img: "/images/gallery/05.jpg" },
+  { tag: "BLACK & GREY", label: "Rose & Dolch", size: "small", SVG: RoseDaggerSVG, img: "/images/gallery/06.jpg" },
 ];
 
 function GalleryCard({
@@ -283,7 +284,17 @@ function GalleryCard({
           className="relative overflow-hidden cursor-pointer group bg-[#0a0a0a] border border-cream/5 hover:border-gold/25 transition-colors duration-500 w-full h-full"
           style={{ willChange: "transform" }}
         >
-          {/* SVG art */}
+          {/* Real photo — shown when file exists; SVG fallback otherwise */}
+          {work.img && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={work.img}
+              alt={work.label}
+              className={`absolute inset-0 w-full h-full object-cover transition-transform duration-500 ${hovered ? "scale-105" : "scale-100"}`}
+              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+            />
+          )}
+          {/* SVG art — visible when no real photo */}
           <div className={`absolute inset-0 flex items-center justify-center p-8 transition-all duration-500 ${hovered ? "scale-105" : "scale-100"}`}>
             <div className="w-full h-full text-cream/30 group-hover:text-cream/55 transition-colors duration-500">
               <SVG />
@@ -415,9 +426,14 @@ export default function Gallery() {
         </div>
 
         <div className="mt-10 text-center">
-          <p className="font-sans text-xs text-cream/20 leading-relaxed">
-            Illustrationen im NataschaLee-Stil — echte Fotos folgen demnächst
-          </p>
+          <a
+            href="https://instagram.com/tattooartist_nataschalee"
+            target="_blank"
+            rel="noreferrer"
+            className="font-sans text-[10px] tracking-[0.22em] uppercase text-cream/25 border-b border-cream/12 pb-1 hover:text-white hover:border-white/40 transition-colors duration-300"
+          >
+            Mehr Arbeiten auf Instagram →
+          </a>
         </div>
       </div>
 
@@ -460,20 +476,29 @@ export default function Gallery() {
               </button>
             )}
 
-            {/* SVG */}
+            {/* Photo or SVG */}
             <motion.div
               key={lightboxIdx}
               initial={{ opacity: 0, scale: 0.88 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.88 }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="w-[min(75vw,360px)] h-[min(80vh,460px)] text-cream/75"
+              className="w-[min(80vw,480px)] h-[min(85vh,580px)] relative text-cream/75"
               onClick={(e) => e.stopPropagation()}
             >
-              {(() => {
-                const { SVG } = filtered[lightboxIdx];
-                return <SVG />;
-              })()}
+              {filtered[lightboxIdx].img && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={filtered[lightboxIdx].img}
+                  alt={filtered[lightboxIdx].label}
+                  className="absolute inset-0 w-full h-full object-contain"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                />
+              )}
+              {/* SVG fallback in lightbox */}
+              <div className="w-full h-full">
+                {(() => { const { SVG } = filtered[lightboxIdx]; return <SVG />; })()}
+              </div>
             </motion.div>
 
             {/* Caption */}

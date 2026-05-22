@@ -44,24 +44,40 @@ export default function Artist() {
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             className="relative"
           >
-            <div className="aspect-[3/4] bg-gradient-to-br from-surface via-[#1a1410] to-[#0d0b08] border border-gold/10 relative overflow-hidden">
-              {/* Gold corner accents */}
-              <div className="absolute top-4 left-4 w-8 h-8 border-t border-l border-gold/40" />
-              <div className="absolute bottom-4 right-4 w-8 h-8 border-b border-r border-gold/40" />
+            <div className="aspect-[3/4] bg-[#0d0d0d] border border-white/6 relative overflow-hidden">
+              {/* Corner accents */}
+              <div className="absolute top-4 left-4 w-8 h-8 border-t border-l border-white/18 z-10" />
+              <div className="absolute bottom-4 right-4 w-8 h-8 border-b border-r border-white/18 z-10" />
 
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                <div className="w-16 h-px bg-gold/30" />
-                <p className="font-sans text-[10px] tracking-[0.3em] text-cream/20 uppercase">Foto folgt</p>
-                <p className="font-display text-xl text-gold/40 font-bold">NataschaLee</p>
-                <div className="w-16 h-px bg-gold/30" />
+              {/* Real photo — add file to /public/images/artist.jpg */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/artist.jpg"
+                alt="NataschaLee — Lemgo INK"
+                className="absolute inset-0 w-full h-full object-cover object-center"
+                onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+              />
+
+              {/* Placeholder — hidden when real photo loads */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-5">
+                <div className="w-20 h-20 rounded-full border border-white/8 flex items-center justify-center">
+                  <svg width="36" height="40" viewBox="0 0 36 40" fill="none">
+                    <circle cx="18" cy="13" r="9" stroke="white" strokeOpacity="0.18" strokeWidth="1.5"/>
+                    <path d="M2 40 C2 27 34 27 34 40" stroke="white" strokeOpacity="0.18" strokeWidth="1.5" fill="none"/>
+                  </svg>
+                </div>
+                <div className="text-center">
+                  <p className="font-display text-base font-bold text-white/20 tracking-widest">NATASCHA LEE</p>
+                  <p className="font-sans text-[9px] tracking-[0.3em] uppercase text-white/12 mt-1">Künstlerin · Lemgo INK</p>
+                </div>
               </div>
 
               {/* Stats overlay */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-bg/90 to-transparent p-6">
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-bg/95 to-transparent p-6 z-10">
                 <div className="grid grid-cols-2 gap-4">
                   {artistFacts.map((f) => (
                     <div key={f.label}>
-                      <div className="font-display text-lg font-bold text-gold">{f.value}</div>
+                      <div className="font-display text-lg font-bold text-white">{f.value}</div>
                       <div className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/30">{f.label}</div>
                     </div>
                   ))}
