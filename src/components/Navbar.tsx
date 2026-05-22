@@ -5,8 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const links = [
   { label: "Über uns", target: "ueberuns" },
+  { label: "Wanna DOs", target: "wanna-dos" },
   { label: "Stile", target: "stile" },
   { label: "Portfolio", target: "portfolio" },
+  { label: "Ablauf", target: "ablauf" },
+  { label: "Bewertungen", target: "bewertungen" },
   { label: "Kontakt", target: "kontakt" },
 ];
 
@@ -74,13 +77,13 @@ export default function Navbar() {
           </button>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-7">
+          <div className="hidden lg:flex items-center gap-5">
             <div className="w-px h-4 bg-white/8" />
             {links.map((link) => (
               <button
                 key={link.label}
                 onClick={() => scrollTo(link.target)}
-                className="font-sans text-[11px] tracking-[0.18em] uppercase text-white/40 hover:text-white transition-colors duration-300"
+                className="font-sans text-[10px] tracking-[0.15em] uppercase text-white/38 hover:text-white transition-colors duration-300 whitespace-nowrap"
               >
                 {link.label}
               </button>

@@ -135,7 +135,7 @@ export default function FlashDesigns() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-24 bg-[#0d0d0d]">
+    <section id="wanna-dos" className="py-24 bg-[#0d0d0d]">
       <div className="max-w-7xl mx-auto px-6 lg:px-16">
         {/* Header */}
         <div ref={ref} className="mb-14 text-center">
