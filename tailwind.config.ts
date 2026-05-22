@@ -9,23 +9,25 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: "#05050a",
-        surface: "#0d0d18",
-        border: "#1a1a2e",
-        accent: "#4f46e5",
-        cyan: "#06b6d4",
-        violet: "#8b5cf6",
-        muted: "#6b7280",
+        bg: "#080808",
+        surface: "#111111",
+        gold: "#c9a227",
+        darkgold: "#8a6d00",
+        crimson: "#8b0000",
+        cream: "#f5f0e8",
+        muted: "#6b6b6b",
+        border: "#1e1e1e",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
-        display: ["var(--font-syne)", "sans-serif"],
+        display: ["var(--font-cinzel)", "serif"],
       },
       animation: {
         "spin-slow": "spin 20s linear infinite",
-        "fade-up": "fadeUp 0.8s ease forwards",
-        marquee: "marquee 30s linear infinite",
-        "marquee-reverse": "marquee-reverse 30s linear infinite",
+        marquee: "marquee 28s linear infinite",
+        "marquee-reverse": "marquee-reverse 28s linear infinite",
+        "ink-pulse": "inkPulse 3s ease-in-out infinite",
+        "fade-up": "fadeUp 0.9s ease forwards",
       },
       keyframes: {
         fadeUp: {
@@ -39,6 +41,10 @@ const config: Config = {
         "marquee-reverse": {
           "0%": { transform: "translateX(-50%)" },
           "100%": { transform: "translateX(0%)" },
+        },
+        inkPulse: {
+          "0%, 100%": { opacity: "0.4", transform: "scale(1)" },
+          "50%": { opacity: "1", transform: "scale(1.05)" },
         },
       },
     },

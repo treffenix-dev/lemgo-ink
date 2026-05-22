@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Syne } from "next/font/google";
+import { Inter, Cinzel } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -7,16 +7,17 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const syne = Syne({
+const cinzel = Cinzel({
   subsets: ["latin"],
-  variable: "--font-syne",
-  weight: ["400", "600", "700", "800"],
+  variable: "--font-cinzel",
+  weight: ["400", "600", "700", "900"],
 });
 
 export const metadata: Metadata = {
-  title: "STUDIO — Premium 3D Web Erlebnisse",
+  title: "Lemgo INK by NataschaLee | Privates Tattoo Studio Lemgo",
   description:
-    "Wir bauen digitale Erlebnisse mit modernsten 3D-Animationen. Was Agenturen für €5.000+ verkaufen, baust du jetzt selbst.",
+    "Privates Tattoo Studio in Lemgo NRW. Black & Grey Realism, Portraits, Fine Line & Piercing. 4.7★ auf Google. Jetzt Termin anfragen.",
+  keywords: "Tattoo Lemgo, Tattoo Studio NRW, Black Grey Realism, NataschaLee, Piercing Lemgo",
 };
 
 export default function RootLayout({
@@ -25,8 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de" className={`${inter.variable} ${syne.variable}`}>
-      <body className="font-sans bg-bg text-white antialiased">{children}</body>
+    <html lang="de" className={`${inter.variable} ${cinzel.variable}`}>
+      <body className="font-sans bg-bg text-cream antialiased">{children}</body>
     </html>
   );
 }

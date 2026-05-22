@@ -3,14 +3,19 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const links = ["Leistungen", "Projekte", "Prozess", "Kontakt"];
+const links = [
+  { label: "Über uns", href: "#ueberuns" },
+  { label: "Stile", href: "#stile" },
+  { label: "Portfolio", href: "#portfolio" },
+  { label: "Kontakt", href: "#kontakt" },
+];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -19,91 +24,84 @@ export default function Navbar() {
     <motion.nav
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-bg/80 backdrop-blur-xl border-b border-white/5 shadow-[0_4px_30px_rgba(0,0,0,0.5)]"
+          ? "bg-bg/90 backdrop-blur-xl border-b border-gold/8 shadow-[0_4px_40px_rgba(0,0,0,0.8)]"
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 h-16 md:h-20 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 lg:px-16 h-16 md:h-20 flex items-center justify-between">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-3 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-cyan flex items-center justify-center group-hover:scale-110 transition-transform">
-            <span className="text-white text-xs font-black tracking-tight">
-              3D
-            </span>
-          </div>
-          <span className="font-display font-bold text-lg tracking-tight">
-            STUDIO
-          </span>
+        <a href="/" className="font-display text-xl md:text-2xl font-bold tracking-widest group">
+          <span className="text-cream/90 group-hover:text-cream transition-colors">LEMGO</span>
+          <span className="text-gold"> INK</span>
         </a>
 
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8">
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-10">
           {links.map((link) => (
             <a
-              key={link}
-              href={`#${link.toLowerCase()}`}
-              className="text-sm text-muted hover:text-white transition-colors duration-200 relative group"
+              key={link.label}
+              href={link.href}
+              className="font-sans text-[11px] tracking-[0.22em] uppercase text-cream/40 hover:text-cream transition-colors duration-300 relative group"
             >
-              {link}
-              <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-accent group-hover:w-full transition-all duration-300" />
+              {link.label}
+              <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold group-hover:w-full transition-all duration-300" />
             </a>
           ))}
         </div>
 
         {/* CTA */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:block">
           <a
             href="#kontakt"
-            className="px-5 py-2.5 rounded-full bg-white/5 border border-white/10 hover:border-accent/50 text-sm font-medium transition-all duration-300 hover:bg-accent/10"
+            className="font-sans text-[11px] tracking-[0.22em] uppercase px-6 py-3 border border-gold/30 text-gold hover:bg-gold hover:text-black transition-all duration-300 font-medium"
           >
-            Gespräch buchen
+            Termin anfragen
           </a>
         </div>
 
-        {/* Mobile hamburger */}
+        {/* Hamburger */}
         <button
-          onClick={() => setMobileOpen(!mobileOpen)}
+          onClick={() => setMenuOpen(!menuOpen)}
           className="md:hidden flex flex-col gap-1.5 p-2"
-          aria-label="Menu"
+          aria-label="Menü"
         >
-          <span
-            className={`block w-5 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? "rotate-45 translate-y-2" : ""}`}
-          />
-          <span
-            className={`block w-5 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? "opacity-0" : ""}`}
-          />
-          <span
-            className={`block w-5 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? "-rotate-45 -translate-y-2" : ""}`}
-          />
+          <span className={`block w-6 h-0.5 bg-cream/70 transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+          <span className={`block w-6 h-0.5 bg-cream/70 transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+          <span className={`block w-6 h-0.5 bg-cream/70 transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
         </button>
       </div>
 
       {/* Mobile menu */}
-      {mobileOpen && (
+      {menuOpen && (
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden bg-bg/95 backdrop-blur-xl border-b border-white/5 px-6 py-6 flex flex-col gap-4"
+          className="md:hidden bg-bg/98 backdrop-blur-xl border-b border-gold/10 px-6 py-8 flex flex-col gap-6"
         >
           {links.map((link) => (
             <a
-              key={link}
-              href={`#${link.toLowerCase()}`}
-              onClick={() => setMobileOpen(false)}
-              className="text-base text-muted hover:text-white transition-colors py-1"
+              key={link.label}
+              href={link.href}
+              onClick={() => setMenuOpen(false)}
+              className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50 hover:text-gold transition-colors py-1"
             >
-              {link}
+              {link.label}
             </a>
           ))}
           <a
             href="#kontakt"
-            className="mt-2 px-5 py-3 rounded-full bg-accent text-white text-sm font-semibold text-center"
+            onClick={() => setMenuOpen(false)}
+            className="mt-2 px-6 py-4 bg-gold text-black font-sans text-xs tracking-[0.22em] uppercase font-bold text-center hover:bg-gold/85 transition-colors"
           >
-            Gespräch buchen
+            Termin anfragen
           </a>
+          <div className="flex gap-6 pt-2">
+            <a href="https://wa.me/4915257668403" target="_blank" rel="noreferrer" className="font-sans text-xs text-[#25D366] tracking-[0.15em] uppercase">WhatsApp</a>
+            <a href="https://instagram.com/tattooartist_nataschalee" target="_blank" rel="noreferrer" className="font-sans text-xs text-cream/30 tracking-[0.15em] uppercase hover:text-gold transition-colors">Instagram</a>
+          </div>
         </motion.div>
       )}
     </motion.nav>

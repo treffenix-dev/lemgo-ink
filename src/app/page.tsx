@@ -1,11 +1,11 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import Marquee from "@/components/Marquee";
-import Services from "@/components/Services";
+import Artist from "@/components/Artist";
 import Stats from "@/components/Stats";
-import Works from "@/components/Works";
+import Styles from "@/components/Styles";
+import Gallery from "@/components/Gallery";
 import Process from "@/components/Process";
-import CTA from "@/components/CTA";
+import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -13,12 +13,12 @@ export default function Home() {
     <main className="relative">
       <Navbar />
       <Hero />
-      <Marquee />
-      <Services />
       <Stats />
-      <Works />
+      <Artist />
+      <Styles />
+      <Gallery />
       <Process />
-      <CTA />
+      <Contact />
       <Footer />
     </main>
   );
