@@ -144,3 +144,103 @@ input:focus, select:focus, textarea:focus {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ────────────────────────────────────────────────────────────
+   HyperFrames CSS Animations
+   Nur transform + opacity animieren (GPU-beschleunigt)
+   200-300ms für UI-Interaktionen
+   ──────────────────────────────────────────────────────────── */
+
+/* Gold glow pulse — für Akzente, Borders, Icons */
+@keyframes goldGlow {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50%       { opacity: 0.70; transform: scale(1.04); }
+}
+.anim-gold-glow {
+  animation: goldGlow 3.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* Floating — sanftes Schweben für dekorative Elemente */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+.anim-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* Shimmer — Gold-Glanz über Text/Elemente (rein CSS) */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.anim-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(201,168,76,0) 0%,
+    rgba(201,168,76,0.6) 50%,
+    rgba(201,168,76,0) 100%
+  );
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+}
+
+/* Scan line — für Gold-Scan-Effekte (HyperFrames-Stil) */
+@keyframes scanline {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* Fade-in-up — Standard Entrance (200-300ms für UI, 900ms für Sections) */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.anim-entrance {
+  animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.36, 1) forwards;
+}
+
+/* Subtle background breathe — für Section-Hintergründe */
+@keyframes bgBreathe {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1.0; }
+}
+
+/* Border glow rotate — für dekorative Rahmen */
+@keyframes borderGlow {
+  0%   { box-shadow: 0 0 8px rgba(201,168,76,0.08), 0 0 24px rgba(201,168,76,0.04); }
+  50%  { box-shadow: 0 0 16px rgba(201,168,76,0.18), 0 0 40px rgba(201,168,76,0.08); }
+  100% { box-shadow: 0 0 8px rgba(201,168,76,0.08), 0 0 24px rgba(201,168,76,0.04); }
+}
+.anim-border-glow {
+  animation: borderGlow 4s ease-in-out infinite;
+}
+
+/* Gold line grow — für horizontale Akzentlinien */
+@keyframes lineGrow {
+  from { transform: scaleX(0); opacity: 0; }
+  to   { transform: scaleX(1); opacity: 1; }
+}
+.anim-line-grow {
+  animation: lineGrow 0.8s cubic-bezier(0.16, 1, 0.36, 1) forwards;
+  transform-origin: left;
+}
+
+/* ── prefers-reduced-motion: alle Animationen deaktivieren ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Standardisierte Transition-Klassen (UI-Animation Prinzip) ── */
+/* 200ms — schnelle UI-Reaktionen */
+.transition-ui   { transition: opacity 0.2s ease-out, transform 0.2s ease-out; }
+/* 300ms — Standard Hover/Focus */
+.transition-std  { transition: opacity 0.3s ease-out, transform 0.3s ease-out; }
+/* 600ms — smooth, für Zustandswechsel */
+.transition-slow { transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
