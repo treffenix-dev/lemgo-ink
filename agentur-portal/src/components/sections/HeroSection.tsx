@@ -15,17 +15,12 @@ export function HeroSection() {
     offset: ["start start", "end start"],
   });
 
-  // Multi-layer parallax — different speeds create perceived depth
   const eyebrowY  = useTransform(scrollYProgress, [0, 1], ["0%", "-18%"]);
-  const headlineY = useTransform(scrollYProgress, [0, 1], ["0%", "-7%"]);  // slowest
-  const sublineY  = useTransform(scrollYProgress, [0, 1], ["0%", "-32%"]); // faster
+  const headlineY = useTransform(scrollYProgress, [0, 1], ["0%", "-7%"]);
+  const sublineY  = useTransform(scrollYProgress, [0, 1], ["0%", "-32%"]);
   const ctaY      = useTransform(scrollYProgress, [0, 1], ["0%", "-22%"]);
   const contentOpacity = useTransform(scrollYProgress, [0.45, 0.85], [1, 0]);
-
-  // 3D perspective — initial slight tilt normalizes as you scroll (cinematic)
   const rotateX = useTransform(scrollYProgress, [0, 0.3], [3.5, 0]);
-
-  // Orb parallax — background moves slower than content
   const orb1Y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const orb2Y = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
@@ -34,7 +29,6 @@ export function HeroSection() {
       ref={ref}
       className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden bg-[#06060A]"
     >
-      {/* ── Animated background orbs ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
           style={{ y: orb1Y }}
@@ -44,14 +38,11 @@ export function HeroSection() {
           style={{ y: orb2Y }}
           className="hero-orb-2 absolute w-[600px] h-[600px] rounded-full bg-violet-950/50 blur-[140px] bottom-0 right-0"
         />
-        {/* Subtle center glow */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.015] to-transparent" />
       </div>
 
-      {/* ── Main content ── */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-10 py-32">
 
-        {/* Eyebrow */}
         <motion.div
           style={{ y: eyebrowY, opacity: contentOpacity }}
           initial={{ opacity: 0, y: 18 }}
@@ -61,13 +52,12 @@ export function HeroSection() {
         >
           <span className="block w-6 h-px bg-white/20" />
           <span className="text-[11px] tracking-[0.42em] uppercase text-white/35 font-medium">
-            Research-first web design
+            Professionelles Webdesign
           </span>
         </motion.div>
 
-        {/* Headline — 3D perspective container */}
         <motion.div style={{ y: headlineY, opacity: contentOpacity }}>
-          <div style={{ perspective: 1200 }}>
+          <div style={{ perspective: "1200px" }}>
             <motion.div style={{ rotateX }}>
               <h1 className="text-[clamp(52px,8.5vw,124px)] font-bold leading-[0.88] tracking-[-0.03em] text-white mb-8">
                 {HEADLINE_WORDS.map((word, i) => (
@@ -90,7 +80,6 @@ export function HeroSection() {
           </div>
         </motion.div>
 
-        {/* Subline */}
         <motion.p
           style={{ y: sublineY, opacity: contentOpacity }}
           initial={{ opacity: 0, y: 22 }}
@@ -101,7 +90,6 @@ export function HeroSection() {
           Moderne Websites mit Kundenportal, Onboarding-System und direktem Support — für lokale Unternehmen in Deutschland.
         </motion.p>
 
-        {/* CTAs */}
         <motion.div
           style={{ y: ctaY, opacity: contentOpacity }}
           initial={{ opacity: 0, y: 22 }}
@@ -124,7 +112,6 @@ export function HeroSection() {
           </Link>
         </motion.div>
 
-        {/* Trust micro-line */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -140,7 +127,6 @@ export function HeroSection() {
         </motion.div>
       </div>
 
-      {/* Bottom fade to next section */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
     </section>
   );
