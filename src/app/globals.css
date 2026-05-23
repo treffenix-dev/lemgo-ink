@@ -2,83 +2,132 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Design tokens ── */
 :root {
-  --gold: #ffffff;
-  --crimson: #1c1c1c;
-  --bg: #080808;
-  --cream: #f0ece6;
+  --gold:      #D4AF37;
+  --gold-glow: rgba(212, 175, 55, 0.22);
+  --bg:        #000000;
+  --surface:   #111111;
+  --cream:     #F5F5F5;
 }
 
-* {
+/* ── Reset ── */
+*, *::before, *::after {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
 }
 
 body {
   background: var(--bg);
   color: var(--cream);
   overflow-x: hidden;
+  cursor: none; /* hidden — CustomCursor takes over */
 }
 
-/* White gradient text */
-.gradient-text {
-  background: linear-gradient(135deg, #ffffff 0%, #d0ccc8 50%, #909090 100%);
+/* ── Gold gradient text ── */
+.gold-text {
+  background: linear-gradient(135deg, #F2D060 0%, #D4AF37 55%, #8B7220 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Subtle grain texture */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.35;
+/* ── White gradient text (kept for compatibility) ── */
+.gradient-text {
+  background: linear-gradient(135deg, #ffffff 0%, #D4AF37 55%, #8B7220 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 2px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
+/* ── Section label ── */
+.section-label {
+  font-family: var(--font-inter);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.6);
+}
 
-/* Divider line */
-.gold-line {
+/* ── Gold horizontal rule ── */
+.gold-rule {
   display: inline-flex;
   align-items: center;
   gap: 12px;
 }
-.gold-line::before {
+.gold-rule::before {
   content: "";
   display: inline-block;
   width: 32px;
   height: 1px;
-  background: rgba(255,255,255,0.3);
+  background: var(--gold);
+  opacity: 0.5;
 }
 
-/* Section label */
-.section-label {
-  font-family: var(--font-inter);
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgba(240,236,230,0.45);
+/* ── Subtle film grain ── */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.28;
 }
 
-/* Reveal on scroll */
+/* ── Scrollbar ── */
+::-webkit-scrollbar           { width: 2px; }
+::-webkit-scrollbar-track     { background: #000; }
+::-webkit-scrollbar-thumb     { background: rgba(212,175,55,0.3); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover{ background: rgba(212,175,55,0.55); }
+
+/* ── Reveal on scroll (CSS class fallback) ── */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.85s ease, transform 0.85s cubic-bezier(0.16, 1, 0.36, 1);
+  transform: translateY(32px);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.16, 1, 0.36, 1);
 }
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ── Horizontal scroll section ── */
+.horizontal-track {
+  display: flex;
+  flex-wrap: nowrap;
+  will-change: transform;
+}
+
+/* ── Glassmorphism ── */
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-gold {
+  background: rgba(212, 175, 55, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+/* ── Form focus glow ── */
+input:focus, select:focus, textarea:focus {
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.35);
+}
+
+/* ── Magnetic button ── */
+.magnetic {
+  transition: transform 0.1s ease-out;
+}
+.magnetic:not(:hover) {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
