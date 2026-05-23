@@ -10,6 +10,7 @@ const links = [
   { label: "Portfolio", target: "portfolio" },
   { label: "Ablauf", target: "ablauf" },
   { label: "Bewertungen", target: "bewertungen" },
+  { label: "FAQ", target: "faq" },
   { label: "Kontakt", target: "kontakt" },
 ];
 
