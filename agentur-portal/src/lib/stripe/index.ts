@@ -1,12 +1,4 @@
-import Stripe from "stripe";
-
-export function getStripe(): Stripe {
-  if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error("STRIPE_SECRET_KEY is not set");
-  }
-  return new Stripe(process.env.STRIPE_SECRET_KEY);
-}
-
+// Stripe wird später integriert
 export const STRIPE_PRICES = {
   starter_einmalig: process.env.STRIPE_PRICE_STARTER_EINMALIG,
   business_einmalig: process.env.STRIPE_PRICE_BUSINESS_EINMALIG,

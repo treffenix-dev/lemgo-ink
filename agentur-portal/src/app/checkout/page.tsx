@@ -56,29 +56,20 @@ function CheckoutForm() {
       preis,
     };
 
-    if (["karte", "paypal", "klarna", "sepa"].includes(zahlungsart)) {
-      const res = await fetch("/api/checkout/stripe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const { url } = await res.json();
-      if (url) window.location.href = url;
-    } else {
-      const res = await fetch("/api/checkout/manual", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const { customerId } = await res.json();
-      if (customerId) router.push("/checkout/bestaetigung?typ=manuell");
-    }
+    const res = await fetch("/api/checkout/manual", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const { customerId } = await res.json();
+    if (customerId) router.push("/checkout/bestaetigung?typ=manuell");
 
     setLoading(false);
   }
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Header */}
       <header className="border-b border-border bg-background/95 h-14 flex items-center px-6">
         <Link href="/pakete" className="text-sm text-muted-foreground hover:text-foreground">
           ← Zurück zu den Paketen
@@ -93,9 +84,10 @@ function CheckoutForm() {
       </header>
 
       <div className="max-w-5xl mx-auto px-4 py-10 grid lg:grid-cols-[1fr_360px] gap-8">
+        {/* Left: Steps */}
         <div>
           {step === 1 && (
-            <div className="animate-fade-in">
+            <div>
               <h1 className="text-2xl font-bold mb-6">Paket bestätigen</h1>
 
               <div className="rounded-xl border border-foreground bg-foreground/5 p-5 mb-6">
@@ -157,7 +149,7 @@ function CheckoutForm() {
           )}
 
           {step === 2 && (
-            <div className="animate-fade-in">
+            <div>
               <h1 className="text-2xl font-bold mb-6">Deine Daten</h1>
               <div className="grid sm:grid-cols-2 gap-4">
                 <Input label="Vorname" required value={form.vorname} onChange={(e) => updateForm("vorname", e.target.value)} />
@@ -192,7 +184,7 @@ function CheckoutForm() {
           )}
 
           {step === 3 && (
-            <div className="animate-fade-in">
+            <div>
               <h1 className="text-2xl font-bold mb-6">Bestätigung & Zahlung</h1>
 
               <div className="bg-muted/40 rounded-xl border border-border p-5 mb-6 space-y-3">
@@ -247,6 +239,7 @@ function CheckoutForm() {
           )}
         </div>
 
+        {/* Right: Order summary */}
         <div className="lg:sticky lg:top-6 h-fit">
           <div className="rounded-xl border border-border bg-card p-6">
             <p className="font-semibold mb-4">Bestellübersicht</p>
