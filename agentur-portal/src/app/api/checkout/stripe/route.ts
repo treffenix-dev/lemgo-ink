@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import type { PaketType, ZahlungsModell } from "@/types";
 import { PAKETE } from "@/lib/data/pakete";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,10 +16,9 @@ export async function POST(req: NextRequest) {
     };
 
     const paketData = PAKETE.find((p) => p.id === paket);
-    if (!paketData) {
-      return NextResponse.json({ error: "Paket nicht gefunden" }, { status: 400 });
-    }
+    if (!paketData) return NextResponse.json({ error: "Paket nicht gefunden" }, { status: 400 });
 
+    const stripe = getStripe();
     const betragsInCents = Math.round(preis * 100);
     const isAbo = zahlungsmodell === "abo";
 
@@ -31,23 +32,12 @@ export async function POST(req: NextRequest) {
         kundenname: `${profil.vorname} ${profil.nachname}`,
         firma: profil.firma,
       },
-      line_items: [
-        {
-          price_data: isAbo
-            ? {
-                currency: "eur",
-                product_data: { name: `${paketData.name} — Abo` },
-                recurring: { interval: "month" },
-                unit_amount: betragsInCents,
-              }
-            : {
-                currency: "eur",
-                product_data: { name: paketData.name },
-                unit_amount: betragsInCents,
-              },
-          quantity: 1,
-        },
-      ],
+      line_items: [{
+        price_data: isAbo
+          ? { currency: "eur", product_data: { name: `${paketData.name} — Abo` }, recurring: { interval: "month" }, unit_amount: betragsInCents }
+          : { currency: "eur", product_data: { name: paketData.name }, unit_amount: betragsInCents },
+        quantity: 1,
+      }],
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/bestaetigung?typ=stripe&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/checkout?paket=${paket}`,
     });
