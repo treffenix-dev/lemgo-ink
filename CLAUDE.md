@@ -1,3 +1,21 @@
+# ⚠️ ZWEI GETRENNTE PROJEKTE — NIEMALS MISCHEN
+
+## Projekt 1: Lemgo INK (DIESES Repo)
+- **Pfad:** `/home/user/3D-Animation-Webseiten-bauen/` (Root)
+- **Repo:** `treffenix-dev/3D-Animation-Webseiten-bauen`
+- **Branch:** `claude/3d-web-animations-P1GAF`
+- **Vercel:** Eigenes Deployment, Root Directory = `/`
+- **Zweck:** Tattoo-Studio Website für Natascha Lee
+
+## Projekt 2: Agentur-Portal (SEPARATES Projekt)
+- **Pfad:** `/home/user/agentur-portal/`
+- **Repo:** Eigenes Repo (NICHT dieses hier)
+- **Vercel:** Eigenes Deployment, Root Directory = `agentur-portal`
+- **Zweck:** Kundenportal für WebAgentur (Supabase + Stripe)
+- **WICHTIG:** Alle Änderungen am Portal → separater Git-Kontext, niemals hier committen
+
+---
+
 # Lemgo INK — Claude Projektgedächtnis
 
 ## Projekt
