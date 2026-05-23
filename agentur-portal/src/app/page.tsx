@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { PAKETE } from "@/lib/data/pakete";
 import { formatCurrency } from "@/lib/utils/format";
 import { Check, ArrowRight, MessageCircle, Phone, Mail, ChevronDown } from "lucide-react";
+import { HeroSection } from "@/components/sections/HeroSection";
 
 export default function HomePage() {
   return (
@@ -11,39 +12,7 @@ export default function HomePage() {
       <PublicNavbar />
 
       {/* ── Hero ── */}
-      <section className="section container-wide flex flex-col items-center text-center gap-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-muted text-sm text-muted-foreground">
-          <span className="w-2 h-2 rounded-full bg-green-500" />
-          Plätze verfügbar — Jetzt starten
-        </div>
-
-        <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-foreground max-w-3xl">
-          Deine Website.<br />
-          <span className="text-blue-600">Professionell. Schnell. Transparent.</span>
-        </h1>
-
-        <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
-          Ich baue moderne Websites für Restaurants, Geschäfte und Dienstleister in Deutschland —
-          mit eigenem Kundenportal, damit du immer weißt, was gerade passiert.
-        </p>
-
-        <div className="flex flex-wrap gap-3 justify-center">
-          <Button size="lg" asChild>
-            <Link href="/pakete">Paket wählen <ArrowRight className="w-4 h-4" /></Link>
-          </Button>
-          <Button size="lg" variant="outline" asChild>
-            <Link href="/#kontakt">Kostenlos beraten lassen</Link>
-          </Button>
-        </div>
-
-        <div className="flex flex-wrap gap-6 justify-center text-sm text-muted-foreground pt-4">
-          {["Lieferung in 5–28 Tagen", "Kundenportal inklusive", "Persönlicher Support", "Kein versteckter Aufwand"].map((t) => (
-            <span key={t} className="flex items-center gap-1.5">
-              <Check className="w-4 h-4 text-green-600" /> {t}
-            </span>
-          ))}
-        </div>
-      </section>
+      <HeroSection />
 
       {/* ── Vorteile ── */}
       <section className="section bg-muted/40">
