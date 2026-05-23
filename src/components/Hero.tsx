@@ -60,13 +60,13 @@ export default function Hero() {
       </div>
 
       {/* ── LEFT GRADIENT — text readability ── */}
-      <div className="absolute inset-0 z-[2] pointer-events-none
-        bg-[linear-gradient(to_right,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.65)_45%,rgba(0,0,0,0.15)_75%,transparent_100%)]"
+      <div className="absolute inset-0 z-[2] pointer-events-none"
+        style={{ background: "linear-gradient(to right, rgba(6,5,10,0.94) 0%, rgba(6,5,10,0.72) 42%, rgba(6,5,10,0.18) 72%, transparent 100%)" }}
       />
 
       {/* ── BOTTOM FADE ── */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 z-[3] pointer-events-none
-        bg-gradient-to-t from-black to-transparent"
+      <div className="absolute bottom-0 left-0 right-0 h-48 z-[3] pointer-events-none"
+        style={{ background: "linear-gradient(to top, #06050A, transparent)" }}
       />
 
       {/* ── CONTENT ── */}
@@ -78,80 +78,82 @@ export default function Hero() {
           className="max-w-[640px]"
         >
           {/* Label */}
-          <motion.div variants={slideIn} className="flex items-center gap-3 mb-10">
-            <div className="w-8 h-px bg-gold opacity-60" />
-            <span className="font-sans text-[10px] tracking-[0.35em] uppercase text-gold/70">
+          <motion.div variants={slideIn} className="flex items-center gap-4 mb-12">
+            <div className="w-10 h-px bg-gold/40" />
+            <span className="font-sans text-[9px] tracking-[0.42em] uppercase text-gold/55">
               Privates Studio · Lemgo NRW · seit 2020
             </span>
           </motion.div>
 
-          {/* MAIN HEADLINE — Bebas Neue, cinematic scale */}
+          {/* MAIN HEADLINE */}
           <motion.h1
             variants={fadeUp}
-            className="font-display leading-[0.90] tracking-wide mb-8"
-            style={{ fontSize: "clamp(80px,14vw,172px)" }}
+            className="font-display leading-[0.88] tracking-wide mb-10"
+            style={{ fontSize: "clamp(76px,13vw,168px)" }}
           >
-            <span className="block text-cream/92">KEIN</span>
-            <span className="block text-cream/92">KOMPROMISS.</span>
+            <span className="block text-ivory/88">KEIN</span>
+            <span className="block text-ivory/88">KOMPROMISS.</span>
             <span className="block gold-text">KEINE</span>
             <span className="block gold-text">KOPIEN.</span>
           </motion.h1>
 
+          {/* Noble divider line */}
+          <motion.div variants={fadeUp} className="w-16 h-px bg-gold/25 mb-8" />
+
           {/* Sub */}
           <motion.p
             variants={fadeUp}
-            className="font-sans text-[clamp(14px,2vw,16px)] text-cream/42 leading-[1.9] mb-10 max-w-md font-light"
+            className="font-sans text-[clamp(13px,1.8vw,15px)] text-cream/38 leading-[2.1] mb-12 max-w-[380px] font-light tracking-wide"
           >
             Natascha Lee tätowiert in ihrem privaten Studio in Lemgo mit der
             Präzision einer Chirurgin — und der Seele einer Künstlerin.
           </motion.p>
 
           {/* CTAs */}
-          <motion.div variants={fadeUp} className="flex flex-wrap gap-4 mb-12">
+          <motion.div variants={fadeUp} className="flex flex-wrap gap-4 mb-14">
             <button
               onClick={() => scrollTo("kontakt")}
               data-cursor="BUCHEN"
               {...magnetic}
-              className="magnetic flex items-center gap-2.5 px-8 py-4
-                bg-gold text-black font-sans font-bold text-[11px] tracking-[0.22em] uppercase
-                hover:bg-gold-light active:scale-[0.97] transition-colors duration-300
-                shadow-[0_0_40px_rgba(212,175,55,0.35)]"
+              className="magnetic flex items-center gap-3 px-8 py-4
+                bg-gold text-black font-sans font-bold text-[10px] tracking-[0.28em] uppercase
+                hover:bg-gold-light active:scale-[0.97] transition-all duration-500"
             >
               Termin anfragen
-              <span className="w-6 h-6 bg-black/15 flex items-center justify-center text-[11px]">→</span>
+              <span className="opacity-60 text-sm">→</span>
             </button>
 
             <button
               onClick={() => scrollTo("portfolio")}
               data-cursor="MEHR"
               {...magnetic}
-              className="magnetic flex items-center gap-2.5 px-8 py-4
-                border border-gold/30 text-cream/60
-                hover:border-gold/60 hover:text-cream
-                font-sans font-medium text-[11px] tracking-[0.22em] uppercase
-                transition-all duration-300"
+              className="magnetic flex items-center gap-3 px-8 py-4
+                border border-ivory/12 text-ivory/45
+                hover:border-gold/35 hover:text-ivory/75
+                font-sans font-light text-[10px] tracking-[0.28em] uppercase
+                transition-all duration-500"
             >
               Portfolio
-              <span className="w-6 h-6 border border-gold/20 flex items-center justify-center text-[11px]">↓</span>
+              <span className="opacity-50 text-sm">↓</span>
             </button>
           </motion.div>
 
-          {/* Social proof */}
+          {/* Social proof — minimal */}
           <motion.div variants={fadeUp} className="flex items-center gap-5 flex-wrap">
-            <div className="flex gap-0.5">
+            <div className="flex gap-1">
               {[...Array(5)].map((_, i) => (
-                <span key={i} className="text-gold text-sm">★</span>
+                <span key={i} className="text-gold/70 text-[11px]">★</span>
               ))}
             </div>
-            <span className="font-sans text-xs text-cream/35">
-              <span className="text-cream/60 font-medium">4.7</span> · 39 Google Bewertungen
+            <span className="font-sans text-[10px] text-cream/28 tracking-wider">
+              4.7 · 39 Google Bewertungen
             </span>
-            <div className="w-px h-4 bg-cream/10" />
+            <div className="w-px h-3 bg-cream/10" />
             <a
               href="https://instagram.com/tattooartist_nataschalee"
               target="_blank"
               rel="noreferrer"
-              className="font-sans text-xs text-cream/30 hover:text-gold transition-colors"
+              className="font-sans text-[10px] text-cream/22 hover:text-gold/70 transition-colors duration-500 tracking-wider"
             >
               @tattooartist_nataschalee
             </a>

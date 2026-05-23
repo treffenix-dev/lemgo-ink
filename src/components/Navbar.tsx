@@ -39,11 +39,11 @@ export default function Navbar() {
       >
         <div className={`
           mx-auto flex items-center justify-between md:justify-start gap-6
-          px-5 md:px-7 h-12
-          transition-all duration-500
+          px-5 md:px-8 h-11
+          transition-all duration-700
           ${scrolled
-            ? "bg-black/92 backdrop-blur-2xl border border-gold/15 shadow-[0_4px_40px_rgba(0,0,0,0.8)]"
-            : "bg-black/60 backdrop-blur-xl border border-white/6"
+            ? "bg-[rgba(6,5,10,0.95)] backdrop-blur-2xl border border-[rgba(201,168,76,0.12)] shadow-[0_2px_60px_rgba(0,0,0,0.9)]"
+            : "bg-[rgba(6,5,10,0.55)] backdrop-blur-xl border border-[rgba(255,252,245,0.05)]"
           }
         `}>
 
@@ -65,21 +65,21 @@ export default function Navbar() {
               <rect x="6.5" y="20" width="11" height="1.5" fill="rgba(212,175,55,0.18)"/>
               <rect x="8"   y="21.5" width="8" height="1.5" fill="rgba(212,175,55,0.12)"/>
             </svg>
-            <span className="font-display text-sm tracking-[0.2em]">
-              <span className="text-cream/75 group-hover:text-cream transition-colors">LEMGO</span>
-              <span className="text-gold"> INK</span>
+            <span className="font-display text-[13px] tracking-[0.28em]">
+              <span className="text-ivory/65 group-hover:text-ivory/90 transition-colors duration-500">LEMGO</span>
+              <span className="text-gold/80 group-hover:text-gold transition-colors duration-500"> INK</span>
             </span>
           </button>
 
           {/* Desktop links */}
-          <div className="hidden xl:flex items-center gap-5">
-            <div className="w-px h-4 bg-gold/15" />
+          <div className="hidden xl:flex items-center gap-6">
+            <div className="w-px h-3 bg-gold/10" />
             {links.map((link) => (
               <button
                 key={link.label}
                 onClick={() => scrollTo(link.target)}
-                className="font-sans text-[9px] tracking-[0.18em] uppercase text-cream/35
-                  hover:text-gold transition-colors duration-300 whitespace-nowrap"
+                className="font-sans text-[8.5px] tracking-[0.22em] uppercase text-cream/28
+                  hover:text-cream/80 transition-colors duration-500 whitespace-nowrap"
               >
                 {link.label}
               </button>
@@ -87,16 +87,15 @@ export default function Navbar() {
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-3 ml-4">
-            <div className="w-px h-4 bg-gold/15" />
+          <div className="hidden md:flex items-center gap-3 ml-5">
+            <div className="w-px h-3 bg-gold/10" />
             <button
               onClick={() => scrollTo("kontakt")}
-              className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.18em] uppercase
-                text-black bg-gold hover:bg-gold-light active:scale-[0.97]
-                transition-all duration-300 px-4 py-1.5 font-semibold"
+              className="font-sans text-[8px] tracking-[0.24em] uppercase
+                text-gold/80 hover:text-gold border border-gold/20 hover:border-gold/50
+                transition-all duration-500 px-4 py-2"
             >
-              Termin
-              <span className="w-4 h-4 bg-black/15 flex items-center justify-center text-[9px]">→</span>
+              Termin anfragen
             </button>
           </div>
 

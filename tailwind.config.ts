@@ -9,15 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg:      "#000000",
-        surface: "#111111",
-        "surface-2": "#1A1A1A",
-        gold:    "#D4AF37",
-        "gold-light": "#F2D060",
-        "gold-dark":  "#8B7220",
-        cream:   "#F5F5F5",
-        muted:   "#6b6b6b",
-        border:  "#222222",
+        bg:          "#06050A",
+        surface:     "#0F0E13",
+        "surface-2": "#181620",
+        gold:        "#C9A84C",
+        "gold-light":"#E8C96A",
+        "gold-dark": "#8B6B1E",
+        cream:       "#EDE8DF",
+        ivory:       "#F5F1EA",
+        muted:       "#5A5660",
+        border:      "#1E1C26",
       },
       fontFamily: {
         display: ["var(--font-bebas)", "Bebas Neue", "sans-serif"],
