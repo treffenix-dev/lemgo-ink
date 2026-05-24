@@ -31,7 +31,9 @@ export default function LeistungenPage() {
                 </div>
                 <div className="mb-6">
                   <p className="text-4xl font-bold">{formatCurrency(p.preis_einmalig)}</p>
-                  <p className="text-sm text-muted-foreground mt-1">einmalig · oder ab {formatCurrency(p.preis_monatlich)}/Monat</p>
+                  {p.preis_monatlich && (
+                    <p className="text-sm text-muted-foreground mt-1">oder ab {formatCurrency(p.preis_monatlich)}/Monat</p>
+                  )}
                   <p className="text-xs text-muted-foreground mt-0.5">Lieferzeit: {p.lieferzeit}</p>
                 </div>
                 <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{p.fuer_wen}</p>
@@ -90,10 +92,10 @@ export default function LeistungenPage() {
           <p className="text-background/70 mb-8">Wähle dein Paket und starte direkt — oder lass dich kostenlos beraten.</p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Button size="lg" asChild>
-              <Link href="/pakete" className="bg-background text-foreground hover:bg-background/90">Paket wählen</Link>
+              <Link href="/pakete">Paket wählen</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="/#kontakt" className="border-background/30 text-background hover:bg-background/10">Kostenlos beraten</Link>
+              <Link href="/#kontakt">Kostenlos beraten</Link>
             </Button>
           </div>
         </div>
