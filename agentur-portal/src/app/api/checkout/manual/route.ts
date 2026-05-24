@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createInvoice } from "@/lib/invoice/create";
+import { getInvoiceSettings } from "@/lib/invoice/settings";
+import { generateInvoicePDF } from "@/lib/invoice/generate";
+import { sendInvoiceEmail } from "@/lib/email/send";
 
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
@@ -8,7 +13,20 @@ export async function POST(req: NextRequest) {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     const body = await req.json();
     console.log("[Demo Checkout]", body.profil?.email, body.paket, body.preis);
-    return NextResponse.json({ customerId: `demo_${Date.now()}` });
+
+    const settings = getInvoiceSettings();
+    const invoice = createInvoice(body, settings.zahlungsziel_tage);
+
+    if (settings.auto_senden) {
+      try {
+        const pdfBuffer = await generateInvoicePDF(invoice);
+        await sendInvoiceEmail(invoice, pdfBuffer);
+      } catch (err) {
+        console.error("[Demo Checkout] Rechnungsversand fehlgeschlagen:", err);
+      }
+    }
+
+    return NextResponse.json({ customerId: `demo_${Date.now()}`, invoiceId: invoice.id });
   }
 
   try {
@@ -67,7 +85,20 @@ export async function POST(req: NextRequest) {
       link: "/portal",
     });
 
-    return NextResponse.json({ customerId: customerProfile.id });
+    // Create file-based invoice for PDF generation
+    const settings = getInvoiceSettings();
+    const fileInvoice = createInvoice(body, settings.zahlungsziel_tage);
+
+    if (settings.auto_senden) {
+      try {
+        const pdfBuffer = await generateInvoicePDF(fileInvoice);
+        await sendInvoiceEmail(fileInvoice, pdfBuffer);
+      } catch (err) {
+        console.error("[Checkout] Rechnungsversand fehlgeschlagen:", err);
+      }
+    }
+
+    return NextResponse.json({ customerId: customerProfile.id, invoiceId: fileInvoice.id });
   } catch (error) {
     console.error("Checkout error:", error);
     return NextResponse.json({ error: "Interner Fehler" }, { status: 500 });

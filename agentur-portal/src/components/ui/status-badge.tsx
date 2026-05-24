@@ -21,7 +21,8 @@ const TICKET_STATUS_MAP: Record<TicketStatus, { label: string; className: string
   archiviert: { label: "Archiviert", className: "bg-gray-100 text-gray-500" },
 };
 
-const INVOICE_STATUS_MAP: Record<InvoiceStatus, { label: string; className: string }> = {
+const INVOICE_STATUS_MAP: Record<string, { label: string; className: string }> = {
+  entwurf: { label: "Entwurf", className: "bg-gray-100 text-gray-600" },
   offen: { label: "Offen", className: "bg-amber-100 text-amber-700" },
   bezahlt: { label: "Bezahlt", className: "bg-green-100 text-green-700" },
   storniert: { label: "Storniert", className: "bg-red-100 text-red-700" },

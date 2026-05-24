@@ -8,6 +8,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 type Agentur = { name: string; inhaber: string; email: string; telefon: string; strasse: string; plz: string; ort: string; ust: string };
 type Notif = { neuesTicket: boolean; neueBestellung: boolean; faelligeRechnung: boolean };
+type InvoiceSettings = { auto_senden: boolean; zahlungsziel_tage: number; absender_email: string };
 
 const initialAgentur: Agentur = {
   name: "WebAgentur", inhaber: "Max Mustermann", email: "hallo@webagentur.de",
@@ -15,10 +16,12 @@ const initialAgentur: Agentur = {
 };
 
 const initialNotif: Notif = { neuesTicket: true, neueBestellung: true, faelligeRechnung: false };
+const initialInvoiceSettings: InvoiceSettings = { auto_senden: false, zahlungsziel_tage: 14, absender_email: "" };
 
 export default function EinstellungenPage() {
   const [agentur, setAgentur] = useLocalStorage<Agentur>("owner_einstellungen", initialAgentur);
   const [notif, setNotif] = useLocalStorage<Notif>("owner_notif", initialNotif);
+  const [invoiceSettings, setInvoiceSettings] = useLocalStorage<InvoiceSettings>("owner_invoice_settings", initialInvoiceSettings);
   const [saved, setSaved] = useState(false);
 
   function handleSave(e: React.FormEvent) {
@@ -83,6 +86,47 @@ export default function EinstellungenPage() {
               </button>
             </div>
           ))}
+        </div>
+
+        {/* Rechnungseinstellungen */}
+        <div className="rounded-xl border border-border bg-card p-6 space-y-5">
+          <div>
+            <h3 className="font-semibold">Rechnungseinstellungen</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              E-Mail-Versand erfordert <code className="bg-muted px-1 rounded text-xs">RESEND_API_KEY</code> in den Umgebungsvariablen.
+            </p>
+          </div>
+
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-medium">Rechnung automatisch per E-Mail senden</p>
+              <p className="text-xs text-muted-foreground">Bei neuer Bestellung sofort verschicken (sonst: manuell im Rechnungs-Dashboard)</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setInvoiceSettings((s) => ({ ...s, auto_senden: !s.auto_senden }))}
+              className={`w-10 h-5 rounded-full relative shrink-0 transition-colors ${invoiceSettings.auto_senden ? "bg-foreground" : "bg-muted-foreground/30"}`}
+            >
+              <div className={`absolute top-0.5 w-4 h-4 bg-background rounded-full transition-all ${invoiceSettings.auto_senden ? "right-0.5" : "left-0.5"}`} />
+            </button>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <Input
+              label="Zahlungsziel (Tage)"
+              type="number"
+              min="1"
+              value={invoiceSettings.zahlungsziel_tage}
+              onChange={(e) => setInvoiceSettings((s) => ({ ...s, zahlungsziel_tage: parseInt(e.target.value) || 14 }))}
+            />
+            <Input
+              label="Absender-E-Mail (Resend)"
+              type="email"
+              placeholder="rechnungen@webagentur.de"
+              value={invoiceSettings.absender_email}
+              onChange={(e) => setInvoiceSettings((s) => ({ ...s, absender_email: e.target.value }))}
+            />
+          </div>
         </div>
 
         <div className="rounded-xl border border-red-200 bg-red-50 p-6">

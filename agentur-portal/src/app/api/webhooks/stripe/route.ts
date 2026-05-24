@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { createInvoice } from "@/lib/invoice/create";
+import { getInvoiceSettings } from "@/lib/invoice/settings";
+import { generateInvoicePDF } from "@/lib/invoice/generate";
+import { sendInvoiceEmail } from "@/lib/email/send";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -47,12 +51,39 @@ export async function POST(req: NextRequest) {
       metadata: session.metadata,
     });
 
-    // TODO: Supabase-Integration
-    // Wenn Supabase konfiguriert ist, hier Bestellung in der DB anlegen:
-    // - customer_profiles erstellen
-    // - projects anlegen
-    // - invoices anlegen
-    // - notifications erstellen
+    // Create file-based invoice from Stripe session metadata
+    try {
+      const meta = session.metadata ?? {};
+      const preisBrutto = session.amount_total ? session.amount_total / 100 : 0;
+
+      const settings = getInvoiceSettings();
+      const invoice = createInvoice(
+        {
+          paket: meta.paket ?? "unbekannt",
+          zahlungsmodell: meta.zahlungsmodell ?? "einmalig",
+          zahlungsart: "karte",
+          profil: {
+            vorname: meta.vorname ?? "",
+            nachname: meta.nachname ?? "",
+            firma: meta.firma ?? "",
+            email: session.customer_email ?? meta.email ?? "",
+            strasse: meta.strasse ?? "",
+            plz: meta.plz ?? "",
+            ort: meta.ort ?? "",
+            land: meta.land ?? "Deutschland",
+          },
+          preis: preisBrutto,
+        },
+        settings.zahlungsziel_tage
+      );
+
+      if (settings.auto_senden) {
+        const pdfBuffer = await generateInvoicePDF(invoice);
+        await sendInvoiceEmail(invoice, pdfBuffer);
+      }
+    } catch (invoiceErr) {
+      console.error("[Stripe Webhook] Rechnungserstellung fehlgeschlagen:", invoiceErr);
+    }
   }
 
   return NextResponse.json({ received: true }, { status: 200 });
