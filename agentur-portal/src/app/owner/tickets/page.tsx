@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Modal, ModalContent, ModalHeader, ModalTitle, ModalFooter } from "@/components/ui/modal";
 import { formatRelative } from "@/lib/utils/format";
 import { Search, Send } from "lucide-react";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import type { TicketStatus, TicketPriority } from "@/types";
 
 const PRIORITY_CLASS: Record<TicketPriority, string> = {
@@ -54,7 +55,7 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 export default function OwnerTicketsPage() {
-  const [tickets, setTickets] = useState<Ticket[]>(initialTickets);
+  const [tickets, setTickets] = useLocalStorage<Ticket[]>("owner_tickets", initialTickets);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("alle");
   const [selected, setSelected] = useState<Ticket | null>(null);

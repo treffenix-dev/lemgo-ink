@@ -1,20 +1,24 @@
 "use client";
+
 import { useState } from "react";
 import { TopBar } from "@/components/layout/TopBar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+
+type Agentur = { name: string; inhaber: string; email: string; telefon: string; strasse: string; plz: string; ort: string; ust: string };
+type Notif = { neuesTicket: boolean; neueBestellung: boolean; faelligeRechnung: boolean };
+
+const initialAgentur: Agentur = {
+  name: "WebAgentur", inhaber: "Max Mustermann", email: "hallo@webagentur.de",
+  telefon: "+49 123 456 7890", strasse: "Musterstraße 1", plz: "32657", ort: "Lemgo", ust: "DE123456789",
+};
+
+const initialNotif: Notif = { neuesTicket: true, neueBestellung: true, faelligeRechnung: false };
 
 export default function EinstellungenPage() {
-  const [agentur, setAgentur] = useState({
-    name: "WebAgentur",
-    inhaber: "Max Mustermann",
-    email: "hallo@webagentur.de",
-    telefon: "+49 123 456 7890",
-    strasse: "Musterstraße 1",
-    plz: "32657",
-    ort: "Lemgo",
-    ust: "DE123456789",
-  });
+  const [agentur, setAgentur] = useLocalStorage<Agentur>("owner_einstellungen", initialAgentur);
+  const [notif, setNotif] = useLocalStorage<Notif>("owner_notif", initialNotif);
   const [saved, setSaved] = useState(false);
 
   function handleSave(e: React.FormEvent) {
@@ -23,14 +27,24 @@ export default function EinstellungenPage() {
     setTimeout(() => setSaved(false), 2500);
   }
 
-  function upd(key: string, val: string) {
+  function upd(key: keyof Agentur, val: string) {
     setAgentur((a) => ({ ...a, [key]: val }));
   }
+
+  function toggleNotif(key: keyof Notif) {
+    setNotif((n) => ({ ...n, [key]: !n[key] }));
+  }
+
+  const notifItems: { key: keyof Notif; label: string; desc: string }[] = [
+    { key: "neuesTicket", label: "Neues Ticket", desc: "E-Mail wenn ein Kunde ein Ticket erstellt" },
+    { key: "neueBestellung", label: "Neue Bestellung", desc: "E-Mail bei neuer Checkout-Bestellung" },
+    { key: "faelligeRechnung", label: "Fällige Rechnung", desc: "Erinnerung 3 Tage vor Fälligkeit" },
+  ];
 
   return (
     <div>
       <TopBar title="Einstellungen" />
-      <div className="p-6 max-w-2xl space-y-8">
+      <div className="p-4 sm:p-6 max-w-2xl space-y-8">
         <form onSubmit={handleSave}>
           <div className="rounded-xl border border-border bg-card p-6 space-y-5">
             <h3 className="font-semibold">Agentur-Daten</h3>
@@ -57,21 +71,27 @@ export default function EinstellungenPage() {
 
         <div className="rounded-xl border border-border bg-card p-6 space-y-4">
           <h3 className="font-semibold">Benachrichtigungen</h3>
-          {[
-            { label: "Neues Ticket", desc: "E-Mail wenn ein Kunde ein Ticket erstellt", on: true },
-            { label: "Neue Bestellung", desc: "E-Mail bei neuer Checkout-Bestellung", on: true },
-            { label: "Fällige Rechnung", desc: "Erinnerung 3 Tage vor Fälligkeit", on: false },
-          ].map((n) => (
-            <div key={n.label} className="flex items-center justify-between gap-4">
+          {notifItems.map((n) => (
+            <div key={n.key} className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-sm font-medium">{n.label}</p>
                 <p className="text-xs text-muted-foreground">{n.desc}</p>
               </div>
-              <div className={`w-10 h-5 rounded-full relative cursor-pointer shrink-0 transition-colors ${n.on ? "bg-foreground" : "bg-muted-foreground/30"}`}>
-                <div className={`absolute top-0.5 w-4 h-4 bg-background rounded-full transition-all ${n.on ? "right-0.5" : "left-0.5"}`} />
-              </div>
+              <button onClick={() => toggleNotif(n.key)}
+                className={`w-10 h-5 rounded-full relative shrink-0 transition-colors ${notif[n.key] ? "bg-foreground" : "bg-muted-foreground/30"}`}>
+                <div className={`absolute top-0.5 w-4 h-4 bg-background rounded-full transition-all ${notif[n.key] ? "right-0.5" : "left-0.5"}`} />
+              </button>
             </div>
           ))}
+        </div>
+
+        <div className="rounded-xl border border-red-200 bg-red-50 p-6">
+          <h3 className="font-semibold text-red-800 mb-2">Gefährliche Zone</h3>
+          <p className="text-sm text-red-600 mb-4">Alle gespeicherten Daten (Leads, Aufgaben, Notizen, etc.) zurücksetzen.</p>
+          <Button variant="outline" className="border-red-300 text-red-600 hover:bg-red-100"
+            onClick={() => { if (confirm("Wirklich alle Daten zurücksetzen?")) { localStorage.clear(); window.location.reload(); } }}>
+            Alle Daten zurücksetzen
+          </Button>
         </div>
       </div>
     </div>

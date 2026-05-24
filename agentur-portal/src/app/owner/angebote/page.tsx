@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Modal, ModalContent, ModalHeader, ModalTitle, ModalFooter } from "@/components/ui/modal";
 import { formatCurrency } from "@/lib/utils/format";
 import { Plus, Search, FileText, Download, Send } from "lucide-react";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const mockAngebote = [
   { id: "1", nummer: "ANG-2025-0001", kunde: "Café Central", kontakt: "Max Mustermann", email: "max@cafecental.de", betrag: 1499, netto: 1260, mwst: 239, status: "gesendet" as const, erstellt: "10.06.2025", gueltigBis: "24.06.2025", leistungen: ["Business-Paket Website", "SEO-Grundoptimierung", "Einrichtung Google Business"] },
@@ -23,10 +24,11 @@ const statusMap = {
 };
 
 export default function AngebotePage() {
+  const [angebote] = useLocalStorage("owner_angebote", mockAngebote);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Angebot | null>(null);
 
-  const gefiltert = mockAngebote.filter(
+  const gefiltert = angebote.filter(
     (a) => a.kunde.toLowerCase().includes(search.toLowerCase()) || a.nummer.includes(search)
   );
 

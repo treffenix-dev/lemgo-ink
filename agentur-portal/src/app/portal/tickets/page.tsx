@@ -11,6 +11,7 @@ import { Modal, ModalContent, ModalHeader, ModalTitle, ModalFooter } from "@/com
 import { MessageSquare, Plus, Send } from "lucide-react";
 import type { TicketCategory } from "@/types";
 import { formatRelative } from "@/lib/utils/format";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const KATEGORIEN: { value: TicketCategory; label: string }[] = [
   { value: "allgemein", label: "Allgemeine Frage" },
@@ -55,7 +56,7 @@ const initialTickets: Ticket[] = [
 ];
 
 export default function TicketsPage() {
-  const [tickets, setTickets] = useState<Ticket[]>(initialTickets);
+  const [tickets, setTickets] = useLocalStorage<Ticket[]>("portal_tickets", initialTickets);
   const [createOpen, setCreateOpen] = useState(false);
   const [activeTicket, setActiveTicket] = useState<Ticket | null>(null);
   const [newTitel, setNewTitel] = useState("");

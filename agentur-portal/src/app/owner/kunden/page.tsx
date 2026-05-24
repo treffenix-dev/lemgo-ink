@@ -6,6 +6,7 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { Button } from "@/components/ui/button";
 import { Modal, ModalContent, ModalHeader, ModalTitle } from "@/components/ui/modal";
 import { Search, ChevronRight, Mail, Phone, Package, Clock } from "lucide-react";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const mockKunden = [
   { id: "1", firma: "Restaurant Da Vinci", kontakt: "Marco Da Vinci", email: "marco@davinci.de", telefon: "0521 123456", paket: "Business", status: "daten_ausfuellen" as const, zahlungsstatus: "offen" as const, letztAktiv: "Heute 14:23", notizen: "Wartet auf Logo-Upload und Speisekarte." },
@@ -17,10 +18,11 @@ const mockKunden = [
 type Kunde = typeof mockKunden[0];
 
 export default function KundenPage() {
+  const [kunden] = useLocalStorage("owner_kunden", mockKunden);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Kunde | null>(null);
 
-  const filtered = mockKunden.filter((k) =>
+  const filtered = kunden.filter((k) =>
     k.firma.toLowerCase().includes(search.toLowerCase()) ||
     k.kontakt.toLowerCase().includes(search.toLowerCase()) ||
     k.email.toLowerCase().includes(search.toLowerCase())

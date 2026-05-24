@@ -1,15 +1,17 @@
 "use client";
-import { useState } from "react";
+
 import { TopBar } from "@/components/layout/TopBar";
 import { Button } from "@/components/ui/button";
 import { Check, X, Eye } from "lucide-react";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 type FreigabeStatus = "ausstehend" | "freigegeben" | "abgelehnt";
+type Freigabe = { id: string; typ: string; titel: string; beschreibung: string; datum: string; status: FreigabeStatus };
 
-const initFreigaben = [
-  { id: "1", typ: "Design", titel: "Homepage — Erster Entwurf", beschreibung: "Bitte prüfe das Design der Startseite und gib dein Feedback.", datum: "Heute, 10:00", status: "ausstehend" as FreigabeStatus },
-  { id: "2", typ: "Inhalt", titel: "Über uns Seite — Textentwurf", beschreibung: "Der Textentwurf für deine Über-uns-Seite ist fertig.", datum: "Gestern, 15:30", status: "ausstehend" as FreigabeStatus },
-  { id: "3", typ: "Design", titel: "Mobile Version — Startseite", beschreibung: "Mobile Ansicht der Startseite wurde fertiggestellt.", datum: "12.06.2025", status: "freigegeben" as FreigabeStatus },
+const initialFreigaben: Freigabe[] = [
+  { id: "1", typ: "Design", titel: "Homepage — Erster Entwurf", beschreibung: "Bitte prüfe das Design der Startseite und gib dein Feedback.", datum: "Heute, 10:00", status: "ausstehend" },
+  { id: "2", typ: "Inhalt", titel: "Über uns Seite — Textentwurf", beschreibung: "Der Textentwurf für deine Über-uns-Seite ist fertig.", datum: "Gestern, 15:30", status: "ausstehend" },
+  { id: "3", typ: "Design", titel: "Mobile Version — Startseite", beschreibung: "Mobile Ansicht der Startseite wurde fertiggestellt.", datum: "12.06.2025", status: "freigegeben" },
 ];
 
 const statusMap: Record<FreigabeStatus, { label: string; cls: string }> = {
@@ -19,7 +21,7 @@ const statusMap: Record<FreigabeStatus, { label: string; cls: string }> = {
 };
 
 export default function FreigabenPage() {
-  const [items, setItems] = useState(initFreigaben);
+  const [items, setItems] = useLocalStorage<Freigabe[]>("portal_freigaben", initialFreigaben);
 
   function freigeben(id: string) {
     setItems((prev) => prev.map((i) => i.id === id ? { ...i, status: "freigegeben" as FreigabeStatus } : i));
@@ -29,10 +31,17 @@ export default function FreigabenPage() {
     setItems((prev) => prev.map((i) => i.id === id ? { ...i, status: "abgelehnt" as FreigabeStatus } : i));
   }
 
+  const ausstehend = items.filter((i) => i.status === "ausstehend").length;
+
   return (
     <div>
       <TopBar title="Freigaben" />
-      <div className="p-6 max-w-3xl space-y-4">
+      <div className="p-4 sm:p-6 max-w-3xl space-y-4">
+        {ausstehend > 0 && (
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
+            <strong>{ausstehend} Freigabe{ausstehend !== 1 ? "n" : ""}</strong> warten auf deine Entscheidung.
+          </div>
+        )}
         <p className="text-sm text-muted-foreground">Hier siehst du alle Entwürfe, die auf deine Freigabe warten.</p>
         {items.map((item) => {
           const s = statusMap[item.status];
@@ -50,10 +59,8 @@ export default function FreigabenPage() {
               </div>
               <p className="text-sm text-muted-foreground mb-4">{item.beschreibung}</p>
               {item.status === "ausstehend" && (
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline">
-                    <Eye className="w-4 h-4" /> Vorschau
-                  </Button>
+                <div className="flex gap-2 flex-wrap">
+                  <Button size="sm" variant="outline"><Eye className="w-4 h-4" /> Vorschau</Button>
                   <Button size="sm" onClick={() => freigeben(item.id)} className="bg-green-600 hover:bg-green-700 text-white">
                     <Check className="w-4 h-4" /> Freigeben
                   </Button>
@@ -61,6 +68,12 @@ export default function FreigabenPage() {
                     <X className="w-4 h-4" /> Ablehnen
                   </Button>
                 </div>
+              )}
+              {item.status !== "ausstehend" && (
+                <button onClick={() => setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, status: "ausstehend" } : i))}
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                  Entscheidung zurücksetzen
+                </button>
               )}
             </div>
           );

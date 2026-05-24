@@ -7,6 +7,7 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { Modal, ModalContent, ModalHeader, ModalTitle, ModalFooter } from "@/components/ui/modal";
 import { formatCurrency, formatDate } from "@/lib/utils/format";
 import { Plus, Download, Search, FileText } from "lucide-react";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const mockRechnungen = [
   { id: "1", nummer: "RE-2025-0001", kunde: "Restaurant Da Vinci", email: "marco@davinci.de", gesamt: 1499, netto: 1260, mwst: 239, status: "offen" as const, faellig: "2025-06-30", erstellt: "2025-06-01", positionen: [{ beschreibung: "Business-Paket – Einmalzahlung", menge: 1, einzelpreis: 1260 }] },
@@ -18,14 +19,15 @@ const mockRechnungen = [
 type Rechnung = typeof mockRechnungen[0];
 
 export default function RechnungenOwnerPage() {
+  const [rechnungen] = useLocalStorage("owner_rechnungen", mockRechnungen);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Rechnung | null>(null);
 
-  const filtered = mockRechnungen.filter((r) =>
+  const filtered = rechnungen.filter((r) =>
     r.nummer.toLowerCase().includes(search.toLowerCase()) || r.kunde.toLowerCase().includes(search.toLowerCase())
   );
-  const gesamtOffen = mockRechnungen.filter((r) => r.status === "offen" || r.status === "ueberfaellig").reduce((s, r) => s + r.gesamt, 0);
-  const gesamtBezahlt = mockRechnungen.filter((r) => r.status === "bezahlt").reduce((s, r) => s + r.gesamt, 0);
+  const gesamtOffen = rechnungen.filter((r) => r.status === "offen" || r.status === "ueberfaellig").reduce((s, r) => s + r.gesamt, 0);
+  const gesamtBezahlt = rechnungen.filter((r) => r.status === "bezahlt").reduce((s, r) => s + r.gesamt, 0);
 
   return (
     <div>
