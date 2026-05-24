@@ -70,7 +70,6 @@ export interface Paket {
   name: string;
   tagline: string;
   preis_einmalig: number;
-  preis_monatlich?: number;
   fuer_wen: string;
   lieferzeit: string;
   enthalten: string[];
@@ -78,7 +77,7 @@ export interface Paket {
 }
 
 // ── Payment ───────────────────────────────────────────────────
-export type ZahlungsModell = "einmalig" | "halbhalb" | "raten" | "abo";
+export type ZahlungsModell = "einmalig" | "halbhalb" | "raten";
 export type Zahlungsart =
   | "karte"
   | "paypal"
@@ -296,7 +295,6 @@ export type NotificationType =
   | "freigabe_benoetigt"
   | "rechnung_erstellt"
   | "rechnung_bezahlt"
-  | "abo_faellig"
   | "storno"
   | "rueckerstattung";
 

@@ -31,9 +31,7 @@ export default function LeistungenPage() {
                 </div>
                 <div className="mb-6">
                   <p className="text-4xl font-bold">{formatCurrency(p.preis_einmalig)}</p>
-                  {p.preis_monatlich && (
-                    <p className="text-sm text-muted-foreground mt-1">oder ab {formatCurrency(p.preis_monatlich)}/Monat</p>
-                  )}
+                  <p className="text-sm text-muted-foreground mt-1">Hosting ab 19 €/Monat nach dem 1. Jahr</p>
                   <p className="text-xs text-muted-foreground mt-0.5">Lieferzeit: {p.lieferzeit}</p>
                 </div>
                 <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{p.fuer_wen}</p>

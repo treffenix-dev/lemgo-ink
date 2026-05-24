@@ -52,11 +52,9 @@ export default function PaketePage() {
                 <div>
                   <p className="text-4xl font-bold">{formatCurrency(p.preis_einmalig)}</p>
                   <p className="text-sm text-muted-foreground mt-1">einmalige Zahlung</p>
-                  {p.preis_monatlich && (
-                    <p className="text-sm text-muted-foreground mt-0.5">
-                      oder {formatCurrency(p.preis_monatlich)}/Monat (Abo)
-                    </p>
-                  )}
+                  <p className="text-sm text-muted-foreground mt-0.5">
+                    Hosting ab 19 €/Monat nach dem 1. Jahr
+                  </p>
                 </div>
 
                 <div className="bg-muted/40 rounded-lg p-3 text-sm">
