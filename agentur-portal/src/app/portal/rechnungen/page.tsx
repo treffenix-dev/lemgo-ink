@@ -1,19 +1,35 @@
 "use client";
 
+import { useState } from "react";
 import { TopBar } from "@/components/layout/TopBar";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Button } from "@/components/ui/button";
-import { FileText, Download } from "lucide-react";
+import { FileText, Download, X, Printer } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils/format";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
-const mockInvoices = [
+type Position = { bezeichnung: string; menge: number; einzelpreis: number; gesamt: number };
+type Invoice = {
+  id: string;
+  invoice_number: string;
+  betrag: number;
+  mwst: number;
+  gesamt: number;
+  status: "offen" | "bezahlt" | "ueberfaellig";
+  faellig_am: string;
+  zahlungsart: string;
+  created_at: string;
+  positionen: Position[];
+};
+
+const initialInvoices: Invoice[] = [
   {
     id: "1",
     invoice_number: "RE-2025-0001",
     betrag: 1258.82,
     mwst: 19,
     gesamt: 1499.00,
-    status: "offen" as const,
+    status: "offen",
     faellig_am: "2025-06-30",
     zahlungsart: "Kreditkarte",
     created_at: "2025-06-01",
@@ -23,18 +39,155 @@ const mockInvoices = [
   },
 ];
 
+function InvoicePrintView({ inv, onClose }: { inv: Invoice; onClose: () => void }) {
+  const netto = inv.betrag;
+  const mwstBetrag = inv.gesamt - netto;
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4 py-8">
+      {/* Toolbar — hidden on print */}
+      <div className="print:hidden fixed top-4 right-4 flex gap-2 z-50">
+        <button
+          onClick={() => window.print()}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-foreground text-background text-sm font-medium hover:bg-foreground/90 transition-colors"
+        >
+          <Printer className="w-4 h-4" /> Als PDF speichern
+        </button>
+        <button
+          onClick={onClose}
+          className="p-2 rounded-lg bg-background border border-border hover:bg-muted transition-colors"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Invoice document */}
+      <div
+        id="invoice-print"
+        className="w-full max-w-2xl bg-white rounded-xl shadow-2xl print:shadow-none print:rounded-none print:max-w-none"
+        style={{ fontFamily: "Arial, Helvetica, sans-serif", color: "#111" }}
+      >
+        {/* Header */}
+        <div style={{ padding: "40px 48px 24px", borderBottom: "2px solid #111", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "4px" }}>
+              <div style={{ width: 32, height: 32, background: "#111", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ color: "#fff", fontWeight: "bold", fontSize: 14 }}>W</span>
+              </div>
+              <span style={{ fontWeight: "bold", fontSize: 18 }}>WebAgentur</span>
+            </div>
+            <div style={{ fontSize: 12, color: "#555", lineHeight: 1.6 }}>
+              <div>Musterstraße 1 · 33602 Bielefeld</div>
+              <div>info@webagentur.de · www.webagentur.de</div>
+            </div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontSize: 22, fontWeight: "bold", marginBottom: 8 }}>RECHNUNG</div>
+            <div style={{ fontSize: 12, color: "#555", lineHeight: 1.8 }}>
+              <div><strong>Rechnungsnr.:</strong> {inv.invoice_number}</div>
+              <div><strong>Datum:</strong> {formatDate(inv.created_at)}</div>
+              <div><strong>Fällig am:</strong> {formatDate(inv.faellig_am)}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Recipient */}
+        <div style={{ padding: "24px 48px", borderBottom: "1px solid #e5e5e5" }}>
+          <div style={{ fontSize: 10, color: "#888", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6 }}>Rechnungsempfänger</div>
+          <div style={{ fontSize: 14, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: "bold" }}>Restaurant Da Vinci</div>
+            <div>Marco Da Vinci</div>
+            <div>Musterweg 5</div>
+            <div>33602 Bielefeld</div>
+          </div>
+        </div>
+
+        {/* Line items */}
+        <div style={{ padding: "24px 48px" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+            <thead>
+              <tr style={{ borderBottom: "2px solid #111" }}>
+                <th style={{ textAlign: "left", paddingBottom: 8, fontWeight: "bold" }}>Beschreibung</th>
+                <th style={{ textAlign: "center", paddingBottom: 8, width: 60, fontWeight: "bold" }}>Menge</th>
+                <th style={{ textAlign: "right", paddingBottom: 8, width: 120, fontWeight: "bold" }}>Einzelpreis</th>
+                <th style={{ textAlign: "right", paddingBottom: 8, width: 120, fontWeight: "bold" }}>Gesamt</th>
+              </tr>
+            </thead>
+            <tbody>
+              {inv.positionen.map((pos, i) => (
+                <tr key={i} style={{ borderBottom: "1px solid #f0f0f0" }}>
+                  <td style={{ paddingTop: 10, paddingBottom: 10 }}>{pos.bezeichnung}</td>
+                  <td style={{ textAlign: "center", paddingTop: 10, paddingBottom: 10 }}>{pos.menge}</td>
+                  <td style={{ textAlign: "right", paddingTop: 10, paddingBottom: 10 }}>{formatCurrency(pos.einzelpreis)}</td>
+                  <td style={{ textAlign: "right", paddingTop: 10, paddingBottom: 10 }}>{formatCurrency(pos.gesamt)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Totals */}
+        <div style={{ padding: "0 48px 24px", display: "flex", justifyContent: "flex-end" }}>
+          <div style={{ width: 280, fontSize: 13 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid #e5e5e5" }}>
+              <span style={{ color: "#555" }}>Nettobetrag</span>
+              <span>{formatCurrency(netto)}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid #e5e5e5" }}>
+              <span style={{ color: "#555" }}>MwSt. {inv.mwst}%</span>
+              <span>{formatCurrency(mwstBetrag)}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", fontWeight: "bold", fontSize: 16 }}>
+              <span>Gesamtbetrag</span>
+              <span>{formatCurrency(inv.gesamt)}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Payment info */}
+        <div style={{ margin: "0 48px 32px", background: "#f8f8f8", borderRadius: 8, padding: "16px 20px", fontSize: 12, color: "#555" }}>
+          <div style={{ fontWeight: "bold", color: "#111", marginBottom: 6, fontSize: 13 }}>Zahlungsinformationen</div>
+          <div style={{ lineHeight: 1.8 }}>
+            <div><strong>Zahlungsart:</strong> {inv.zahlungsart}</div>
+            <div><strong>Zahlungsziel:</strong> {formatDate(inv.faellig_am)}</div>
+            <div><strong>IBAN:</strong> DE12 3456 7890 1234 5678 90 · <strong>BIC:</strong> DEUTDEDB</div>
+            <div><strong>Verwendungszweck:</strong> {inv.invoice_number}</div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div style={{ padding: "16px 48px", borderTop: "1px solid #e5e5e5", fontSize: 11, color: "#888", textAlign: "center" }}>
+          WebAgentur · Musterstraße 1 · 33602 Bielefeld · info@webagentur.de · Steuernummer auf Anfrage
+        </div>
+      </div>
+
+      {/* Print styles */}
+      <style>{`
+        @media print {
+          body * { visibility: hidden; }
+          #invoice-print, #invoice-print * { visibility: visible; }
+          #invoice-print { position: fixed; top: 0; left: 0; width: 100%; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export default function RechnungenPage() {
+  const [invoices] = useLocalStorage<Invoice[]>("portal_rechnungen", initialInvoices);
+  const [viewInvoice, setViewInvoice] = useState<Invoice | null>(null);
+
   return (
     <div>
       <TopBar title="Rechnungen" />
-      <div className="p-6 max-w-3xl space-y-4">
-        {mockInvoices.length === 0 ? (
+      <div className="p-4 sm:p-6 max-w-3xl space-y-4">
+        {invoices.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border bg-card p-12 text-center">
             <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
             <p className="font-medium mb-1">Noch keine Rechnungen</p>
           </div>
         ) : (
-          mockInvoices.map((inv) => (
+          invoices.map((inv) => (
             <div key={inv.id} className="rounded-xl border border-border bg-card overflow-hidden">
               <div className="p-5 flex items-start justify-between gap-4">
                 <div>
@@ -54,7 +207,7 @@ export default function RechnungenPage() {
               <div className="border-t border-border px-5 py-4">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Positionen</p>
                 {inv.positionen.map((pos, i) => (
-                  <div key={i} className="flex justify-between text-sm">
+                  <div key={i} className="flex justify-between text-sm py-0.5">
                     <span>{pos.bezeichnung}</span>
                     <span className="font-medium">{formatCurrency(pos.gesamt)}</span>
                   </div>
@@ -63,7 +216,9 @@ export default function RechnungenPage() {
               <div className="border-t border-border px-5 py-3 flex items-center justify-between bg-muted/30">
                 <span className="text-sm text-muted-foreground">Zahlungsart: {inv.zahlungsart}</span>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm"><Download className="w-4 h-4" /> PDF</Button>
+                  <Button variant="outline" size="sm" onClick={() => setViewInvoice(inv)}>
+                    <Download className="w-4 h-4" /> PDF ansehen
+                  </Button>
                   {inv.status === "offen" && <Button size="sm">Jetzt bezahlen</Button>}
                 </div>
               </div>
@@ -71,6 +226,10 @@ export default function RechnungenPage() {
           ))
         )}
       </div>
+
+      {viewInvoice && (
+        <InvoicePrintView inv={viewInvoice} onClose={() => setViewInvoice(null)} />
+      )}
     </div>
   );
 }
