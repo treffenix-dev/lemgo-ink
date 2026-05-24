@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ScrollReset } from "@/components/ScrollReset";
 
 export const metadata: Metadata = {
   title: "WebAgentur — Professionelle Websites für lokale Unternehmen",
@@ -9,7 +10,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="de">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <ScrollReset />
+        {children}
+      </body>
     </html>
   );
 }
