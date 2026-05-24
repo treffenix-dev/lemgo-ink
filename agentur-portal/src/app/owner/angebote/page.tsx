@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { TopBar } from "@/components/layout/TopBar";
 import { Button } from "@/components/ui/button";
-import { StatusBadge } from "@/components/ui/status-badge";
 import { formatCurrency } from "@/lib/utils/format";
 import { Plus, Search } from "lucide-react";
 
