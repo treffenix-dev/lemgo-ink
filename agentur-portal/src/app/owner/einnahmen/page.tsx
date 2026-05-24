@@ -1,3 +1,5 @@
+"use client";
+
 import { TopBar } from "@/components/layout/TopBar";
 import { formatCurrency, formatDate } from "@/lib/utils/format";
 import { TrendingUp } from "lucide-react";

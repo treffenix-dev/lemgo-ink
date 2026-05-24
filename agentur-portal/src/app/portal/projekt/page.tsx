@@ -1,3 +1,5 @@
+"use client";
+
 import { TopBar } from "@/components/layout/TopBar";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Button } from "@/components/ui/button";

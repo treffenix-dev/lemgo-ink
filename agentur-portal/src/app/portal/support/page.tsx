@@ -1,3 +1,5 @@
+"use client";
+
 import { TopBar } from "@/components/layout/TopBar";
 import { MessageCircle, Phone, Mail, MessageSquare } from "lucide-react";
 import Link from "next/link";
