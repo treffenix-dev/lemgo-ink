@@ -97,7 +97,7 @@ export function HeroSection() {
           transition={{ delay: 0.08, duration: 0.7 }}
         >
           <span className="block w-8 h-px bg-white/15" />
-          <span className="text-[10px] font-medium tracking-[0.52em] uppercase text-white/28">
+          <span className="text-[10px] font-medium tracking-[0.52em] uppercase text-white/55">
             Professionelles Webdesign · Deutschland
           </span>
         </motion.div>
@@ -114,7 +114,7 @@ export function HeroSection() {
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                         backgroundImage:
-                          "linear-gradient(180deg, #fff 20%, rgba(255,255,255,0.42) 100%)",
+                          "linear-gradient(180deg, #fff 40%, rgba(255,255,255,0.72) 100%)",
                         backgroundClip: "text",
                       }
                     : undefined
@@ -129,7 +129,7 @@ export function HeroSection() {
         {/* Subline + CTAs */}
         <div className="flex flex-col sm:flex-row sm:items-end gap-8 sm:gap-20 mb-20">
           <motion.p
-            className="max-w-[330px] text-[16px] font-light leading-[1.85] text-white/32"
+            className="max-w-[330px] text-[16px] font-light leading-[1.85] text-white/65"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.68, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -152,7 +152,7 @@ export function HeroSection() {
             </Link>
             <Link
               href="/#ablauf"
-              className="text-[13px] text-white/28 hover:text-white/55 tracking-[0.02em] transition-colors duration-200"
+              className="text-[13px] text-white/55 hover:text-white/80 tracking-[0.02em] transition-colors duration-200"
             >
               Wie es läuft →
             </Link>
@@ -161,17 +161,17 @@ export function HeroSection() {
 
         {/* Stats */}
         <motion.div
-          className="grid grid-cols-3 border-t border-white/[0.07] pt-7"
+          className="grid grid-cols-3 border-t border-white/[0.15] pt-7"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.05, duration: 0.9 }}
         >
           {STATS.map((s, i) => (
-            <div key={s.label} className={i > 0 ? "pl-8 border-l border-white/[0.07]" : ""}>
+            <div key={s.label} className={i > 0 ? "pl-8 border-l border-white/[0.15]" : ""}>
               <p className="text-[clamp(26px,3.2vw,40px)] font-bold text-white leading-none tracking-[-0.02em] mb-1.5">
                 {s.num}
               </p>
-              <p className="text-[10px] text-white/22 tracking-[0.1em] uppercase">{s.label}</p>
+              <p className="text-[10px] text-white/50 tracking-[0.1em] uppercase">{s.label}</p>
             </div>
           ))}
         </motion.div>
