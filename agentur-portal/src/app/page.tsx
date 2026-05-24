@@ -10,12 +10,12 @@ import { WebsiteShowcase } from "@/components/WebsiteShowcase";
 import dynamic from "next/dynamic";
 import { motion, useInView } from "framer-motion";
 import { useRef, useCallback } from "react";
+import { ArrowRight, Check, ChevronDown, MessageCircle, Phone, Mail } from "lucide-react";
 
 const StarFieldWrapper = dynamic(
   () => import("@/components/StarField").then((m) => ({ default: m.StarField })),
   { ssr: false }
 );
-import { ArrowRight, Check, ChevronDown, MessageCircle, Phone, Mail } from "lucide-react";
 
 // ── Reveal wrapper (early trigger so no big scroll needed) ──────────
 function Reveal({
