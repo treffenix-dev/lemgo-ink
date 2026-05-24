@@ -4,10 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-// Credentials — change to your real values
 const ACCOUNTS = [
-  { email: "admin@webagentur.de", password: "admin2024", role: "owner", target: "/owner" },
-  { email: "demo@webagentur.de",  password: "kunde2024", role: "customer", target: "/portal" },
+  { email: "admin@webagentur.de", password: "admin2024", role: "owner",    target: "/owner",  label: "Agentur-Login" },
+  { email: "demo@webagentur.de",  password: "kunde2024", role: "customer", target: "/portal", label: "Kunden-Demo"   },
 ];
 
 export default function LoginPage() {
@@ -17,21 +16,20 @@ export default function LoginPage() {
   const [error, setError]       = useState("");
   const [loading, setLoading]   = useState(false);
 
+  function login(e: string, p: string, target: string, role: string) {
+    sessionStorage.setItem(role === "owner" ? "owner_auth" : "customer_auth", "1");
+    router.push(target);
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
-
     const account = ACCOUNTS.find(
       (a) => a.email === email.trim().toLowerCase() && a.password === password
     );
-
     if (account) {
-      sessionStorage.setItem(
-        account.role === "owner" ? "owner_auth" : "customer_auth",
-        "1"
-      );
-      router.push(account.target);
+      login(account.email, account.password, account.target, account.role);
     } else {
       setError("E-Mail oder Passwort falsch.");
       setLoading(false);
@@ -54,6 +52,35 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <h1 className="text-2xl font-bold text-white mb-1">Anmelden</h1>
         <p className="text-white/40 text-sm mb-8">Willkommen zurück</p>
+
+        {/* Quick-login demo buttons */}
+        <div className="flex gap-2 mb-6">
+          {ACCOUNTS.map((a) => (
+            <button
+              key={a.role}
+              type="button"
+              onClick={() => login(a.email, a.password, a.target, a.role)}
+              className="flex-1 py-2 px-3 rounded-xl border text-xs font-medium transition-all duration-200"
+              style={{
+                borderColor: "rgba(255,255,255,0.12)",
+                background: "rgba(255,255,255,0.04)",
+                color: "rgba(255,255,255,0.5)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget.style.borderColor = "rgba(255,255,255,0.28)");
+                (e.currentTarget.style.color = "rgba(255,255,255,0.85)");
+                (e.currentTarget.style.background = "rgba(255,255,255,0.07)");
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)");
+                (e.currentTarget.style.color = "rgba(255,255,255,0.5)");
+                (e.currentTarget.style.background = "rgba(255,255,255,0.04)");
+              }}
+            >
+              {a.label}
+            </button>
+          ))}
+        </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           {/* Email */}

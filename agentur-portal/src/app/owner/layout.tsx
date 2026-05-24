@@ -18,7 +18,11 @@ export default function OwnerLayout({ children }: { children: React.ReactNode })
     }
   }, [router]);
 
-  if (!authed) return null;
+  if (!authed) return (
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="w-5 h-5 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+    </div>
+  );
 
   return (
     <SidebarContext.Provider value={{ openSidebar: () => setSidebarOpen(true) }}>
