@@ -55,18 +55,24 @@ export default function OwnerDashboard() {
         actions={
           <div className="flex gap-2">
             <Button size="sm" variant="outline" asChild>
-              <Link href="/owner/leads?neu=true"><Plus className="w-4 h-4" /> Lead</Link>
+              <Link href="/owner/leads?neu=true">
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline ml-1">Lead</span>
+              </Link>
             </Button>
             <Button size="sm" asChild>
-              <Link href="/owner/rechnungen?neu=true"><Plus className="w-4 h-4" /> Rechnung</Link>
+              <Link href="/owner/rechnungen?neu=true">
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline ml-1">Rechnung</span>
+              </Link>
             </Button>
           </div>
         }
       />
 
-      <div className="p-6 space-y-6 max-w-7xl">
+      <div className="p-4 sm:p-6 space-y-5 sm:space-y-6 max-w-7xl">
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3 sm:gap-4">
           <StatCard label="Umsatz heute" value={formatCurrency(stats.umsatzHeute)} icon={Euro} color="green" />
           <StatCard label="Umsatz Monat" value={formatCurrency(stats.umsatzMonat)} icon={TrendingUp} color="green" trend="up" trendValue="+12% vs. Vormonat" />
           <StatCard label="Off. Rechnungen" value={stats.offeneRechnungen} icon={FileText} color="amber" />

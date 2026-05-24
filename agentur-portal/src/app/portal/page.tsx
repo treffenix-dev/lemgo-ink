@@ -40,7 +40,7 @@ export default function PortalDashboard() {
     <div>
       <TopBar title="Mein Dashboard" />
 
-      <div className="p-6 space-y-6 max-w-5xl">
+      <div className="p-4 sm:p-6 space-y-5 sm:space-y-6 max-w-5xl">
 
         <div className="rounded-xl border border-border bg-card p-6">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
