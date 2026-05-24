@@ -6,8 +6,15 @@ import { PAKETE } from "@/lib/data/pakete";
 import { formatCurrency } from "@/lib/utils/format";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { WaveMeshWrapper } from "@/components/WaveMeshWrapper";
+import { WebsiteShowcase } from "@/components/WebsiteShowcase";
+import dynamic from "next/dynamic";
 import { motion, useInView } from "framer-motion";
 import { useRef, useCallback } from "react";
+
+const StarFieldWrapper = dynamic(
+  () => import("@/components/StarField").then((m) => ({ default: m.StarField })),
+  { ssr: false }
+);
 import { ArrowRight, Check, ChevronDown, MessageCircle, Phone, Mail } from "lucide-react";
 
 // ── Reveal wrapper (early trigger so no big scroll needed) ──────────
@@ -83,8 +90,9 @@ const CARD =
 export default function HomePage() {
   return (
     <div className="min-h-screen" style={{ background: "#07070d" }}>
-      {/* Three.js wave mesh — fixed, behind everything */}
+      {/* Three.js wave mesh + star field — fixed, behind everything */}
       <WaveMeshWrapper />
+      <StarFieldWrapper />
 
       {/* All content sits above the mesh (z-index > 0) */}
       <div className="relative" style={{ zIndex: 10 }}>
@@ -92,6 +100,24 @@ export default function HomePage() {
 
         {/* ── Hero ─────────────────────────────────────────────────── */}
         <HeroSection />
+
+        {/* ── Website Showcase ─────────────────────────────────────── */}
+        <section className="py-28 border-t border-white/[0.06]">
+          <div className="max-w-6xl mx-auto px-6 sm:px-10">
+            <Reveal className="mb-14">
+              <p className="text-[10px] tracking-[0.48em] uppercase text-white/30 mb-4">Referenzen</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                Websites die wir gebaut haben
+              </h2>
+              <p className="text-white/45 mt-3 max-w-md">
+                Restaurants, Beauty-Studios, Handwerker und mehr — jede Seite individuell, jede mit Kundenportal.
+              </p>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <WebsiteShowcase />
+            </Reveal>
+          </div>
+        </section>
 
         {/* ── Vorteile ─────────────────────────────────────────────── */}
         <section className="py-28">

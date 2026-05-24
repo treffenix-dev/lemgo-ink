@@ -65,17 +65,18 @@ export function WaveMesh() {
             vUv = uv;
             vec3 p = position;
 
-            // Three overlapping sine waves for organic motion
-            float w1 = sin(p.x * 0.38 + uTime * 0.7)
-                     * cos(p.y * 0.32 + uTime * 0.45) * 1.6;
-            float w2 = sin(p.x * 0.22 + p.y * 0.18 + uTime * 1.05) * 0.9;
-            float w3 = cos(p.x * 0.14 - p.y * 0.11 + uTime * 0.55) * 0.5;
+            // Four overlapping sine waves — more complex, more dramatic
+            float w1 = sin(p.x * 0.42 + uTime * 0.85)
+                     * cos(p.y * 0.36 + uTime * 0.52) * 2.4;
+            float w2 = sin(p.x * 0.26 + p.y * 0.20 + uTime * 1.2) * 1.4;
+            float w3 = cos(p.x * 0.16 - p.y * 0.13 + uTime * 0.65) * 0.85;
+            float w4 = sin(p.x * 0.55 + p.y * 0.08 - uTime * 1.45) * 0.6;
 
-            // Mouse influence
-            float mDist = length(vec2(p.x, p.y) - uMouse * 8.0);
-            float mPull = exp(-mDist * 0.12) * 1.4;
+            // Mouse influence — stronger pull
+            float mDist = length(vec2(p.x, p.y) - uMouse * 10.0);
+            float mPull = exp(-mDist * 0.1) * 2.2;
 
-            p.z = (w1 + w2 + w3) * 1.2 + mPull - uScroll * 4.0;
+            p.z = (w1 + w2 + w3 + w4) * 1.3 + mPull - uScroll * 5.0;
             vZ = p.z;
 
             gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
@@ -87,24 +88,24 @@ export function WaveMesh() {
           uniform float uTime;
 
           void main() {
-            // Depth-based color: deep dark navy → subtle blue-grey
-            float d = clamp((vZ + 2.8) / 5.5, 0.0, 1.0);
+            // Stronger depth contrast — darker valleys, brighter crests
+            float d = clamp((vZ + 3.5) / 7.0, 0.0, 1.0);
             vec3 col = mix(
-              vec3(0.01, 0.01, 0.04),   // dark valley
-              vec3(0.08, 0.11, 0.24),   // crest — muted navy (NOT purple)
+              vec3(0.005, 0.005, 0.02),  // dark valley
+              vec3(0.10, 0.15, 0.32),    // crest — visible navy
               d
             );
 
-            // Fade near edges so mesh blends into the dark page
-            float ex = smoothstep(0.0, 0.18, vUv.x) * smoothstep(1.0, 0.82, vUv.x);
-            float ey = smoothstep(0.0, 0.12, vUv.y) * smoothstep(1.0, 0.88, vUv.y);
+            // Edge fade
+            float ex = smoothstep(0.0, 0.14, vUv.x) * smoothstep(1.0, 0.86, vUv.x);
+            float ey = smoothstep(0.0, 0.10, vUv.y) * smoothstep(1.0, 0.90, vUv.y);
             float edge = ex * ey;
 
-            // Subtle bright crests
-            float crest = pow(clamp(d, 0.0, 1.0), 3.0) * 0.55;
-            col += vec3(crest * 0.3, crest * 0.4, crest * 0.9);
+            // Bright crest shimmer
+            float crest = pow(clamp(d, 0.0, 1.0), 2.5) * 0.8;
+            col += vec3(crest * 0.25, crest * 0.38, crest * 1.0);
 
-            gl_FragColor = vec4(col, (0.42 + crest * 0.25) * edge);
+            gl_FragColor = vec4(col, (0.55 + crest * 0.3) * edge);
           }
         `,
       });
