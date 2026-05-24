@@ -16,6 +16,77 @@
 
 ---
 
+# 🧠 UNIVERSELLE DENK-PRINZIPIEN (für ALLE Projekte, immer aktiv)
+
+## TRICK 02 — LLM-COUNCIL PRINZIP
+
+**Vor jeder wichtigen Entscheidung: Validiere aus mehreren Perspektiven.**
+
+Anstatt blind der ersten Idee zu folgen, denke wie ein Gremium aus 3 LLMs:
+
+```
+PERSPEKTIVE 1 — Der Kritiker:
+  Was kann an diesem Ansatz scheitern?
+  Was wurde übersehen? Was ist der worst case?
+
+PERSPEKTIVE 2 — Der Pragmatiker:
+  Was ist die einfachste Lösung die funktioniert?
+  Wird hier über-engineered? Gibt es eine direktere Route?
+
+PERSPEKTIVE 3 — Der Erfahrene:
+  Wie würde ein Senior-Dev das angehen?
+  Welche Muster/Fallen kennt man aus der Praxis?
+```
+
+**Anwendung in der Praxis:**
+- Bei Build-Fehlern: Nicht den ersten Fix probieren — erst alle Ursachen analysieren
+- Bei Design-Entscheidungen: Nicht freelancen — erst Research (Awwwards, Godly)
+- Bei Architektur: Nicht sofort coden — erst mehrere Ansätze durchdenken
+- Bei Fehlern die länger als 10min bestehen: Komplett neu denken, andere Perspektive
+
+---
+
+## BRUTAL EHRLICH — EPISTEMIC HUMILITY RULES
+
+**Ich bin committed zu Ehrlichkeit, Genauigkeit und epistemischer Bescheidenheit über allem anderen.**
+
+### 1. UNSICHERHEIT — Immer kommunizieren
+
+Wenn ich nicht 100% sicher bin, sage ich das klar:
+
+```
+"Ich bin nicht sicher, aber..."
+"Du solltest das verifizieren..."
+"Ich könnte hier falsch liegen, aber..."
+"Basierend auf den mir verfügbaren Informationen..."
+"Das ist meine beste Einschätzung, keine gesicherte Tatsache."
+```
+
+- Niemals unsichere Behauptungen als Fakten darstellen
+- Wenn die Antwort vom fehlenden Kontext abhängt → sagen was fehlt
+- Wenn es mehrere plausible Antworten gibt → alle erklären, nicht so tun als gäbe es nur eine
+
+### 2. QUELLEN — Niemals erfinden
+
+**Ich erfinde NIEMALS:**
+- Paper-Titel oder Studien
+- URLs oder Links
+- Autoren oder Experten
+- Statistiken oder Zahlen
+- Bücher oder Zitate
+- Firmenberichte
+- Historische Referenzen
+
+Wenn ich keine Quelle kenne → sage ich, dass ich keine habe. Punkt.
+
+### 3. FEHLER — Sofort zugeben
+
+- Wenn ich einen Fehler erkenne: sofort transparent darauf hinweisen
+- Nicht verteidigen, nicht umschweifen
+- "Ich habe mich geirrt: [was genau falsch war] — der richtige Weg ist: [fix]"
+
+---
+
 # Lemgo INK — Claude Projektgedächtnis
 
 ## Projekt
@@ -256,27 +327,21 @@ install https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git
 ```bash
 # Skill 01 — Front-end Design
 npx skills add https://github.com/anthropics/skills --skill frontend-design
-# Claude follows complete design-thinking process before writing code
 
 # Skill 02 — Figma to Code
 npx skills add https://github.com/anthropics/skills --skill figma
-# Turn Figma designs into production-ready code with exact 1:1 fidelity
 
 # Skill 03 — Theme Factory
 npx skills add https://github.com/anthropics/skills --skill theme-factory
-# 10 polished themes with curated color palettes + professional font pairings
 
 # Skill 04 — Brand Guidelines
 npx skills add https://github.com/anthropics/skills --skill brand-guidelines
-# Automatically enforces brand colors, fonts, spacing, tone across every output
 
 # Skill 05 — Canvas Design
 npx skills add https://github.com/anthropics/skills --skill canvas-design
-# Create visual art, posters, compositions — exported as PNG or PDF
 
 # Skill 06 — Skill Creator
 npx skills add https://github.com/anthropics/skills --skill skill-creator
-# Build custom skills for design system, brand voice, or workflow
 ```
 
 ---
@@ -288,154 +353,51 @@ npx skills add https://github.com/anthropics/skills --skill skill-creator
 npx shadcn@latest add https://21st.dev/r/[component-name]
 ```
 - 73+ Hero Sections, Marketing Blocks
-- Kategorien: Announcements (10), Backgrounds (33), Borders (12), Calls to Action (34), Clients (16), Comparisons (6), Docks (6), Features (36), Footers (14), **Heroes (73)**, Hooks (31)
+- Kategorien: Announcements, Backgrounds, Borders, CTAs, Heroes (73), Hooks (31)
 - Dependencies: meist nur framer-motion
-- Direkt kopierbar mit "Copy prompt" oder "Copy code"
 
 ---
 
-### DESIGN RESSOURCEN (täglich besuchen für Inspiration)
+### DESIGN RESSOURCEN (täglich für Inspiration)
 
-#### 14. Uiverse.io — Open-Source UI Components
-- Largest Library of Open-Source UI
-- Kopierbar als HTML/CSS, Tailwind, React und Figma
-- Community-built: Buttons, Cards, Inputs, Switches, Loaders
-
-#### 15. 60fps.design — App Animation Inspiration
-- Endless collection of delightful details from best-in-class apps
-- Filtern nach: Apps, Screens, UI Elements, Flows
-- Referenz für: micro-interactions, transitions, loading states
-
-#### 16. Fontjoy.com — AI Font Pairing
-- "Font pairing made simple" — deep learning basierte Font-Kombinationen
-- Generate → Lock → Edit für die perfekte Kombination
-- Referenz für Schrift-Hierarchien
-
-#### 17. Lummi.ai — Quality AI Stock Images
-- "No more boring stock" — AI-powered royalty-free images
-- Für Projekt-Demos und Mockups nutzen
-
-#### 18. Grainient.supply — Grainy Gradient Backgrounds
-- High quality, grainy textured + smooth gradient backgrounds
-- Über 1000 Premium-Hintergründe
-- "Present your designs like a Pro"
-
-#### 19. Mobbin.com — Mobile App UI Inspiration
-- iOS + Android + Web App Screenshots
-- Filter nach: Finance, Business, Health, Shopping, AI, etc.
-- Referenz für Navigation, Cards, Flows
+- **Awwwards.com / Godly.website / Dribbble.com** — Referenzen vor JEDEM Build
+- **Uiverse.io** — Open-Source UI Components (HTML/CSS, Tailwind, React)
+- **60fps.design** — App Animation Inspiration
+- **Fontjoy.com** — AI Font Pairing
+- **Lummi.ai** — Quality AI Stock Images
+- **Grainient.supply** — Grainy Gradient Backgrounds
+- **Mobbin.com** — Mobile App UI Inspiration
 
 ---
 
-### CLAUDE PROMPTS & TEXT-TOOLS
+### DESIGN-PHILOSOPHIE
 
-#### 20. LazarusAI Prompts (lazarusai.de)
-```
-/ghost [dein Text] 
-→ Schreibt Text komplett um. Klingt 100% menschlich. Kein AI-Detektor kommt durch.
-
-/mirror [Beispiel deines Stils] — schreib jetzt [AUFGABE] in diesem Stil
-→ Claude analysiert deinen Stil und übernimmt ihn komplett.
-
-/punch [dein langweiliger Text]
-→ Streicht alles Unnötige. Macht jeden Satz direkter, härter, kraftvoller.
-```
-
-#### 21. Its AI Guide — Prompt Templates für Websites
-```
-1. PLAN: "Help me plan a complete website for [type of business] in [location].
-   Target audience: [audience]. Goal: [sales/leads/bookings/portfolio].
-   Suggest pages, what each includes, site structure, conversion goal per page."
-
-2. STRUKTUR: "Create a complete homepage structure for [business].
-   Include: hero, trust, services, social proof, FAQ, CTA.
-   Tone: [friendly/professional/modern]. Explain why each section appears in that order."
-
-3. COPY: "Write complete homepage copy. Strong headline in under 8 seconds,
-   subheadline addressing main objection, CTA text, 3 benefit statements as results
-   (not features), closing section making next step obvious. Tone: [tone]."
-
-4. VISUAL STYLE: "Suggest complete visual style for [business].
-   Primary+secondary palette with hex codes, font pairings, button styles,
-   spacing guidelines, image direction, overall mood: [modern/luxury/minimal]."
-
-5. LANDING PAGE CODE: "Create responsive landing page in HTML/CSS for [business].
-   Hero + features (3 key benefits) + testimonials (3 blocks) + CTA.
-   Clean code, clear class names, easy to edit."
-
-6. SERVICES PAGE: "Write content for services page [business].
-   Services: [1], [2], [3]. For each: title, description, ideal client,
-   key benefit, specific CTA. Easy to understand for first-time visitor."
-
-7. ABOUT PAGE: "Write About page for [business/person].
-   Origin story, mission statement, 3 core values, what makes us different,
-   closing that makes reader confident. Tone: [friendly/professional/warm]."
-
-8. SEO CONTENT: "Write SEO-optimized copy for [page] targeting keyword [keyword].
-   Page title under 60 chars, 3 H2 headings, short paragraphs under 4 lines,
-   natural keyword usage, closing CTA. Mobile-readable, impossible to confuse with AI."
-```
-
----
-
-### TOOLS FÜR DESIGN QUALITÄT
-
-#### 22. Playwright — Browser Automation Testing
-```bash
-# Claude kann die Website sehen und Bugs catchen
-npm install @playwright/test
-```
-- End-to-end testing für moderne Web-Apps
-- Spins up browser, screenshots the UI, catches bugs before you do
-- 67k GitHub Stars
-
-#### 23. Framer MCP — Design direkt in Framer
-- MCP Plugin für Framer
-- Copy MCP server URL → Add to Claude Code / Cursor
-- Claude kann direkt in Framer designen
-
-#### 24. Higgsfield MCP — Cinematic Image/Video Generation
-```bash
-npx skills add higgsfield-ai/skills
-```
-- Cinematic image/video generation
-- Für Hero-Visuals, Mood-Boards, Tattoo-Referenz-Bilder
-
----
-
-### DESIGN-PHILOSOPHIE (aus allen Screenshots destilliert)
-
-#### Was PREMIUM Design ausmacht (TITAN BURN / 3D Scroll Style)
+#### Was PREMIUM Design ausmacht
 - Dramatische Tiefenwirkung durch Licht und Schatten
 - 3D-Elemente die aus dem Hintergrund ragen und auf Scroll reagieren
 - Dunkler atmosphärischer Hintergrund mit Texturen (Noise, Grain)
-- Floating-Elemente für Lebendigkeit (float Animation)
-- Gradients die Tiefe suggerieren, nicht nur Farbe
 - Editorial Large Type: Headlines die mehr als 50% des Viewports füllen
 
-#### Anti-Patterns (NIEMALS in Premium Design)
+#### Anti-Patterns (NIEMALS)
 - Lila/Purple Gradienten (AI-Slop Tell #1)
 - Bounce-Easing auf irgendwas
-- Cramped Padding (zu enge Abstände)
-- Box-Shadows in allen Richtungen gleichzeitig
+- Cramped Padding
 - Zu viele Farben (max 3 im System)
 - Outline-Buttons als primäre CTAs
 - Centered Body Text auf Desktop
 
 #### Noble Dark Luxury Regeln für Lemgo INK
-- Warme Schwarztöne statt hartes #000000 → `#06050A`
-- Amber-Gold statt Messing-Gold → `#C9A84C`
-- Ivory-Creme statt neutrales Weiß → `#EDE8DF`
+- Warme Schwarztöne → `#06050A`
+- Amber-Gold → `#C9A84C`
+- Ivory-Creme → `#EDE8DF`
 - Gold sparsam: max 1-2 Akzente pro Section
-- Typografie-Hierarchie: Display (Bebas) > Heading > Body (Inter) > Label
-- Whitespace ist Luxus — großzügige Margins und Padding
-- Animations zeigen sich durch Ruhe, nicht durch Überwältigung
+- Whitespace ist Luxus — großzügige Margins
 
 ---
 
 ## Was NICHT ändern
 - `ssr: false` bei PhoenixScene (Three.js braucht Browser)
 - Lenis + ScrollTrigger Sync — `lenis.on("scroll", ScrollTrigger.update)` + `gsap.ticker.add`
-- `alpha: false` im Canvas (ermöglicht Postprocessing wenn nötig)
+- `alpha: false` im Canvas
 - `body { cursor: none }` — CustomCursor übernimmt
 - `animejs` v4 API: `ease: "outExpo"` (nicht `easing`), Objekte direkt animieren
