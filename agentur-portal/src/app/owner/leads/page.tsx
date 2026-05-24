@@ -24,7 +24,7 @@ export default function LeadsPage() {
     <div>
       <TopBar title="Leads" actions={<Button size="sm" onClick={() => setOpen(true)}><Plus className="w-4 h-4" /> Neuer Lead</Button>} />
       <div className="p-6 max-w-5xl">
-        <div className="grid grid-cols-5 gap-4 mb-6 text-center">
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-6 text-center overflow-x-auto">
           {(["neu", "kontaktiert", "angebot_gesendet", "gewonnen", "verloren"] as LeadStatus[]).map((s) => (
             <div key={s} className="rounded-xl border border-border bg-card p-3">
               <StatusBadge type="lead" status={s} />
