@@ -21,7 +21,7 @@ export default function PaketePage() {
         {/* Zahlungsmodelle Info */}
         <div className="bg-muted/40 rounded-xl border border-border p-6 mb-10">
           <p className="font-semibold mb-4 text-sm">Flexible Zahlungsmodelle</p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {ZAHLUNGSMODELLE.map((m) => (
               <div key={m.id} className="bg-background rounded-lg border border-border p-4">
                 <p className="font-medium text-sm mb-1">{m.label}</p>
