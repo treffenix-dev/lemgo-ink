@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, FolderKanban, CheckSquare, Upload, MessageSquare,
   FileText, CreditCard, ThumbsUp, HeadphonesIcon, LogOut,
@@ -43,7 +43,14 @@ const ownerNav = [
 
 export function Sidebar({ role }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const nav = role === "customer" ? customerNav : ownerNav;
+
+  function handleLogout() {
+    sessionStorage.removeItem("owner_auth");
+    sessionStorage.removeItem("customer_auth");
+    router.push("/login");
+  }
 
   const sections = role === "owner"
     ? Array.from(new Set(ownerNav.map((i) => i.section)))
@@ -85,15 +92,13 @@ export function Sidebar({ role }: SidebarProps) {
       </nav>
 
       <div className="border-t border-border p-3">
-        <form action="/api/auth/signout" method="POST">
-          <button
-            type="submit"
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            Abmelden
-          </button>
-        </form>
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+        >
+          <LogOut className="w-4 h-4" />
+          Abmelden
+        </button>
       </div>
     </aside>
   );
