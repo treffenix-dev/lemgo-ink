@@ -19,3 +19,5 @@ Thumbs.db
 .idea/
 .vercel
 tsconfig.tsbuildinfo
+loewenbraeu-website/node_modules
+loewenbraeu-website/.next
