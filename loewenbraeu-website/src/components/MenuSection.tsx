@@ -13,57 +13,72 @@ export function MenuSection() {
   const category = MENU.find((c) => c.id === active) ?? MENU[0];
 
   return (
-    <section id="speisekarte" className="py-28 px-[5%] bg-surface">
+    <section id="speisekarte" className="py-36 px-[5%]">
       <div className="max-w-5xl mx-auto">
-        <span className="text-[0.68rem] tracking-[0.42em] uppercase text-gold mb-3 block">Unsere Küche</span>
-        <h2 className="font-display text-[clamp(2rem,4vw,3rem)] mb-2">Speisekarte</h2>
-        <p className="text-muted text-sm mb-10 max-w-md leading-loose">
-          Frisch zubereitet, großzügige Portionen, faire Preise. Alle Gerichte auch zum Mitnehmen.
-        </p>
 
-        {/* Category tabs */}
-        <div className="flex flex-wrap gap-2 mb-10">
-          {MENU.map((c) => (
-            <button
-              key={c.id}
-              onClick={() => setActive(c.id)}
-              className={`text-[0.72rem] tracking-[0.16em] uppercase px-4 py-2 border transition-colors ${
-                active === c.id
-                  ? "bg-gold text-bg border-gold"
-                  : "border-border text-muted hover:border-gold/50 hover:text-cream"
-              }`}
-            >
-              {c.label}
-            </button>
-          ))}
+        {/* Header */}
+        <div className="mb-16">
+          <span className="gold-rule" />
+          <h2 className="font-display font-light text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.0] text-cream mb-3">
+            Speisekarte
+          </h2>
+          <p className="font-sans text-[0.8rem] text-muted leading-loose max-w-sm">
+            Täglich frisch zubereitet · Großzügige Portionen · Faire Preise
+          </p>
         </div>
 
-        {/* Items */}
-        <motion.div
-          key={active}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35 }}
-          className="divide-y divide-border border border-border"
-        >
-          {category.items.map((item) => (
-            <div key={item.name} className="flex justify-between items-start gap-4 p-5 bg-surface2">
-              <div className="flex-1">
-                <div className="text-[0.92rem] text-cream">{item.name}</div>
-                {item.desc && (
-                  <div className="text-[0.78rem] text-muted mt-0.5">{item.desc}</div>
-                )}
-              </div>
-              <span className={`font-display text-[0.95rem] shrink-0 ${item.price ? "text-gold-lt" : "text-muted text-[0.75rem] italic"}`}>
-                {fmt(item.price)}
-              </span>
-            </div>
-          ))}
-        </motion.div>
+        <div className="grid md:grid-cols-[220px_1fr] gap-16">
 
-        <p className="mt-5 text-[0.75rem] text-muted">
-          Alle Gerichte auch zum Mitnehmen · Nur Barzahlung · Tischreservierung empfohlen
-        </p>
+          {/* Category sidebar */}
+          <div className="flex md:flex-col gap-2 flex-wrap">
+            {MENU.map((c) => (
+              <button
+                key={c.id}
+                onClick={() => setActive(c.id)}
+                className={`text-left font-sans text-[0.68rem] tracking-[0.18em] uppercase transition-colors duration-200 py-2 border-l-2 pl-3 ${
+                  active === c.id
+                    ? "border-gold text-cream"
+                    : "border-transparent text-muted hover:text-cream hover:border-border"
+                }`}
+              >
+                {c.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Items — editorial menu style */}
+          <motion.div
+            key={active}
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <h3 className="font-display font-light text-[1.6rem] text-cream mb-8 pb-4 border-b border-border">
+              {category.label}
+            </h3>
+
+            <div className="flex flex-col gap-5">
+              {category.items.map((item) => (
+                <div key={item.name}>
+                  <div className="flex items-baseline gap-0">
+                    <span className="font-display text-[1.05rem] text-cream">{item.name}</span>
+                    <span className="menu-dots" />
+                    <span className={`font-display text-[1.05rem] shrink-0 ${item.price ? "text-gold-lt" : "text-muted text-[0.8rem] italic font-sans"}`}>
+                      {fmt(item.price)}
+                    </span>
+                  </div>
+                  {item.desc && (
+                    <p className="font-sans text-[0.72rem] text-muted mt-0.5 leading-relaxed">{item.desc}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <p className="font-sans text-[0.65rem] text-muted/60 mt-10 tracking-[0.12em]">
+              Alle Gerichte auch zum Mitnehmen · Nur Barzahlung
+            </p>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

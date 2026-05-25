@@ -9,18 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
+        display: ["var(--font-cormorant)", "Georgia", "serif"],
         sans:    ["var(--font-inter)", "sans-serif"],
-        display: ["var(--font-playfair)", "serif"],
       },
       colors: {
-        bg:       "#0c0805",
-        surface:  "#171009",
-        surface2: "#211608",
-        gold:     "#c9900a",
-        "gold-lt":"#e8b040",
-        cream:    "#f0e4cc",
-        muted:    "#8a7a62",
-        border:   "#2a1e0e",
+        bg:        "#06080F",
+        surface:   "#0C1020",
+        surface2:  "#121829",
+        navy:      "#1A2B5C",
+        gold:      "#B8891F",
+        "gold-lt": "#D4A840",
+        cream:     "#EDE9DF",
+        muted:     "#5A6580",
+        border:    "#1A2240",
       },
     },
   },

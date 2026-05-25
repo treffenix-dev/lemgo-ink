@@ -5,85 +5,93 @@ const FOOD_IMG = "https://img02.restaurantguru.com/c2d3-Restaurant-Munchner-Lowe
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-[5%] pt-24 pb-20 overflow-hidden">
-      {/* Background photo */}
+    <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-[5%] overflow-hidden">
+      {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage: `url(${FOOD_IMG})`,
-          filter: "brightness(0.15) saturate(0.5)",
-          transform: "scale(1.04)",
+          filter: "brightness(0.12) saturate(0.4)",
+          transform: "scale(1.05)",
         }}
       />
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-bg/30 via-transparent to-bg/80" />
+      {/* Gradient: fade out at bottom */}
+      <div className="absolute inset-0 bg-gradient-to-b from-bg/20 via-transparent to-bg" />
 
-      <div className="relative z-10 flex flex-col items-center">
-        <motion.span
-          initial={{ opacity: 0, y: 10 }}
+      <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto">
+
+        {/* Eyebrow */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="text-[0.68rem] tracking-[0.42em] uppercase text-gold mb-8"
+          transition={{ duration: 0.8 }}
+          className="flex items-center gap-4 mb-12"
         >
-          Mittelstraße 144 · Lemgo · Seit über 50 Jahren
-        </motion.span>
+          <span className="block w-8 h-px bg-gold/60" />
+          <span className="font-sans text-[0.62rem] tracking-[0.4em] uppercase text-gold">
+            Seit über 50 Jahren · Lemgo
+          </span>
+          <span className="block w-8 h-px bg-gold/60" />
+        </motion.div>
 
+        {/* Main title */}
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="font-display text-[clamp(3rem,9vw,7.5rem)] leading-[1.0] font-bold mb-7"
+          transition={{ duration: 1.1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="font-display font-light text-[clamp(3.5rem,10vw,8.5rem)] leading-[0.92] text-cream mb-6"
         >
-          Balkan & Deutsche
+          Münchener
           <br />
-          <em className="text-gold-lt not-italic">Küche mit Seele</em>
+          <span className="text-gold-lt italic">Löwenbräu</span>
         </motion.h1>
 
+        {/* Subtitle */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.25 }}
-          className="text-muted text-base max-w-md leading-loose mb-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.9, delay: 0.35 }}
+          className="font-display font-light text-[1.1rem] tracking-[0.18em] text-muted uppercase mb-14"
         >
-          Hausgemachte Ćevapčići, saftige Steaks und knusprige Schnitzel —
-          serviert in gemütlicher Atmosphäre seit über einem halben Jahrhundert.
+          Balkan & Deutsche Küche
         </motion.p>
 
+        {/* CTAs */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.38 }}
-          className="flex flex-wrap gap-4 justify-center"
+          transition={{ duration: 0.7, delay: 0.5 }}
+          className="flex flex-wrap gap-8 justify-center items-center"
         >
           <a
-            href="tel:+4952614267"
-            className="bg-gold text-bg text-[0.8rem] font-medium tracking-[0.14em] uppercase px-8 py-4 hover:bg-gold-lt transition-colors"
+            href="#reservierung"
+            className="font-sans text-[0.7rem] tracking-[0.26em] uppercase text-cream border border-cream/30 px-10 py-4 hover:border-gold-lt hover:text-gold-lt transition-all duration-300"
           >
-            Tisch reservieren →
+            Tisch reservieren
           </a>
           <a
-            href="#bestellen"
-            className="text-muted text-[0.8rem] tracking-[0.14em] uppercase py-4 hover:text-cream transition-colors"
+            href="#speisekarte"
+            className="font-sans text-[0.7rem] tracking-[0.26em] uppercase text-muted hover:text-cream transition-colors duration-200"
           >
-            Online bestellen ↓
+            Speisekarte ansehen →
           </a>
         </motion.div>
 
-        {/* Badges */}
+        {/* Stats */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
-          className="flex gap-10 mt-16 pt-10 border-t border-border/60"
+          transition={{ delay: 0.75, duration: 0.9 }}
+          className="flex gap-12 mt-24 pt-10 border-t border-border/50"
         >
           {[
-            { num: "4,8 ★", label: "Google Bewertung" },
-            { num: "347",   label: "Kundenbewertungen" },
-            { num: "50+",   label: "Jahre Erfahrung" },
+            { num: "4,8",  label: "Google Bewertung" },
+            { num: "347",  label: "Rezensionen"      },
+            { num: "50+",  label: "Jahre Erfahrung"  },
           ].map((b) => (
             <div key={b.label} className="text-center">
-              <span className="font-display text-[2rem] text-gold-lt block">{b.num}</span>
-              <span className="text-[0.68rem] text-muted tracking-[0.18em] uppercase">{b.label}</span>
+              <span className="font-display font-light text-[2.2rem] text-gold-lt block leading-none mb-1">{b.num}</span>
+              <span className="font-sans text-[0.6rem] text-muted tracking-[0.2em] uppercase">{b.label}</span>
             </div>
           ))}
         </motion.div>

@@ -3,14 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --bg:       #0c0805;
-  --surface:  #171009;
-  --surface2: #211608;
-  --gold:     #c9900a;
-  --gold-lt:  #e8b040;
-  --cream:    #f0e4cc;
-  --muted:    #8a7a62;
-  --border:   #2a1e0e;
+  --bg:       #06080F;
+  --surface:  #0C1020;
+  --surface2: #121829;
+  --navy:     #1A2B5C;
+  --gold:     #B8891F;
+  --gold-lt:  #D4A840;
+  --cream:    #EDE9DF;
+  --muted:    #5A6580;
+  --border:   #1A2240;
 }
 
 html { scroll-behavior: smooth; }
@@ -20,15 +21,28 @@ body {
   color: var(--cream);
 }
 
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.5);
+  filter: invert(0.4);
   cursor: pointer;
 }
 
-@layer utilities {
-  .text-balance { text-wrap: balance; }
+/* Thin gold rule used in sections */
+.gold-rule {
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--gold);
+  margin-bottom: 1.5rem;
+}
+
+/* Menu dotted line between name and price */
+.menu-dots {
+  flex: 1;
+  border-bottom: 1px dotted rgba(90, 101, 128, 0.35);
+  margin: 0 0.75rem;
+  margin-bottom: 4px;
 }

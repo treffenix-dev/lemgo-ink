@@ -29,53 +29,55 @@ export default function Page() {
 
   return (
     <>
-      <Nav cartCount={count} />
+      <Nav />
 
       <main>
         <Hero />
 
-        <hr className="border-none border-t border-border max-w-5xl mx-auto" />
+        <div className="border-t border-border" />
         <MenuSection />
 
-        <hr className="border-none border-t border-border max-w-5xl mx-auto" />
+        <div className="border-t border-border" />
         <OrderSection onAdd={handleAdd} />
 
-        <hr className="border-none border-t border-border max-w-5xl mx-auto" />
+        <div className="border-t border-border" />
         <About />
 
+        <div className="border-t border-border" />
         <Gallery />
 
+        <div className="border-t border-border" />
         <Reviews />
 
+        <div className="border-t border-border" />
         <Reservation />
 
-        <hr className="border-none border-t border-border max-w-5xl mx-auto" />
+        <div className="border-t border-border" />
         <Contact />
 
-        <footer className="border-t border-border px-[5%] py-8 flex flex-wrap justify-between items-center gap-4">
-          <span className="font-display text-gold text-base">Münchener Löwenbräu</span>
-          <p className="text-[0.75rem] text-muted">Mittelstraße 144 · 32657 Lemgo · 05261 4267</p>
-          <p className="text-[0.7rem] text-muted">Impressum · Datenschutz</p>
+        <footer className="border-t border-border px-[5%] py-10 flex flex-wrap justify-between items-center gap-4">
+          <span className="font-display font-light text-[1.1rem] text-cream tracking-[0.12em]">Münchener Löwenbräu</span>
+          <p className="font-sans text-[0.68rem] text-muted tracking-[0.1em]">Mittelstraße 144 · 32657 Lemgo · 05261 4267</p>
+          <p className="font-sans text-[0.62rem] text-muted/50">Impressum · Datenschutz</p>
         </footer>
       </main>
 
-      {/* Floating cart button */}
       {count > 0 && (
         <button
           onClick={() => setCartOpen(true)}
-          className="fixed bottom-6 right-6 z-30 bg-gold text-bg w-14 h-14 flex items-center justify-center text-xl shadow-2xl hover:bg-gold-lt transition-colors"
+          className="fixed bottom-6 right-6 z-30 border border-gold/50 text-cream bg-surface w-14 h-14 flex items-center justify-center text-lg shadow-2xl hover:border-gold hover:text-gold-lt transition-all duration-200"
           aria-label="Warenkorb öffnen"
         >
           🛒
-          <span className="absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[0.62rem] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+          <span className="absolute -top-1.5 -right-1.5 bg-navy text-cream font-sans text-[0.58rem] font-medium w-5 h-5 rounded-full flex items-center justify-center border border-border">
             {count}
           </span>
         </button>
       )}
 
-      {/* Demo badge */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 bg-gold/90 text-bg text-[0.68rem] font-medium tracking-[0.1em] uppercase px-5 py-2 shadow-xl whitespace-nowrap pointer-events-none">
-        ✦ Demo-Entwurf — Noch kein eigener Webauftritt vorhanden
+      {/* Demo banner */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 bg-surface/95 border border-border text-cream font-sans text-[0.62rem] tracking-[0.12em] uppercase px-6 py-2.5 shadow-xl whitespace-nowrap pointer-events-none">
+        Demo-Entwurf · Noch kein eigener Webauftritt
       </div>
 
       <Cart
