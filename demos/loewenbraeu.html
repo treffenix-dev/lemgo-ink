@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Münchener Löwenbräu Lemgo — Balkan & Deutsche Küche</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0c0805;
+      --surface:  #171009;
+      --surface2: #211608;
+      --gold:     #c9900a;
+      --gold-lt:  #e8b040;
+      --cream:    #f0e4cc;
+      --muted:    #8a7a62;
+      --border:   #2a1e0e;
+      --red:      #8b1a1a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 72px;
+      background: rgba(12,8,5,0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(201,144,10,0.15);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      letter-spacing: 0.06em;
+      color: var(--gold-lt);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--cream); }
+
+    .nav-cta {
+      background: var(--gold);
+      color: #0c0805;
+      border: none;
+      padding: 0.55rem 1.4rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 5% 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 40%, rgba(201,144,10,0.12) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 20% 80%, rgba(139,26,26,0.1) 0%, transparent 60%);
+    }
+
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 9vw, 8rem);
+      line-height: 1.0;
+      font-weight: 700;
+      position: relative;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold-lt);
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 2.8rem;
+      line-height: 1.8;
+      position: relative;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: #0c0805;
+      padding: 1rem 2.4rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover { background: var(--gold-lt); }
+
+    .btn-ghost {
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .btn-ghost:hover { color: var(--cream); }
+
+    .hero-badges {
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      margin-top: 4rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--border);
+      position: relative;
+    }
+
+    .badge {
+      text-align: center;
+    }
+
+    .badge-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--gold-lt);
+      display: block;
+    }
+
+    .badge-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      padding: 7rem 5%;
+    }
+
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      max-width: 500px;
+      line-height: 1.9;
+      font-size: 0.95rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── SPEISEKARTE ── */
+    .menu-section {
+      background: var(--surface);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+
+    .menu-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      position: relative;
+    }
+
+    .menu-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+
+    .menu-card-category {
+      font-size: 0.65rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .menu-item:last-child { border-bottom: none; }
+
+    .menu-item-name {
+      font-size: 0.92rem;
+      color: var(--cream);
+    }
+
+    .menu-item-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    .menu-item-price {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold-lt);
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      margin-top: 0;
+    }
+
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .nav-links { display: none; }
+    }
+
+    .about-visual {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      aspect-ratio: 4/3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 60% 40%, rgba(201,144,10,0.18) 0%, transparent 60%);
+    }
+
+    .about-visual-icon {
+      font-size: 5rem;
+      position: relative;
+    }
+
+    .about-visual-text {
+      position: relative;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--muted);
+      margin-top: 1rem;
+      font-style: italic;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .about-stat {
+      border-left: 2px solid var(--gold);
+      padding-left: 1rem;
+    }
+
+    .about-stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--gold-lt);
+      display: block;
+    }
+
+    .about-stat-label {
+      font-size: 0.73rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── REVIEWS ── */
+    .reviews-section {
+      background: var(--surface);
+    }
+
+    .stars {
+      color: var(--gold);
+      font-size: 1.1rem;
+      letter-spacing: 0.1rem;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .review-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 1.8rem;
+    }
+
+    .review-text {
+      font-size: 0.9rem;
+      color: var(--cream);
+      line-height: 1.75;
+      font-style: italic;
+      margin: 1rem 0;
+    }
+
+    .review-author {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .review-score {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 2rem 0 1rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .review-score-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      color: var(--gold-lt);
+      line-height: 1;
+    }
+
+    .review-score-detail { line-height: 1.6; }
+
+    /* ── HOURS + CONTACT ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-top: 3.5rem;
+    }
+
+    @media (max-width: 700px) {
+      .info-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    .hours-table { width: 100%; border-collapse: collapse; }
+
+    .hours-table tr {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hours-table td {
+      padding: 0.8rem 0;
+      font-size: 0.88rem;
+    }
+
+    .hours-table td:first-child { color: var(--muted); }
+    .hours-table td:last-child { text-align: right; color: var(--cream); }
+
+    .hours-table tr.closed td { opacity: 0.35; }
+
+    .contact-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .contact-value {
+      font-size: 0.95rem;
+      color: var(--cream);
+    }
+
+    /* ── CTA BANNER ── */
+    .cta-banner {
+      background: var(--surface2);
+      border-top: 1px solid rgba(201,144,10,0.2);
+      border-bottom: 1px solid rgba(201,144,10,0.2);
+      text-align: center;
+      padding: 6rem 5%;
+    }
+
+    .cta-banner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      margin-bottom: 1rem;
+    }
+
+    .cta-banner p {
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 3rem 5%;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 1rem;
+    }
+
+    footer p {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* ── DEMO BANNER ── */
+    .demo-banner {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(201,144,10,0.95);
+      color: #0c0805;
+      padding: 0.6rem 1.6rem;
+      font-size: 0.73rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      z-index: 200;
+      white-space: nowrap;
+      border-radius: 2px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Demo Banner -->
+  <div class="demo-banner">✦ Demo-Entwurf — Noch kein eigener Webauftritt vorhanden</div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Münchener Löwenbräu</div>
+    <ul class="nav-links">
+      <li><a href="#speisekarte">Speisekarte</a></li>
+      <li><a href="#ueber-uns">Über uns</a></li>
+      <li><a href="#bewertungen">Bewertungen</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+    <a href="tel:+4952614267" class="nav-cta">Tisch reservieren</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="hero-eyebrow">Mittelstraße 144 · Lemgo · Seit über 50 Jahren</span>
+    <h1>
+      Balkan & Deutsche<br>
+      <em>Küche mit Seele</em>
+    </h1>
+    <p class="hero-sub">
+      Hausgemachte Ćevapčići, saftige Steaks und knusprige Schnitzel —
+      serviert in gemütlicher Atmosphäre seit über einem halben Jahrhundert.
+    </p>
+    <div class="hero-actions">
+      <a href="tel:+4952614267" class="btn-primary">Tisch reservieren →</a>
+      <a href="#speisekarte" class="btn-ghost">Speisekarte ansehen ↓</a>
+    </div>
+    <div class="hero-badges">
+      <div class="badge">
+        <span class="badge-num">4,8 ★</span>
+        <span class="badge-label">Google Bewertung</span>
+      </div>
+      <div class="badge">
+        <span class="badge-num">347</span>
+        <span class="badge-label">Kundenbewertungen</span>
+      </div>
+      <div class="badge">
+        <span class="badge-num">50+</span>
+        <span class="badge-label">Jahre Erfahrung</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- SPEISEKARTE -->
+  <section class="menu-section" id="speisekarte">
+    <div class="container">
+      <span class="section-label">Unsere Küche</span>
+      <h2 class="section-title">Speisekarte</h2>
+      <p class="section-desc">Frisch zubereitet, großzügige Portionen, faire Preise. Alle Gerichte auch zum Mitnehmen.</p>
+
+      <div class="menu-grid">
+
+        <div class="menu-card">
+          <div class="menu-card-category">Balkan Spezialitäten</div>
+          <div class="menu-item">
+            <div>
+              <div class="menu-item-name">Ćevapčići (10 Stück)</div>
+              <div class="menu-item-desc">Mit Ajvar, Zwiebeln und Fladenbrot</div>
+            </div>
+            <span class="menu-item-price">12,90 €</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <div class="menu-item-name">Mixed Grill Platte</div>
+              <div class="menu-item-desc">Ćevapčići, Pljeskavica, Fleischspieß</div>
+            </div>
+            <span class="menu-item-price">18,90 €</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <div class="menu-item-name">Pljeskavica</div>
+              <div class="menu-item-desc">Hausgemachter Balkan-Burger mit Ajvar</div>
+            </div>
+            <span class="menu-item-price">13,50 €</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <div class="menu-item-name">Balkan-Teller für 2</div>
+              <div class="menu-item-desc">Auswahl der Spezialitäten, Beilagen</div>
+            </div>
+            <span class="menu-item-price">32,00 €</span>
+          </div>
+        </div>
+
+        <div class="menu-card">
+          <div class="menu-card-category">Steaks & Grill</div>
+          <div class="menu-item">
+            <div>
+              <div class="menu-item-name">Rumpsteak (250 g)</div>
+              <div class="menu-item-desc">Mit Kräuterbutter, Pommes & Salat</div>
+            </div>
+            <span class="menu-item-price">22,90 €</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <div class="menu-item-name">T-Bone Steak (400 g)</div>
+              <div class="menu-item-desc">Auf dem Holzkohlegrill, Beilagen nach Wahl</div>
+            </div>
+            <span class="menu-item-price">28,90 €</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <div class="menu-item-name">Grillspieß vom Hähnchen</div>
+              <div class="menu-item-desc">Mariniert, mit Reis und Salat</div>
+            </div>
+            <span class="menu-item-price">14,90 €</span>
+          </div>
+        </div>
+
+        <div class="menu-card">
+          <div class="menu-card-category">Schnitzel & Klassiker</div>
+          <div class="menu-item">
+            <div>
+              <div class="menu-item-name">Wiener Schnitzel</div>
+              <div class="menu-item-desc">Vom Kalb, Pommes & Preiselbeeren</div>
+            </div>
+            <span class="menu-item-price">16,90 €</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <div class="menu-item-name">Jägerschnitzel</div>
+              <div class="menu-item-desc">Mit Pilzrahmsauce und Kartoffeln</div>
+            </div>
+            <span class="menu-item-price">15,90 €</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <div class="menu-item-name">Zigeunerschnitzel</div>
+              <div class="menu-item-desc">Mit Paprika-Tomaten-Sauce, Pommes</div>
+            </div>
+            <span class="menu-item-price">15,90 €</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <div class="menu-item-name">Kinderschnitzel</div>
+              <div class="menu-item-desc">Kleines Schnitzel mit Pommes</div>
+            </div>
+            <span class="menu-item-price">8,50 €</span>
+          </div>
+        </div>
+
+      </div>
+
+      <p style="margin-top: 2.5rem; font-size: 0.8rem; color: var(--muted);">
+        Alle Gerichte auch zum Mitnehmen · Barzahlung · Reservierung empfohlen
+      </p>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ÜBER UNS -->
+  <section id="ueber-uns">
+    <div class="container">
+      <div class="about-grid">
+        <div>
+          <span class="section-label">Unsere Geschichte</span>
+          <h2 class="section-title">50 Jahre<br>gute Küche in Lemgo</h2>
+          <p class="section-desc">
+            Was als kleines Gasthaus in der Lemgoer Innenstadt begann, ist heute
+            eines der beständigsten Restaurants der Stadt. Seit über einem halben
+            Jahrhundert kochen wir mit denselben Rezepten, denselben Zutaten —
+            und derselben Leidenschaft.
+          </p>
+          <p style="color: var(--muted); font-size: 0.92rem; margin-top: 1.4rem; max-width: 500px; line-height: 1.9;">
+            Balkanische Hausmannskost trifft auf deutsche Gastfreundschaft.
+            Ćevapčići nach Originalrezept, Steaks vom Grill und Schnitzel
+            die satt machen — das ist unser Versprechen.
+          </p>
+          <div class="about-stats">
+            <div class="about-stat">
+              <span class="about-stat-num">4,8 ★</span>
+              <span class="about-stat-label">Google-Bewertung</span>
+            </div>
+            <div class="about-stat">
+              <span class="about-stat-num">347</span>
+              <span class="about-stat-label">Bewertungen</span>
+            </div>
+            <div class="about-stat">
+              <span class="about-stat-num">50+</span>
+              <span class="about-stat-label">Jahre Erfahrung</span>
+            </div>
+            <div class="about-stat">
+              <span class="about-stat-num">Di–So</span>
+              <span class="about-stat-label">Geöffnet</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-visual">
+          <div class="about-visual-icon">🦁</div>
+          <div class="about-visual-text">Mittelstraße 144, Lemgo</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <div class="cta-banner">
+    <h2>Einen Tisch reservieren</h2>
+    <p>Tischreservierung empfohlen — rufen Sie uns einfach an.</p>
+    <a href="tel:+4952614267" class="btn-primary">☎ 05261 4267 anrufen</a>
+  </div>
+
+  <!-- BEWERTUNGEN -->
+  <section class="reviews-section" id="bewertungen">
+    <div class="container">
+      <span class="section-label">Was unsere Gäste sagen</span>
+      <h2 class="section-title">Kundenbewertungen</h2>
+
+      <div class="review-score">
+        <div class="review-score-num">4,8</div>
+        <div class="review-score-detail">
+          <div class="stars">★★★★★</div>
+          <div style="font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem;">347 Google-Bewertungen · Platz 29 von 109 in Lemgo</div>
+        </div>
+      </div>
+
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">
+            „Freundlicher Service, Sauberkeit, gutes Preis-Leistungs-Verhältnis
+            und perfekte Steaks. Wir kommen immer wieder gerne."
+          </p>
+          <div class="review-author">— Google-Rezension</div>
+        </div>
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">
+            „Über 50 Jahre erfolgreiche Gastronomie — das sagt alles.
+            Die Ćevapčići sind die besten in der Region."
+          </p>
+          <div class="review-author">— Google-Rezension</div>
+        </div>
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">
+            „Tolles Essen, gemütliche Atmosphäre, sehr aufmerksames Personal.
+            Das Schnitzel war hervorragend, gerne wieder!"
+          </p>
+          <div class="review-author">— Google-Rezension</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- KONTAKT + ZEITEN -->
+  <section id="kontakt">
+    <div class="container">
+      <span class="section-label">Besuchen Sie uns</span>
+      <h2 class="section-title">Öffnungszeiten & Kontakt</h2>
+
+      <div class="info-grid">
+        <div>
+          <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--muted);">Öffnungszeiten</h3>
+          <table class="hours-table">
+            <tr class="closed"><td>Montag</td><td>Ruhetag</td></tr>
+            <tr><td>Dienstag</td><td>11:30 – 14:30 · 17:00 – 22:30</td></tr>
+            <tr><td>Mittwoch</td><td>11:30 – 14:30 · 17:00 – 22:30</td></tr>
+            <tr><td>Donnerstag</td><td>11:30 – 14:30 · 17:00 – 22:30</td></tr>
+            <tr><td>Freitag</td><td>11:30 – 14:30 · 17:00 – 22:30</td></tr>
+            <tr><td>Samstag</td><td>11:30 – 14:30 · 17:00 – 22:30</td></tr>
+            <tr><td>Sonntag</td><td>11:30 – 14:30 · 17:00 – 22:30</td></tr>
+          </table>
+        </div>
+
+        <div>
+          <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--muted);">Kontakt & Anfahrt</h3>
+          <div class="contact-item">
+            <span class="contact-label">Adresse</span>
+            <span class="contact-value">Mittelstraße 144, 32657 Lemgo</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Telefon</span>
+            <span class="contact-value"><a href="tel:+4952614267" style="color: inherit; text-decoration: none;">05261 4267</a></span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Reservierung</span>
+            <span class="contact-value">Tischreservierung empfohlen</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Zahlung</span>
+            <span class="contact-value">Nur Barzahlung</span>
+          </div>
+          <div style="margin-top: 2rem;">
+            <a href="https://maps.google.com/?q=Mittelstra%C3%9Fe+144+32657+Lemgo" target="_blank" class="btn-primary" style="display: inline-block;">
+              In Google Maps öffnen →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Münchener Löwenbräu</div>
+    <p>Mittelstraße 144 · 32657 Lemgo · 05261 4267</p>
+    <p style="font-size: 0.7rem; color: var(--muted);">Impressum · Datenschutz</p>
+  </footer>
+
+</body>
+</html>
