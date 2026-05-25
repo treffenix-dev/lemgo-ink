@@ -2,12 +2,19 @@
 
 import { useRef } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { motion, useInView } from "framer-motion";
 import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { Button } from "@/components/ui/button";
 import { PAKETE } from "@/lib/data/pakete";
 import { formatCurrency } from "@/lib/utils/format";
 import { Check, ArrowRight, MessageCircle, Phone, Mail, ChevronDown } from "lucide-react";
+import { WebsiteShowcase } from "@/components/WebsiteShowcase";
+
+const StarField = dynamic(
+  () => import("@/components/StarField").then((m) => ({ default: m.StarField })),
+  { ssr: false }
+);
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -30,19 +37,24 @@ const heroWords = "Websites die wirklich überzeugen.".split(" ");
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen" style={{ background: "#080c18" }}>
+      {/* ── Sternfeld — läuft durch die gesamte Seite ── */}
+      <StarField />
+
       <PublicNavbar />
 
       {/* ── Hero — dark, animiert beim Laden ── */}
       <section
         className="relative overflow-hidden flex flex-col items-center text-center gap-7 py-28 sm:py-40 px-4"
-        style={{ background: "linear-gradient(160deg, #0a0e1a 0%, #0d1128 60%, #0a0e1a 100%)" }}
+        style={{ zIndex: 2 }}
       >
-        {/* orbs */}
-        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 70%)", animation: "driftOrb1 14s ease-in-out infinite" }} />
-        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(99,102,241,0.14) 0%, transparent 70%)", animation: "driftOrb2 18s ease-in-out infinite" }} />
+        {/* orbs — größer + stärker */}
+        <div className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(59,130,246,0.22) 0%, transparent 65%)", animation: "driftOrb1 14s ease-in-out infinite" }} />
+        <div className="absolute -bottom-32 -right-32 w-[600px] h-[600px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 65%)", animation: "driftOrb2 18s ease-in-out infinite" }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%)", animation: "driftOrb1 22s ease-in-out infinite reverse" }} />
 
         {/* badge */}
         <motion.div
@@ -111,8 +123,26 @@ export default function HomePage() {
         </motion.div>
       </section>
 
+      {/* ── Website Showcase ── */}
+      <section className="py-24 sm:py-32 border-t border-white/[0.06]" style={{ zIndex: 2, position: "relative" }}>
+        <div className="max-w-6xl mx-auto px-6 sm:px-10">
+          <Reveal>
+            <p className="text-[10px] tracking-[0.48em] uppercase text-white/30 mb-4">Referenz-Projekte</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
+              Websites die wir bauen
+            </h2>
+            <p className="text-white/45 max-w-md leading-relaxed mb-14">
+              Restaurants, Beauty-Studios, Handwerker und mehr — jede Seite individuell gestaltet, jede mit Kundenportal.
+            </p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <WebsiteShowcase />
+          </Reveal>
+        </div>
+      </section>
+
       {/* ── Vorteile ── */}
-      <section className="section bg-muted/40">
+      <section className="section bg-muted/40" style={{ position: "relative", zIndex: 2 }}>
         <div className="container-wide">
           <Reveal>
             <div className="text-center mb-12">
@@ -144,7 +174,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Branchen ── */}
-      <section className="section container-wide">
+      <section className="section container-wide" style={{ position: "relative", zIndex: 2 }}>
         <Reveal>
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-3">Für wen ist das?</h2>
@@ -164,7 +194,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Ablauf ── */}
-      <section id="ablauf" className="section bg-muted/40">
+      <section id="ablauf" className="section bg-muted/40" style={{ position: "relative", zIndex: 2 }}>
         <div className="container-narrow">
           <Reveal>
             <div className="text-center mb-12">
@@ -196,7 +226,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Pakete Preview ── */}
-      <section className="section container-wide">
+      <section className="section container-wide" style={{ position: "relative", zIndex: 2 }}>
         <Reveal>
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-3">Einfache, faire Preise</h2>
@@ -239,7 +269,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Vertrauen ── */}
-      <section className="section bg-muted/40">
+      <section className="section bg-muted/40" style={{ position: "relative", zIndex: 2 }}>
         <div className="container-narrow">
           <div className="grid sm:grid-cols-2 gap-6">
             {[
@@ -263,7 +293,7 @@ export default function HomePage() {
       </section>
 
       {/* ── FAQ ── */}
-      <section id="faq" className="section container-narrow">
+      <section id="faq" className="section container-narrow" style={{ position: "relative", zIndex: 2 }}>
         <Reveal>
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold mb-3">Häufige Fragen</h2>
@@ -291,7 +321,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Kontakt ── */}
-      <section id="kontakt" className="section bg-foreground text-background">
+      <section id="kontakt" className="section bg-foreground text-background" style={{ position: "relative", zIndex: 2 }}>
         <div className="container-narrow text-center">
           <Reveal>
             <h2 className="text-3xl font-bold mb-3">Fragen? Ich helfe dir gerne.</h2>
@@ -317,7 +347,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-border bg-background">
+      <footer className="border-t border-border bg-background" style={{ position: "relative", zIndex: 2 }}>
         <div className="container-wide py-10">
           <div className="grid sm:grid-cols-4 gap-8 mb-8">
             <div>
