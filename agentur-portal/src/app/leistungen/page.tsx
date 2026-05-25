@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { Button } from "@/components/ui/button";
-import { PAKETE, HOSTING_PAKETE } from "@/lib/data/pakete";
+import { PAKETE } from "@/lib/data/pakete";
 import { formatCurrency } from "@/lib/utils/format";
 import { Check, Server } from "lucide-react";
 
@@ -59,22 +59,23 @@ export default function LeistungenPage() {
         <div className="mb-16">
           <div className="flex items-center gap-3 mb-2">
             <Server className="w-5 h-5 text-blue-600" />
-            <h2 className="text-2xl font-bold">Hosting-Pakete</h2>
+            <h2 className="text-2xl font-bold">Hosting</h2>
           </div>
           <p className="text-muted-foreground mb-8">
-            Im ersten Jahr inklusive — danach monatlich kündbar. SSL, tägliche Backups und technischer Support inbegriffen.
+            Im ersten Jahr in jedem Paket inklusive. Ab dem zweiten Jahr wird das Hosting individuell vereinbart — je nach Anforderungen deiner Website.
           </p>
-          <div className="grid sm:grid-cols-3 gap-5">
-            {HOSTING_PAKETE.map((h) => (
-              <div key={h.id} className="rounded-xl border border-border bg-card p-6">
-                <p className="font-semibold mb-1">{h.label}</p>
-                <p className="text-2xl font-bold mt-2 mb-1">
-                  {formatCurrency(h.preis)}
-                  <span className="text-sm font-normal text-muted-foreground"> / Monat</span>
-                </p>
-                <p className="text-sm text-muted-foreground">{h.beschreibung}</p>
-              </div>
-            ))}
+          <div className="rounded-xl border border-border bg-card p-6 max-w-xl">
+            <p className="font-semibold mb-2">Was ist immer dabei:</p>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li className="flex items-center gap-2"><span className="text-green-600 font-bold">✓</span> SSL-Zertifikat (HTTPS)</li>
+              <li className="flex items-center gap-2"><span className="text-green-600 font-bold">✓</span> Tägliche Backups</li>
+              <li className="flex items-center gap-2"><span className="text-green-600 font-bold">✓</span> Schnelle Ladezeiten</li>
+              <li className="flex items-center gap-2"><span className="text-green-600 font-bold">✓</span> Technischer Support</li>
+              <li className="flex items-center gap-2"><span className="text-green-600 font-bold">✓</span> Domain-Einrichtung inklusive</li>
+            </ul>
+            <p className="text-sm text-muted-foreground mt-4 pt-4 border-t border-border">
+              Preis ab dem 2. Jahr: <strong>auf Anfrage</strong> — wird vor Projektstart gemeinsam besprochen.
+            </p>
           </div>
         </div>
 
