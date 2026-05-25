@@ -579,6 +579,288 @@
       filter: brightness(1) saturate(1);
     }
 
+    /* ── ORDER BUTTONS ── */
+    .menu-item { position: relative; }
+
+    .add-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--gold);
+      width: 28px; height: 28px;
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.2s, border-color 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .add-btn:hover { background: var(--gold); color: #0c0805; border-color: var(--gold); }
+
+    /* ── CART FLOAT ── */
+    .cart-float {
+      position: fixed;
+      bottom: 5rem; right: 1.5rem;
+      z-index: 300;
+      background: var(--gold);
+      color: #0c0805;
+      border: none;
+      width: 56px; height: 56px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .cart-float:hover { transform: scale(1.08); background: var(--gold-lt); }
+
+    .cart-badge {
+      position: absolute;
+      top: -6px; right: -6px;
+      background: #c0392b;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      display: none;
+    }
+
+    /* ── CART DRAWER ── */
+    .cart-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 400;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: min(420px, 100vw);
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      z-index: 401;
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .cart-overlay.open .cart-drawer { transform: translateX(0); }
+
+    .cart-header {
+      padding: 1.5rem 1.5rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .cart-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+    }
+
+    .cart-close {
+      background: none; border: none; color: var(--muted);
+      font-size: 1.4rem; cursor: pointer; line-height: 1;
+      padding: 0.2rem 0.4rem;
+    }
+
+    .cart-close:hover { color: var(--cream); }
+
+    .cart-items { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
+
+    .cart-empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 3rem 0;
+      font-size: 0.9rem;
+    }
+
+    .cart-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cart-line-name { font-size: 0.9rem; color: var(--cream); }
+    .cart-line-sub  { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+
+    .cart-qty {
+      display: flex; align-items: center; gap: 0.6rem;
+      flex-shrink: 0;
+    }
+
+    .qty-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--cream);
+      width: 24px; height: 24px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      line-height: 1;
+    }
+
+    .qty-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .qty-num { font-size: 0.85rem; min-width: 1.4rem; text-align: center; }
+    .cart-line-price { font-family: 'Playfair Display', serif; color: var(--gold-lt); font-size: 0.9rem; min-width: 4rem; text-align: right; }
+
+    .cart-footer {
+      padding: 1.2rem 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .cart-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .cart-note input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--cream);
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+      margin-top: 0.4rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .cart-note input:focus { border-color: var(--gold); }
+
+    .cart-total {
+      display: flex; justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1rem;
+    }
+
+    .cart-total-label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    .cart-total-sum { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold-lt); }
+
+    .cart-order-btn {
+      width: 100%;
+      background: var(--gold);
+      color: #0c0805;
+      border: none;
+      padding: 1rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .cart-order-btn:hover { background: var(--gold-lt); }
+
+    /* ── RESERVIERUNG ── */
+    .rsvp-section {
+      background: var(--surface2);
+      border-top: 1px solid rgba(201,144,10,0.15);
+      border-bottom: 1px solid rgba(201,144,10,0.15);
+    }
+
+    .rsvp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .rsvp-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    .rsvp-form { display: flex; flex-direction: column; gap: 1rem; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .form-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .form-input, .form-select {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--cream);
+      padding: 0.85rem 1rem;
+      font-size: 0.88rem;
+      font-family: inherit;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.2s;
+      appearance: none;
+    }
+
+    .form-input:focus, .form-select:focus { border-color: var(--gold); }
+
+    .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7a62' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+    }
+
+    .rsvp-info {
+      display: flex; flex-direction: column; gap: 1.5rem;
+      padding-top: 0.5rem;
+    }
+
+    .rsvp-info-item {
+      border-left: 2px solid rgba(201,144,10,0.3);
+      padding-left: 1rem;
+    }
+
+    .rsvp-info-label { font-size: 0.68rem; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase; }
+    .rsvp-info-val { font-size: 0.92rem; color: var(--cream); margin-top: 0.3rem; }
+
+    /* ── SUCCESS MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid rgba(201,144,10,0.3);
+      padding: 2.5rem;
+      max-width: 440px;
+      width: 90%;
+      text-align: center;
+      transform: scale(0.92);
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .modal-overlay.open .modal-box { transform: scale(1); }
+
+    .modal-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .modal-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.8rem; }
+    .modal-text { color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
+    .modal-close { margin-top: 1.8rem; }
+
     /* ── DEMO BANNER ── */
     .demo-banner {
       position: fixed;
@@ -609,11 +891,11 @@
     <div class="nav-logo">Münchener Löwenbräu</div>
     <ul class="nav-links">
       <li><a href="#speisekarte">Speisekarte</a></li>
-      <li><a href="#ueber-uns">Über uns</a></li>
-      <li><a href="#bewertungen">Bewertungen</a></li>
+      <li><a href="#bestellen">Bestellen</a></li>
+      <li><a href="#reservierung">Reservierung</a></li>
       <li><a href="#kontakt">Kontakt</a></li>
     </ul>
-    <a href="tel:+4952614267" class="nav-cta">Tisch reservieren</a>
+    <a href="#reservierung" class="nav-cta">Tisch reservieren</a>
   </nav>
 
   <!-- HERO -->
@@ -758,6 +1040,98 @@
 
   <hr class="divider" />
 
+  <!-- ONLINE BESTELLEN -->
+  <section id="bestellen" style="padding: 7rem 5%;">
+    <div class="container">
+      <span class="section-label">Abholung & Mitnahme</span>
+      <h2 class="section-title">Online bestellen</h2>
+      <p class="section-desc" style="margin-bottom: 3rem;">Wählen Sie Ihre Gerichte — wir bereiten alles frisch zu. Abholung nach Absprache.</p>
+
+      <div style="display: grid; gap: 0.75rem; max-width: 680px;">
+
+        <div style="background: var(--surface2); border: 1px solid var(--border); padding: 1.2rem 1.4rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+          <div>
+            <div style="font-size: 0.92rem; color: var(--cream);">Ćevapčići (10 Stück)</div>
+            <div style="font-size: 0.78rem; color: var(--muted);">Mit Ajvar, Zwiebeln und Fladenbrot</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem; flex-shrink: 0;">
+            <span style="font-family: 'Playfair Display', serif; color: var(--gold-lt);">12,90 €</span>
+            <button class="add-btn" onclick="addToCart('Ćevapčići (10 Stück)', 12.90)">+</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface2); border: 1px solid var(--border); padding: 1.2rem 1.4rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+          <div>
+            <div style="font-size: 0.92rem; color: var(--cream);">Mixed Grill Platte</div>
+            <div style="font-size: 0.78rem; color: var(--muted);">Ćevapčići, Pljeskavica, Fleischspieß</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem; flex-shrink: 0;">
+            <span style="font-family: 'Playfair Display', serif; color: var(--gold-lt);">18,90 €</span>
+            <button class="add-btn" onclick="addToCart('Mixed Grill Platte', 18.90)">+</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface2); border: 1px solid var(--border); padding: 1.2rem 1.4rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+          <div>
+            <div style="font-size: 0.92rem; color: var(--cream);">Pljeskavica</div>
+            <div style="font-size: 0.78rem; color: var(--muted);">Hausgemachter Balkan-Burger mit Ajvar</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem; flex-shrink: 0;">
+            <span style="font-family: 'Playfair Display', serif; color: var(--gold-lt);">13,50 €</span>
+            <button class="add-btn" onclick="addToCart('Pljeskavica', 13.50)">+</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface2); border: 1px solid var(--border); padding: 1.2rem 1.4rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+          <div>
+            <div style="font-size: 0.92rem; color: var(--cream);">Rumpsteak (250 g)</div>
+            <div style="font-size: 0.78rem; color: var(--muted);">Mit Kräuterbutter, Pommes & Salat</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem; flex-shrink: 0;">
+            <span style="font-family: 'Playfair Display', serif; color: var(--gold-lt);">22,90 €</span>
+            <button class="add-btn" onclick="addToCart('Rumpsteak (250 g)', 22.90)">+</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface2); border: 1px solid var(--border); padding: 1.2rem 1.4rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+          <div>
+            <div style="font-size: 0.92rem; color: var(--cream);">Wiener Schnitzel</div>
+            <div style="font-size: 0.78rem; color: var(--muted);">Vom Kalb, Pommes & Preiselbeeren</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem; flex-shrink: 0;">
+            <span style="font-family: 'Playfair Display', serif; color: var(--gold-lt);">16,90 €</span>
+            <button class="add-btn" onclick="addToCart('Wiener Schnitzel', 16.90)">+</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface2); border: 1px solid var(--border); padding: 1.2rem 1.4rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+          <div>
+            <div style="font-size: 0.92rem; color: var(--cream);">Jägerschnitzel</div>
+            <div style="font-size: 0.78rem; color: var(--muted);">Mit Pilzrahmsauce und Kartoffeln</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem; flex-shrink: 0;">
+            <span style="font-family: 'Playfair Display', serif; color: var(--gold-lt);">15,90 €</span>
+            <button class="add-btn" onclick="addToCart('Jägerschnitzel', 15.90)">+</button>
+          </div>
+        </div>
+
+        <div style="background: var(--surface2); border: 1px solid var(--border); padding: 1.2rem 1.4rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+          <div>
+            <div style="font-size: 0.92rem; color: var(--cream);">Grillspieß vom Hähnchen</div>
+            <div style="font-size: 0.78rem; color: var(--muted);">Mariniert, mit Reis und Salat</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem; flex-shrink: 0;">
+            <span style="font-family: 'Playfair Display', serif; color: var(--gold-lt);">14,90 €</span>
+            <button class="add-btn" onclick="addToCart('Grillspieß vom Hähnchen', 14.90)">+</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
   <!-- ÜBER UNS -->
   <section id="ueber-uns">
     <div class="container">
@@ -827,12 +1201,111 @@
 
   <hr class="divider" />
 
-  <!-- CTA BANNER -->
-  <div class="cta-banner">
-    <h2>Einen Tisch reservieren</h2>
-    <p>Tischreservierung empfohlen — rufen Sie uns einfach an.</p>
-    <a href="tel:+4952614267" class="btn-primary">☎ 05261 4267 anrufen</a>
-  </div>
+  <!-- RESERVIERUNG -->
+  <section class="rsvp-section" id="reservierung" style="padding: 7rem 5%;">
+    <div class="container">
+      <div class="rsvp-grid">
+        <div>
+          <span class="section-label">Online Reservierung</span>
+          <h2 class="section-title" style="margin-bottom: 2rem;">Tisch reservieren</h2>
+
+          <form class="rsvp-form" onsubmit="submitRsvp(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Datum</label>
+                <input class="form-input" type="date" id="rsvp-date" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Uhrzeit</label>
+                <select class="form-select" id="rsvp-time" required>
+                  <option value="">— wählen —</option>
+                  <optgroup label="Mittagstisch (Di–So)">
+                    <option>11:30 Uhr</option>
+                    <option>12:00 Uhr</option>
+                    <option>12:30 Uhr</option>
+                    <option>13:00 Uhr</option>
+                    <option>13:30 Uhr</option>
+                    <option>14:00 Uhr</option>
+                  </optgroup>
+                  <optgroup label="Abendessen (Di–So)">
+                    <option>17:00 Uhr</option>
+                    <option>17:30 Uhr</option>
+                    <option>18:00 Uhr</option>
+                    <option>18:30 Uhr</option>
+                    <option>19:00 Uhr</option>
+                    <option>19:30 Uhr</option>
+                    <option>20:00 Uhr</option>
+                    <option>20:30 Uhr</option>
+                    <option>21:00 Uhr</option>
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Personenanzahl</label>
+                <select class="form-select" id="rsvp-guests" required>
+                  <option value="">— wählen —</option>
+                  <option>1 Person</option>
+                  <option>2 Personen</option>
+                  <option>3 Personen</option>
+                  <option>4 Personen</option>
+                  <option>5 Personen</option>
+                  <option>6 Personen</option>
+                  <option>7–10 Personen</option>
+                  <option>Mehr als 10</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Name</label>
+                <input class="form-input" type="text" id="rsvp-name" placeholder="Ihr Name" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Telefonnummer</label>
+              <input class="form-input" type="tel" id="rsvp-phone" placeholder="+49 …" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Anmerkungen (optional)</label>
+              <input class="form-input" type="text" id="rsvp-note" placeholder="z.B. Geburtstag, Allergien, Kinderstuhl …" />
+            </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%; border: none; cursor: pointer; padding: 1.1rem; font-size: 0.82rem; margin-top: 0.5rem;">
+              Tisch verbindlich reservieren →
+            </button>
+          </form>
+        </div>
+
+        <div class="rsvp-info">
+          <div>
+            <p style="font-size: 0.92rem; color: var(--muted); line-height: 1.85; margin-bottom: 2rem;">
+              Reservierungen werden innerhalb von 30 Minuten telefonisch bestätigt.
+              Bei Stornierungen bitten wir um Rückmeldung bis spätestens 2 Stunden vorher.
+            </p>
+          </div>
+          <div class="rsvp-info-item">
+            <div class="rsvp-info-label">Öffnungszeiten</div>
+            <div class="rsvp-info-val">Di – So: 11:30–14:30 &amp; 17:00–22:30<br>Montag: Ruhetag</div>
+          </div>
+          <div class="rsvp-info-item">
+            <div class="rsvp-info-label">Telefon</div>
+            <div class="rsvp-info-val"><a href="tel:+4952614267" style="color: inherit; text-decoration: none;">05261 4267</a></div>
+          </div>
+          <div class="rsvp-info-item">
+            <div class="rsvp-info-label">Adresse</div>
+            <div class="rsvp-info-val">Mittelstraße 144<br>32657 Lemgo</div>
+          </div>
+          <div class="rsvp-info-item">
+            <div class="rsvp-info-label">Zahlung</div>
+            <div class="rsvp-info-val">Nur Barzahlung vor Ort</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- BEWERTUNGEN -->
   <section class="reviews-section" id="bewertungen">
@@ -934,5 +1407,195 @@
     <p style="font-size: 0.7rem; color: var(--muted);">Impressum · Datenschutz</p>
   </footer>
 
+  <!-- FLOATING CART BUTTON -->
+  <button class="cart-float" onclick="openCart()" id="cart-float-btn" title="Warenkorb">
+    🛒
+    <span class="cart-badge" id="cart-badge">0</span>
+  </button>
+
+  <!-- CART OVERLAY + DRAWER -->
+  <div class="cart-overlay" id="cart-overlay" onclick="handleOverlayClick(event)">
+    <div class="cart-drawer" id="cart-drawer">
+      <div class="cart-header">
+        <h3>Ihre Bestellung</h3>
+        <button class="cart-close" onclick="closeCart()">✕</button>
+      </div>
+      <div class="cart-items" id="cart-items">
+        <div class="cart-empty" id="cart-empty">Noch keine Gerichte gewählt.</div>
+      </div>
+      <div class="cart-footer" id="cart-footer" style="display:none;">
+        <div class="cart-note">
+          <div>Abholzeit (frühestens 30 Min. nach Bestellung)</div>
+          <input type="time" id="pickup-time" class="form-input" style="margin-top: 0.5rem;" />
+        </div>
+        <div class="cart-note">
+          <div>Ihr Name</div>
+          <input type="text" id="order-name" placeholder="Für die Abholung" />
+        </div>
+        <div class="cart-total">
+          <span class="cart-total-label">Gesamt</span>
+          <span class="cart-total-sum" id="cart-total">0,00 €</span>
+        </div>
+        <p style="font-size: 0.72rem; color: var(--muted); margin-bottom: 1rem;">Barzahlung bei Abholung · Mittelstraße 144, Lemgo</p>
+        <button class="cart-order-btn" onclick="submitOrder()">Bestellung absenden →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL RESERVIERUNG -->
+  <div class="modal-overlay" id="rsvp-modal">
+    <div class="modal-box">
+      <div class="modal-icon">✓</div>
+      <div class="modal-title">Reservierung eingegangen!</div>
+      <p class="modal-text" id="rsvp-modal-text">Wir melden uns innerhalb von 30 Minuten telefonisch zur Bestätigung.</p>
+      <div class="modal-close">
+        <button class="btn-primary" onclick="closeModal('rsvp-modal')" style="border: none; cursor: pointer;">Schließen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL BESTELLUNG -->
+  <div class="modal-overlay" id="order-modal">
+    <div class="modal-box">
+      <div class="modal-icon">🍽️</div>
+      <div class="modal-title">Bestellung aufgegeben!</div>
+      <p class="modal-text" id="order-modal-text">Ihre Bestellung wird vorbereitet. Bitte kommen Sie zur Abholzeit mit Bargeld zur Kasse.</p>
+      <div class="modal-close">
+        <button class="btn-primary" onclick="closeModal('order-modal')" style="border: none; cursor: pointer;">Schließen</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── CART ──────────────────────────────────────────────────
+    let cart = [];
+
+    function addToCart(name, price) {
+      const existing = cart.find(i => i.name === name);
+      if (existing) existing.qty++;
+      else cart.push({ name, price, qty: 1 });
+      renderCart();
+      openCart();
+    }
+
+    function changeQty(name, delta) {
+      const item = cart.find(i => i.name === name);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) cart = cart.filter(i => i.name !== name);
+      renderCart();
+    }
+
+    function renderCart() {
+      const count = cart.reduce((s, i) => s + i.qty, 0);
+      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+      const badge = document.getElementById('cart-badge');
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'flex' : 'none';
+
+      const container = document.getElementById('cart-items');
+      const empty = document.getElementById('cart-empty');
+      const footer = document.getElementById('cart-footer');
+
+      if (cart.length === 0) {
+        empty.style.display = 'block';
+        footer.style.display = 'none';
+        container.innerHTML = '';
+        container.appendChild(empty);
+        document.getElementById('cart-total').textContent = '0,00 €';
+        return;
+      }
+
+      empty.style.display = 'none';
+      footer.style.display = 'block';
+
+      container.innerHTML = '';
+      cart.forEach(item => {
+        const line = document.createElement('div');
+        line.className = 'cart-line';
+        line.innerHTML = `
+          <div style="flex:1;">
+            <div class="cart-line-name">${item.name}</div>
+            <div class="cart-line-sub">${(item.price).toFixed(2).replace('.',',')} € pro Stück</div>
+          </div>
+          <div class="cart-qty">
+            <button class="qty-btn" onclick="changeQty('${item.name}', -1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty('${item.name}', 1)">+</button>
+          </div>
+          <div class="cart-line-price">${(item.price * item.qty).toFixed(2).replace('.',',')} €</div>
+        `;
+        container.appendChild(line);
+      });
+
+      document.getElementById('cart-total').textContent =
+        total.toFixed(2).replace('.', ',') + ' €';
+
+      // Default pickup time = now + 30min
+      const pickup = document.getElementById('pickup-time');
+      if (!pickup.value) {
+        const d = new Date(Date.now() + 30 * 60000);
+        pickup.value = d.toTimeString().slice(0,5);
+      }
+    }
+
+    function openCart() {
+      document.getElementById('cart-overlay').classList.add('open');
+    }
+
+    function closeCart() {
+      document.getElementById('cart-overlay').classList.remove('open');
+    }
+
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('cart-overlay')) closeCart();
+    }
+
+    function submitOrder() {
+      const name = document.getElementById('order-name').value.trim();
+      const time = document.getElementById('pickup-time').value;
+      if (!name) { alert('Bitte geben Sie Ihren Namen ein.'); return; }
+      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      document.getElementById('order-modal-text').textContent =
+        `Danke, ${name}! Ihre Bestellung über ${total.toFixed(2).replace('.',',')} € ist eingegangen. Abholung gegen ${time} Uhr an der Kasse — bitte Bargeld mitbringen.`;
+      closeCart();
+      cart = [];
+      renderCart();
+      document.getElementById('order-modal').classList.add('open');
+    }
+
+    // ── RESERVIERUNG ─────────────────────────────────────────
+    // Set min date to today
+    document.addEventListener('DOMContentLoaded', () => {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('rsvp-date').setAttribute('min', today);
+    });
+
+    function submitRsvp(e) {
+      e.preventDefault();
+      const name    = document.getElementById('rsvp-name').value.trim();
+      const date    = document.getElementById('rsvp-date').value;
+      const time    = document.getElementById('rsvp-time').value;
+      const guests  = document.getElementById('rsvp-guests').value;
+      const phone   = document.getElementById('rsvp-phone').value.trim();
+      const note    = document.getElementById('rsvp-note').value.trim();
+
+      const d = new Date(date);
+      const dateStr = d.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' });
+
+      document.getElementById('rsvp-modal-text').textContent =
+        `${name}, wir haben Ihre Anfrage für ${guests} am ${dateStr} um ${time} erhalten. Wir bestätigen Ihren Tisch unter ${phone} innerhalb von 30 Minuten.` +
+        (note ? ` Anmerkung: „${note}"` : '');
+
+      document.getElementById('rsvp-modal').classList.add('open');
+      e.target.reset();
+    }
+
+    // ── MODAL CLOSE ──────────────────────────────────────────
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+  </script>
 </body>
 </html>
