@@ -11,7 +11,7 @@ export const PAKETE: Paket[] = [
     enthalten: [
       "1-seitige Landing Page",
       "Mobiloptimiert & schnell geladen",
-      "Kontaktformular",
+      "Kontaktformular & WhatsApp-Button",
       "Google Maps Integration",
       "3 Monate Betreuung",
       "Hosting-Paket inklusive (1. Jahr)",

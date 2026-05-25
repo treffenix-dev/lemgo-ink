@@ -89,7 +89,7 @@ export default function LeistungenPage() {
               { titel: "Mehrsprachigkeit (DE + EN)", preis: 390, beschreibung: "Vollständige zweite Sprache — manuell oder KI-übersetzt." },
               { titel: "SEO-Volloptimierung", preis: 490, beschreibung: "Keyword-Analyse, On-Page SEO, Google Search Console Setup." },
               { titel: "Google Analytics + Tracking", preis: 190, beschreibung: "Besucheranalyse, Ziele, Events und Conversion-Tracking." },
-              { titel: "Fotografie (vor Ort)", preis: 590, beschreibung: "Professionelle Fotos deines Unternehmens — ab Lemgo NRW." },
+              { titel: "Wartung & Pflege (monatlich)", preis: 99, beschreibung: "Inhalte aktualisieren, Texte ändern, Bilder tauschen — ohne Aufwand für dich." },
             ].map((a) => (
               <div key={a.titel} className="rounded-xl border border-border bg-card p-5">
                 <p className="font-semibold mb-1">{a.titel}</p>
