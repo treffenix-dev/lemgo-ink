@@ -4,12 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, FolderKanban, CheckSquare, Upload, MessageSquare,
-  FileText, CreditCard, ThumbsUp, HeadphonesIcon, LogOut,
+  FileText, CreditCard, ThumbsUp, HeadphonesIcon, LogOut, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
 interface SidebarProps {
   role: "customer" | "owner";
+  onClose?: () => void;
 }
 
 const customerNav = [
@@ -42,7 +43,7 @@ const ownerNav = [
   { label: "Tickets", href: "/owner/tickets", icon: MessageSquare, section: "System" },
 ];
 
-export function Sidebar({ role }: SidebarProps) {
+export function Sidebar({ role, onClose }: SidebarProps) {
   const pathname = usePathname();
   const nav = role === "customer" ? customerNav : ownerNav;
 
@@ -51,15 +52,20 @@ export function Sidebar({ role }: SidebarProps) {
     : [null];
 
   return (
-    <aside className="w-60 shrink-0 h-screen sticky top-0 bg-card border-r border-border flex flex-col">
+    <aside className="w-60 shrink-0 h-screen bg-card border-r border-border flex flex-col">
       {/* Logo */}
-      <div className="h-16 flex items-center px-5 border-b border-border">
-        <Link href="/" className="flex items-center gap-2">
+      <div className="h-16 flex items-center justify-between px-5 border-b border-border">
+        <Link href="/" className="flex items-center gap-2" onClick={onClose}>
           <div className="w-7 h-7 bg-foreground rounded-md flex items-center justify-center">
             <span className="text-background text-xs font-bold">W</span>
           </div>
           <span className="font-semibold text-sm text-foreground">WebAgentur</span>
         </Link>
+        {onClose && (
+          <button onClick={onClose} className="lg:hidden text-muted-foreground hover:text-foreground p-1">
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       {/* Navigation */}
@@ -75,14 +81,14 @@ export function Sidebar({ role }: SidebarProps) {
                   </p>
                 )}
                 {items.map((item) => (
-                  <NavItem key={item.href} item={item} active={pathname === item.href} />
+                  <NavItem key={item.href} item={item} active={pathname === item.href} onClick={onClose} />
                 ))}
               </div>
             );
           })
         ) : (
           nav.map((item) => (
-            <NavItem key={item.href} item={item} active={pathname === item.href} />
+            <NavItem key={item.href} item={item} active={pathname === item.href} onClick={onClose} />
           ))
         )}
       </nav>
@@ -103,11 +109,20 @@ export function Sidebar({ role }: SidebarProps) {
   );
 }
 
-function NavItem({ item, active }: { item: { label: string; href: string; icon: React.ComponentType<{ className?: string }> }; active: boolean }) {
+function NavItem({
+  item,
+  active,
+  onClick,
+}: {
+  item: { label: string; href: string; icon: React.ComponentType<{ className?: string }> };
+  active: boolean;
+  onClick?: () => void;
+}) {
   const Icon = item.icon;
   return (
     <Link
       href={item.href}
+      onClick={onClick}
       className={cn(
         "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors mb-0.5",
         active

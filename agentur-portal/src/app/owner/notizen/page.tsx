@@ -1,97 +1,147 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TopBar } from "@/components/layout/TopBar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Modal, ModalContent, ModalHeader, ModalTitle, ModalFooter } from "@/components/ui/modal";
-import { Plus, Trash2 } from "lucide-react";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { Plus, Trash2, StickyNote } from "lucide-react";
 
-type Notiz = { id: string; titel: string; inhalt: string; erstellt: string; farbe: string };
+interface Note {
+  id: string;
+  titel: string;
+  inhalt: string;
+  erstellt: string;
+  farbe: "default" | "amber" | "blue" | "green";
+}
 
-const FARBEN = [
-  { value: "amber", label: "Gelb", cls: "border-amber-200 bg-amber-50" },
-  { value: "blue", label: "Blau", cls: "border-blue-200 bg-blue-50" },
-  { value: "green", label: "Grün", cls: "border-green-200 bg-green-50" },
-  { value: "default", label: "Standard", cls: "border-border bg-card" },
-];
+const FARBE_MAP = {
+  default: "border-border",
+  amber:   "border-amber-500/40 bg-amber-500/5",
+  blue:    "border-blue-500/40 bg-blue-500/5",
+  green:   "border-emerald-500/40 bg-emerald-500/5",
+};
 
-const initialNotizen: Notiz[] = [
-  { id: "1", titel: "Kundengespräch Da Vinci", inhalt: "Will Reservierungssystem ergänzen. Preis: ~299€. Follow-up nächste Woche.", erstellt: "Heute, 10:00", farbe: "amber" },
-  { id: "2", titel: "SEO-Ideen für Parfümerie", inhalt: "Keywords: Parfüm Lemgo, Naturkosmetik NRW. Blogartikel über Düfte einplanen.", erstellt: "Gestern", farbe: "blue" },
-];
+function load(): Note[] {
+  if (typeof window === "undefined") return [];
+  try { return JSON.parse(localStorage.getItem("notizen") || "[]"); } catch { return []; }
+}
+function save(n: Note[]) { localStorage.setItem("notizen", JSON.stringify(n)); }
 
 export default function NotizenPage() {
-  const [notizen, setNotizen] = useLocalStorage<Notiz[]>("owner_notizen", initialNotizen);
-  const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ titel: "", inhalt: "", farbe: "default" });
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [adding, setAdding] = useState(false);
+  const [newTitel, setNewTitel] = useState("");
+  const [newInhalt, setNewInhalt] = useState("");
+  const [newFarbe, setNewFarbe] = useState<Note["farbe"]>("default");
 
-  function loeschen(id: string) {
-    setNotizen((prev) => prev.filter((n) => n.id !== id));
+  useEffect(() => { setNotes(load()); }, []);
+
+  function handleAdd() {
+    if (!newInhalt.trim()) return;
+    const note: Note = {
+      id: crypto.randomUUID(),
+      titel: newTitel || "Notiz",
+      inhalt: newInhalt,
+      erstellt: new Date().toLocaleDateString("de-DE"),
+      farbe: newFarbe,
+    };
+    const updated = [note, ...notes];
+    setNotes(updated);
+    save(updated);
+    setNewTitel("");
+    setNewInhalt("");
+    setNewFarbe("default");
+    setAdding(false);
   }
 
-  function save() {
-    if (!form.titel.trim() || !form.inhalt.trim()) return;
-    const now = new Date();
-    const erstellt = `${now.toLocaleDateString("de-DE")}, ${now.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}`;
-    setNotizen((prev) => [{ ...form, id: Date.now().toString(), erstellt }, ...prev]);
-    setOpen(false);
-    setForm({ titel: "", inhalt: "", farbe: "default" });
+  function handleDelete(id: string) {
+    const updated = notes.filter((n) => n.id !== id);
+    setNotes(updated);
+    save(updated);
   }
-
-  const farbeMap = Object.fromEntries(FARBEN.map((f) => [f.value, f.cls]));
 
   return (
     <div>
-      <TopBar title="Notizen" actions={<Button size="sm" onClick={() => setOpen(true)}><Plus className="w-4 h-4" /><span className="hidden sm:inline ml-1">Neue Notiz</span></Button>} />
-      <div className="p-4 sm:p-6 max-w-4xl">
-        <div className="grid sm:grid-cols-2 gap-4">
-          {notizen.map((n) => (
-            <div key={n.id} className={`rounded-xl border p-5 ${farbeMap[n.farbe] ?? "border-border bg-card"}`}>
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <h3 className="font-semibold text-sm">{n.titel}</h3>
-                <button onClick={() => loeschen(n.id)} className="text-muted-foreground hover:text-red-500 transition-colors shrink-0">
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-              <p className="text-sm leading-relaxed mb-3">{n.inhalt}</p>
-              <p className="text-[11px] text-muted-foreground">{n.erstellt}</p>
-            </div>
-          ))}
-          <button onClick={() => setOpen(true)}
-            className="rounded-xl border-2 border-dashed border-border hover:border-foreground/30 p-5 text-center text-muted-foreground hover:text-foreground transition-colors flex flex-col items-center justify-center gap-2 min-h-[120px]">
-            <Plus className="w-5 h-5" />
-            <span className="text-sm">Neue Notiz</span>
-          </button>
-        </div>
-      </div>
+      <TopBar
+        title="Notizen"
+        actions={
+          <Button size="sm" variant="primary" onClick={() => setAdding(true)}>
+            <Plus className="w-4 h-4" /> Notiz
+          </Button>
+        }
+      />
+      <div className="p-6 max-w-5xl space-y-5">
 
-      <Modal open={open} onOpenChange={setOpen}>
-        <ModalContent>
-          <ModalHeader><ModalTitle>Neue Notiz</ModalTitle></ModalHeader>
-          <div className="p-6 space-y-4">
-            <Input label="Titel" required value={form.titel} onChange={(e) => setForm((f) => ({ ...f, titel: e.target.value }))} placeholder="Thema der Notiz" />
-            <Textarea label="Inhalt" required value={form.inhalt} onChange={(e) => setForm((f) => ({ ...f, inhalt: e.target.value }))} placeholder="Deine Notiz..." className="min-h-[120px]" />
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium">Farbe</label>
-              <div className="flex gap-2">
-                {FARBEN.map((f) => (
-                  <button key={f.value} onClick={() => setForm((s) => ({ ...s, farbe: f.value }))}
-                    className={`flex-1 py-2 rounded-lg text-xs font-medium border-2 transition-colors ${form.farbe === f.value ? "border-foreground" : "border-border"} ${f.cls}`}>
-                    {f.label}
-                  </button>
+        {/* New Note Form */}
+        {adding && (
+          <div className="rounded-xl border border-blue-500/40 bg-blue-500/5 p-5 space-y-3">
+            <input
+              autoFocus
+              value={newTitel}
+              onChange={(e) => setNewTitel(e.target.value)}
+              placeholder="Titel (optional)"
+              className="w-full h-9 px-3 rounded-md border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+            <textarea
+              value={newInhalt}
+              onChange={(e) => setNewInhalt(e.target.value)}
+              placeholder="Notiz schreiben…"
+              rows={4}
+              className="w-full px-3 py-2 rounded-md border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+            />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground">Farbe:</span>
+                {(["default", "amber", "blue", "green"] as const).map((f) => (
+                  <button
+                    key={f}
+                    onClick={() => setNewFarbe(f)}
+                    className={`w-5 h-5 rounded-full border-2 transition-transform ${newFarbe === f ? "scale-125" : ""} ${
+                      f === "default" ? "bg-border border-border" :
+                      f === "amber"   ? "bg-amber-400 border-amber-400" :
+                      f === "blue"    ? "bg-blue-400 border-blue-400" :
+                                        "bg-emerald-400 border-emerald-400"
+                    }`}
+                  />
                 ))}
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={() => setAdding(false)}>Abbrechen</Button>
+                <Button variant="primary" size="sm" onClick={handleAdd}>Speichern</Button>
               </div>
             </div>
           </div>
-          <ModalFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>Abbrechen</Button>
-            <Button disabled={!form.titel.trim() || !form.inhalt.trim()} onClick={save}>Speichern</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+        )}
+
+        {/* Notes Grid */}
+        {notes.length === 0 && !adding ? (
+          <div className="rounded-xl border border-border bg-card p-16 text-center">
+            <StickyNote className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+            <p className="text-sm font-medium">Noch keine Notizen</p>
+            <p className="text-xs text-muted-foreground mt-1 mb-4">Halte Ideen, Todos und Infos fest.</p>
+            <Button size="sm" variant="primary" onClick={() => setAdding(true)}>
+              <Plus className="w-4 h-4" /> Erste Notiz
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {notes.map((n) => (
+              <div key={n.id} className={`rounded-xl border bg-card p-4 group ${FARBE_MAP[n.farbe]}`}>
+                <div className="flex items-start justify-between mb-2">
+                  <p className="text-sm font-semibold">{n.titel}</p>
+                  <button
+                    onClick={() => handleDelete(n.id)}
+                    className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-red-400 transition-all"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+                <p className="text-xs text-muted-foreground whitespace-pre-wrap leading-relaxed">{n.inhalt}</p>
+                <p className="text-[10px] text-muted-foreground/60 mt-3">{n.erstellt}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

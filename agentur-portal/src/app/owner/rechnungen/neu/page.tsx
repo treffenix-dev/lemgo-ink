@@ -95,9 +95,9 @@ export default function NeueRechnungPage() {
         }
       `}</style>
 
-      <div className="flex h-screen overflow-hidden">
-        {/* LEFT — Form */}
-        <div className="w-[420px] shrink-0 border-r border-border flex flex-col">
+      <div className="flex flex-col lg:flex-row lg:h-screen lg:overflow-hidden">
+        {/* Form */}
+        <div className="w-full lg:w-[420px] lg:shrink-0 border-b lg:border-b-0 lg:border-r border-border flex flex-col lg:h-screen">
           {/* Header */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-card">
             <div className="flex items-center gap-3">
@@ -106,12 +106,12 @@ export default function NeueRechnungPage() {
               </button>
               <h2 className="text-sm font-semibold">Neue Rechnung</h2>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <Button variant="outline" size="sm" onClick={handlePrint}>
-                <Printer className="w-3.5 h-3.5" /> PDF
+                <Printer className="w-3.5 h-3.5" /><span className="hidden sm:inline"> PDF</span>
               </Button>
               <Button variant="primary" size="sm" onClick={() => handleSave("offen")} disabled={saved}>
-                <Save className="w-3.5 h-3.5" /> {saved ? "Gespeichert ✓" : "Speichern"}
+                <Save className="w-3.5 h-3.5" /> {saved ? "✓" : "Speichern"}
               </Button>
             </div>
           </div>
@@ -252,8 +252,8 @@ export default function NeueRechnungPage() {
           </div>
         </div>
 
-        {/* RIGHT — Live Preview */}
-        <div className="flex-1 overflow-y-auto bg-gray-100 p-8">
+        {/* RIGHT — Live Preview (hidden on mobile) */}
+        <div className="hidden lg:block flex-1 overflow-y-auto bg-muted/40 p-6">
           <div className="max-w-[700px] mx-auto">
             <p className="text-xs text-muted-foreground text-center mb-4 uppercase tracking-wide">Vorschau · wird automatisch aktualisiert</p>
             <InvoicePreview invoice={inv} mode="screen" />

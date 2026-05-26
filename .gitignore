@@ -19,5 +19,13 @@ Thumbs.db
 .idea/
 .vercel
 tsconfig.tsbuildinfo
-loewenbraeu-website/node_modules
-loewenbraeu-website/.next
+
+# Subproject build artifacts
+loewenbraeu-website/next-env.d.ts
+loewenbraeu-website/node_modules/
+loewenbraeu-website/.next/
+loewenbraeu-website/tsconfig.tsbuildinfo
+agentur-portal/next-env.d.ts
+agentur-portal/node_modules/
+agentur-portal/.next/
+agentur-portal/tsconfig.tsbuildinfo

@@ -46,9 +46,9 @@ export default function AbnahmeprotokollPage() {
         }
       `}</style>
 
-      <div className="flex h-screen overflow-hidden">
+      <div className="flex flex-col lg:flex-row lg:h-screen lg:overflow-hidden">
         {/* Form */}
-        <div className="w-[400px] shrink-0 border-r border-border flex flex-col">
+        <div className="w-full lg:w-[400px] lg:shrink-0 border-b lg:border-b-0 lg:border-r border-border flex flex-col lg:h-screen">
           <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-card">
             <div className="flex items-center gap-3">
               <button onClick={() => router.back()} className="text-muted-foreground hover:text-foreground">
@@ -94,8 +94,8 @@ export default function AbnahmeprotokollPage() {
           </div>
         </div>
 
-        {/* Preview */}
-        <div className="flex-1 overflow-y-auto bg-gray-100 p-8">
+        {/* Preview (hidden on mobile) */}
+        <div className="hidden lg:block flex-1 overflow-y-auto bg-muted/40 p-6">
           <div className="max-w-[660px] mx-auto">
             <p className="text-xs text-muted-foreground text-center mb-4 uppercase tracking-wide">Vorschau</p>
 

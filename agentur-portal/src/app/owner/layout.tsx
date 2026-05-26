@@ -1,39 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { SidebarContext } from "@/context/SidebarContext";
+import { Menu } from "lucide-react";
 
 export default function OwnerLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-  const [authed, setAuthed] = useState<boolean | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    if (sessionStorage.getItem("owner_auth") === "1") {
-      setAuthed(true);
-    } else {
-      router.replace("/login");
-    }
-  }, [router]);
-
-  if (!authed) return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="w-5 h-5 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
-    </div>
-  );
-
   return (
-    <SidebarContext.Provider value={{ openSidebar: () => setSidebarOpen(true) }}>
-      <div className="flex min-h-screen bg-muted/20">
-        <Sidebar
-          role="owner"
-          open={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
-        />
-        <main className="flex-1 overflow-x-hidden min-w-0">{children}</main>
+    <div className="flex min-h-screen bg-muted/20">
+
+      {/* Desktop sidebar — always visible, in normal flow */}
+      <div className="hidden lg:block shrink-0">
+        <Sidebar role="owner" />
       </div>
-    </SidebarContext.Provider>
+
+      {/* Mobile sidebar — only in DOM when open, fully removed otherwise */}
+      {sidebarOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/70 lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+          <div className="fixed inset-y-0 left-0 z-50 lg:hidden">
+            <Sidebar role="owner" onClose={() => setSidebarOpen(false)} />
+          </div>
+        </>
+      )}
+
+      {/* Main content — always full width on mobile */}
+      <main className="flex-1 min-w-0 overflow-x-hidden">
+        {children}
+      </main>
+
+      {/* Mobile menu button */}
+      <button
+        onClick={() => setSidebarOpen(true)}
+        className="fixed bottom-5 left-4 z-30 lg:hidden flex items-center gap-2 bg-blue-600 text-white rounded-full px-4 py-2.5 text-sm font-semibold shadow-lg shadow-blue-500/30 active:scale-95 transition-transform"
+      >
+        <Menu className="w-4 h-4" />
+        Menü
+      </button>
+    </div>
   );
 }

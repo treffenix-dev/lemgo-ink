@@ -3,128 +3,144 @@
 import { useState, useEffect, useRef } from "react";
 import { TopBar } from "@/components/layout/TopBar";
 import { Button } from "@/components/ui/button";
-import { Play, Square, Clock, Save, Trash2 } from "lucide-react";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { Play, Pause, Square, Trash2, Clock } from "lucide-react";
 
-type Eintrag = { id: string; beschreibung: string; dauer: string; sekunden: number; datum: string };
+interface TimeEntry {
+  id: string;
+  projekt: string;
+  dauer: number; // seconds
+  datum: string;
+}
 
-const initialEintraege: Eintrag[] = [
-  { id: "1", beschreibung: "Design: Restaurant Da Vinci", dauer: "2h 15m", sekunden: 8100, datum: "Heute" },
-  { id: "2", beschreibung: "Dev: Parfümerie Müller", dauer: "3h 40m", sekunden: 13200, datum: "Heute" },
-  { id: "3", beschreibung: "Meeting: Friseur Schneider", dauer: "0h 45m", sekunden: 2700, datum: "Gestern" },
-];
-
-function formatSeconds(s: number) {
+function formatTime(s: number) {
   const h = Math.floor(s / 3600);
   const m = Math.floor((s % 3600) / 60);
   const sec = s % 60;
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
 }
 
-function secsToLabel(s: number) {
-  const h = Math.floor(s / 3600);
-  const m = Math.floor((s % 3600) / 60);
-  return `${h}h ${m}m`;
+function loadEntries(): TimeEntry[] {
+  if (typeof window === "undefined") return [];
+  try { return JSON.parse(localStorage.getItem("timer-entries") || "[]"); } catch { return []; }
+}
+
+function saveEntries(e: TimeEntry[]) {
+  localStorage.setItem("timer-entries", JSON.stringify(e));
 }
 
 export default function TimerPage() {
-  const [eintraege, setEintraege] = useLocalStorage<Eintrag[]>("owner_timer", initialEintraege);
-  const [laufend, setLaufend] = useState(false);
-  const [sekunden, setSekunden] = useState(0);
-  const [beschreibung, setBeschreibung] = useState("");
+  const [running, setRunning] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+  const [projekt, setProjekt] = useState("");
+  const [entries, setEntries] = useState<TimeEntry[]>([]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (laufend) {
-      intervalRef.current = setInterval(() => setSekunden((s) => s + 1), 1000);
+    setEntries(loadEntries());
+  }, []);
+
+  useEffect(() => {
+    if (running) {
+      intervalRef.current = setInterval(() => setElapsed((e) => e + 1), 1000);
     } else {
       if (intervalRef.current) clearInterval(intervalRef.current);
     }
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, [laufend]);
+  }, [running]);
 
-  function toggleTimer() { setLaufend((v) => !v); }
-
-  function reset() { setLaufend(false); setSekunden(0); }
-
-  function saveEintrag() {
-    if (sekunden === 0) return;
-    const eintrag: Eintrag = {
-      id: Date.now().toString(),
-      beschreibung: beschreibung.trim() || "Ohne Beschreibung",
-      dauer: secsToLabel(sekunden),
-      sekunden,
-      datum: "Heute",
+  function handleStop() {
+    if (elapsed < 5) { setRunning(false); setElapsed(0); return; }
+    const entry: TimeEntry = {
+      id: crypto.randomUUID(),
+      projekt: projekt || "Ohne Projekt",
+      dauer: elapsed,
+      datum: new Date().toLocaleDateString("de-DE"),
     };
-    setEintraege((prev) => [eintrag, ...prev]);
-    setSekunden(0);
-    setBeschreibung("");
-    setLaufend(false);
+    const updated = [entry, ...entries];
+    setEntries(updated);
+    saveEntries(updated);
+    setRunning(false);
+    setElapsed(0);
+    setProjekt("");
   }
 
-  function loeschen(id: string) {
-    setEintraege((prev) => prev.filter((e) => e.id !== id));
+  function handleDelete(id: string) {
+    const updated = entries.filter((e) => e.id !== id);
+    setEntries(updated);
+    saveEntries(updated);
   }
 
-  const gesamtHeute = eintraege.filter((e) => e.datum === "Heute").reduce((s, e) => s + e.sekunden, 0);
+  const gesamtHeute = entries
+    .filter((e) => e.datum === new Date().toLocaleDateString("de-DE"))
+    .reduce((s, e) => s + e.dauer, 0);
 
   return (
     <div>
-      <TopBar title="Zeiterfassung" />
-      <div className="p-4 sm:p-6 max-w-2xl space-y-6">
+      <TopBar title="Timer" />
+      <div className="p-6 max-w-2xl space-y-6">
+
+        {/* Timer Display */}
         <div className="rounded-xl border border-border bg-card p-8 text-center">
-          <div className={`text-6xl font-mono font-bold tracking-tight mb-6 ${laufend ? "text-foreground" : "text-muted-foreground"}`}>
-            {formatSeconds(sekunden)}
+          <div className="text-6xl font-mono font-bold tracking-widest mb-6 text-foreground">
+            {formatTime(elapsed)}
           </div>
-          <input value={beschreibung} onChange={(e) => setBeschreibung(e.target.value)}
-            placeholder="Was arbeitest du gerade? (z.B. Design: Restaurant Da Vinci)"
-            className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-sm text-center focus:outline-none focus:ring-2 focus:ring-ring mb-5"
+          <input
+            value={projekt}
+            onChange={(e) => setProjekt(e.target.value)}
+            placeholder="Projektname (optional)"
+            className="w-full max-w-xs h-9 px-3 rounded-md border border-border bg-muted text-sm text-center focus:outline-none focus:ring-2 focus:ring-ring mb-6"
           />
-          <div className="flex items-center justify-center gap-3 flex-wrap">
-            <Button size="lg" onClick={toggleTimer} className={`gap-2 min-w-[140px] ${laufend ? "bg-red-600 hover:bg-red-700" : ""}`}>
-              {laufend ? <><Square className="w-4 h-4" /> Stoppen</> : <><Play className="w-4 h-4" /> Starten</>}
-            </Button>
-            {sekunden > 0 && !laufend && (
-              <>
-                <Button size="lg" onClick={saveEintrag} className="gap-2">
-                  <Save className="w-4 h-4" /> Speichern
-                </Button>
-                <Button variant="outline" size="lg" onClick={reset}>Verwerfen</Button>
-              </>
+          <div className="flex items-center justify-center gap-3">
+            {!running ? (
+              <Button variant="primary" size="sm" onClick={() => setRunning(true)}>
+                <Play className="w-4 h-4" /> Start
+              </Button>
+            ) : (
+              <Button variant="outline" size="sm" onClick={() => setRunning(false)}>
+                <Pause className="w-4 h-4" /> Pause
+              </Button>
             )}
+            <Button variant="outline" size="sm" onClick={handleStop} disabled={elapsed === 0}>
+              <Square className="w-4 h-4" /> Speichern
+            </Button>
           </div>
         </div>
 
-        {gesamtHeute > 0 && (
-          <div className="rounded-xl border border-border bg-card p-4 flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">Heute erfasst</p>
-            <p className="font-bold">{secsToLabel(gesamtHeute)}</p>
+        {/* Today Summary */}
+        <div className="rounded-xl border border-border bg-card p-4 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center">
+            <Clock className="w-4 h-4 text-cyan-400" />
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Heute insgesamt</p>
+            <p className="font-semibold">{formatTime(gesamtHeute)}</p>
+          </div>
+        </div>
+
+        {/* Entries */}
+        {entries.length > 0 && (
+          <div className="rounded-xl border border-border bg-card overflow-hidden">
+            <div className="px-5 py-3.5 border-b border-border">
+              <h3 className="text-sm font-semibold">Letzte Einträge</h3>
+            </div>
+            <div className="divide-y divide-border">
+              {entries.map((e) => (
+                <div key={e.id} className="px-5 py-3 flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium">{e.projekt}</p>
+                    <p className="text-xs text-muted-foreground">{e.datum}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="font-mono text-sm text-muted-foreground">{formatTime(e.dauer)}</span>
+                    <button onClick={() => handleDelete(e.id)} className="text-muted-foreground hover:text-red-400 transition-colors">
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
-
-        <div className="rounded-xl border border-border bg-card">
-          <div className="flex items-center gap-2 p-5 border-b border-border">
-            <Clock className="w-4 h-4 text-muted-foreground" />
-            <h3 className="font-semibold">Letzte Einträge</h3>
-          </div>
-          <div className="divide-y divide-border">
-            {eintraege.map((e) => (
-              <div key={e.id} className="px-5 py-3.5 flex items-center justify-between group">
-                <div className="min-w-0">
-                  <p className="text-sm font-medium">{e.beschreibung}</p>
-                  <p className="text-xs text-muted-foreground">{e.datum}</p>
-                </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-sm font-mono font-medium">{e.dauer}</span>
-                  <button onClick={() => loeschen(e.id)} className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-red-500 transition-all">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
-            {eintraege.length === 0 && <div className="px-5 py-10 text-center text-sm text-muted-foreground">Noch keine Einträge.</div>}
-          </div>
-        </div>
       </div>
     </div>
   );

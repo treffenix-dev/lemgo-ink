@@ -16,10 +16,10 @@ function fmtDate(s: string) {
 }
 
 const STATUS_LABELS: Record<Invoice["status"], { label: string; cls: string }> = {
-  entwurf:     { label: "Entwurf",     cls: "bg-gray-100 text-gray-600" },
-  offen:       { label: "Offen",       cls: "bg-amber-100 text-amber-700" },
-  bezahlt:     { label: "Bezahlt",     cls: "bg-green-100 text-green-700" },
-  ueberfaellig:{ label: "Überfällig",  cls: "bg-red-100 text-red-700" },
+  entwurf:     { label: "Entwurf",     cls: "bg-muted text-muted-foreground" },
+  offen:       { label: "Offen",       cls: "bg-amber-500/10 text-amber-400" },
+  bezahlt:     { label: "Bezahlt",     cls: "bg-emerald-500/10 text-emerald-400" },
+  ueberfaellig:{ label: "Überfällig",  cls: "bg-red-500/10 text-red-400" },
 };
 
 export default function RechnungenOwnerPage() {
@@ -67,10 +67,10 @@ export default function RechnungenOwnerPage() {
         }
       />
 
-      <div className="p-6 max-w-5xl space-y-5">
+      <div className="p-4 md:p-6 max-w-5xl space-y-5">
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="rounded-xl border border-border bg-card p-4">
             <p className="text-xs text-muted-foreground mb-1">Offen / Überfällig</p>
             <p className="text-2xl font-bold text-amber-600">{fmt(gesamtOffen)}</p>
@@ -108,7 +108,8 @@ export default function RechnungenOwnerPage() {
           </div>
         ) : (
           <div className="rounded-xl border border-border bg-card overflow-hidden">
-            <table className="w-full text-sm">
+            <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[500px]">
               <thead>
                 <tr className="border-b border-border bg-muted/30">
                   <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Nummer</th>
@@ -170,6 +171,7 @@ export default function RechnungenOwnerPage() {
                 })}
               </tbody>
             </table>
+            </div>
           </div>
         )}
 
