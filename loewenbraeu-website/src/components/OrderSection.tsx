@@ -1,15 +1,22 @@
 "use client";
 import { ORDERABLE } from "@/lib/menu";
+import { CartItem } from "@/lib/cart";
 
 type Props = {
+  items: CartItem[];
   onAdd: (name: string, price: number) => void;
+  onChangeQty: (name: string, delta: number) => void;
 };
 
 function fmt(price: number) {
   return price.toFixed(2).replace(".", ",") + " €";
 }
 
-export function OrderSection({ onAdd }: Props) {
+export function OrderSection({ items, onAdd, onChangeQty }: Props) {
+  function qty(name: string) {
+    return items.find((i) => i.name === name)?.qty ?? 0;
+  }
+
   return (
     <section id="bestellen" className="py-36 px-[5%] bg-surface">
       <div className="max-w-3xl mx-auto">
@@ -25,29 +32,50 @@ export function OrderSection({ onAdd }: Props) {
         </p>
 
         <div className="flex flex-col divide-y divide-border">
-          {ORDERABLE.map((item) => (
-            <div
-              key={item.name}
-              className="flex justify-between items-center gap-6 py-5"
-            >
-              <div className="flex-1">
-                <div className="font-display text-[1.05rem] text-cream">{item.name}</div>
-                {item.desc && (
-                  <div className="font-sans text-[0.72rem] text-muted mt-0.5">{item.desc}</div>
-                )}
+          {ORDERABLE.map((item) => {
+            const count = qty(item.name);
+            return (
+              <div key={item.name} className="flex justify-between items-center gap-6 py-5">
+                <div className="flex-1">
+                  <div className="font-display text-[1.05rem] text-cream">{item.name}</div>
+                  {item.desc && (
+                    <div className="font-sans text-[0.72rem] text-muted mt-0.5">{item.desc}</div>
+                  )}
+                </div>
+                <div className="flex items-center gap-5 shrink-0">
+                  <span className="font-display text-[1.1rem] text-gold-lt">{fmt(item.price!)}</span>
+
+                  {count === 0 ? (
+                    <button
+                      onClick={() => onAdd(item.name, item.price!)}
+                      className="w-8 h-8 border border-border/80 text-muted flex items-center justify-center text-lg hover:border-gold hover:text-gold-lt transition-all duration-200"
+                      aria-label={`${item.name} hinzufügen`}
+                    >
+                      +
+                    </button>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => onChangeQty(item.name, -1)}
+                        className="w-8 h-8 border border-border/80 text-muted flex items-center justify-center text-lg hover:border-gold hover:text-gold-lt transition-all duration-200"
+                        aria-label="Weniger"
+                      >
+                        −
+                      </button>
+                      <span className="font-display text-[1.05rem] text-gold-lt w-5 text-center">{count}</span>
+                      <button
+                        onClick={() => onChangeQty(item.name, +1)}
+                        className="w-8 h-8 border border-border/80 text-muted flex items-center justify-center text-lg hover:border-gold hover:text-gold-lt transition-all duration-200"
+                        aria-label="Mehr"
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="flex items-center gap-5 shrink-0">
-                <span className="font-display text-[1.1rem] text-gold-lt">{fmt(item.price!)}</span>
-                <button
-                  onClick={() => onAdd(item.name, item.price!)}
-                  className="w-8 h-8 border border-border/80 text-muted flex items-center justify-center text-lg hover:border-gold hover:text-gold-lt transition-all duration-200"
-                  aria-label={`${item.name} hinzufügen`}
-                >
-                  +
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

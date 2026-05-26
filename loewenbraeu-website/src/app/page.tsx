@@ -37,7 +37,7 @@ export default function Page() {
         <MenuSection />
 
         <div className="border-t border-border" />
-        <OrderSection onAdd={handleAdd} />
+        <OrderSection onAdd={handleAdd} items={cartItems} onChangeQty={handleChangeQty} />
 
         <div className="border-t border-border" />
         <About />
