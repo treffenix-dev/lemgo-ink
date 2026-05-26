@@ -1,132 +1,59 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { TopBar } from "@/components/layout/TopBar";
 import { Button } from "@/components/ui/button";
-import { StatusBadge } from "@/components/ui/status-badge";
-import { Modal, ModalContent, ModalHeader, ModalTitle, ModalFooter } from "@/components/ui/modal";
-import { formatCurrency, formatDate } from "@/lib/utils/format";
-import { Plus, Download, Search, FileText, Send, Clock } from "lucide-react";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import type { Invoice } from "@/lib/invoice/types";
+import { Plus, Download, Trash2, Search, FileText } from "lucide-react";
+import { Invoice, loadInvoices, saveInvoice, deleteInvoice, invoiceTotal } from "@/lib/invoice";
 
-// Legacy mock type for backward compatibility with localStorage
-type MockRechnung = {
-  id: string;
-  nummer: string;
-  kunde: string;
-  email: string;
-  gesamt: number;
-  netto: number;
-  mwst: number;
-  status: string;
-  faellig: string;
-  erstellt: string;
-  positionen: { beschreibung: string; menge: number; einzelpreis: number }[];
-};
-
-function toMockRechnung(inv: Invoice): MockRechnung {
-  return {
-    id: inv.id,
-    nummer: inv.nummer,
-    kunde: inv.kunde.firma || `${inv.kunde.vorname} ${inv.kunde.nachname}`.trim(),
-    email: inv.kunde.email,
-    gesamt: inv.gesamt,
-    netto: inv.netto,
-    mwst: inv.mwst_betrag,
-    status: inv.status,
-    faellig: inv.faellig_am,
-    erstellt: inv.erstellt_am,
-    positionen: inv.positionen.map((p) => ({
-      beschreibung: p.beschreibung,
-      menge: p.menge,
-      einzelpreis: p.einzelpreis,
-    })),
-  };
+function fmt(n: number) {
+  return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(n);
+}
+function fmtDate(s: string) {
+  if (!s) return "—";
+  return new Date(s).toLocaleDateString("de-DE");
 }
 
-const mockRechnungen: MockRechnung[] = [
-  { id: "1", nummer: "RE-2025-0001", kunde: "Restaurant Da Vinci", email: "marco@davinci.de", gesamt: 1499, netto: 1260, mwst: 239, status: "offen", faellig: "2025-06-30", erstellt: "2025-06-01", positionen: [{ beschreibung: "Business-Paket – Einmalzahlung", menge: 1, einzelpreis: 1260 }] },
-  { id: "2", nummer: "RE-2025-0002", kunde: "Parfümerie Müller", email: "info@parfuemerie-mueller.de", gesamt: 2499, netto: 2100, mwst: 399, status: "bezahlt", faellig: "2025-06-15", erstellt: "2025-05-15", positionen: [{ beschreibung: "Pro-Paket – Einmalzahlung", menge: 1, einzelpreis: 2100 }] },
-  { id: "3", nummer: "RE-2025-0003", kunde: "Friseur Schneider", email: "peter@friseur-schneider.de", gesamt: 799, netto: 671, mwst: 128, status: "bezahlt", faellig: "2025-05-30", erstellt: "2025-05-01", positionen: [{ beschreibung: "Starter-Paket – Einmalzahlung", menge: 1, einzelpreis: 671 }] },
-  { id: "4", nummer: "RE-2025-0004", kunde: "Bäckerei Wagner", email: "lisa@baeckerei-wagner.de", gesamt: 1499, netto: 1260, mwst: 239, status: "ueberfaellig", faellig: "2025-06-10", erstellt: "2025-05-10", positionen: [{ beschreibung: "Business-Paket – Einmalzahlung", menge: 1, einzelpreis: 1260 }] },
-];
-
-// Track which IDs are from the API (not mock) — needed for PDF/send actions
-const apiIds = new Set<string>();
+const STATUS_LABELS: Record<Invoice["status"], { label: string; cls: string }> = {
+  entwurf:     { label: "Entwurf",     cls: "bg-gray-100 text-gray-600" },
+  offen:       { label: "Offen",       cls: "bg-amber-100 text-amber-700" },
+  bezahlt:     { label: "Bezahlt",     cls: "bg-green-100 text-green-700" },
+  ueberfaellig:{ label: "Überfällig",  cls: "bg-red-100 text-red-700" },
+};
 
 export default function RechnungenOwnerPage() {
-  const [storedRechnungen, setStoredRechnungen] = useLocalStorage<MockRechnung[]>("owner_rechnungen", mockRechnungen);
-  const [rechnungen, setRechnungen] = useState<MockRechnung[]>(storedRechnungen);
+  const router = useRouter();
+  const [rechnungen, setRechnungen] = useState<Invoice[]>([]);
   const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState<MockRechnung | null>(null);
-  const [sendingId, setSendingId] = useState<string | null>(null);
-  const [sendResult, setSendResult] = useState<{ success: boolean; error?: string } | null>(null);
 
-  // Fetch from API on mount and merge with localStorage
   useEffect(() => {
-    async function fetchApiInvoices() {
-      try {
-        const res = await fetch("/api/invoices");
-        if (!res.ok) return;
-        const apiInvoices: Invoice[] = await res.json();
-        if (apiInvoices.length === 0) return;
-
-        const mapped = apiInvoices.map(toMockRechnung);
-        mapped.forEach((m) => apiIds.add(m.id));
-
-        setRechnungen((prev) => {
-          // Merge: API invoices override/replace if same ID, prepend new ones
-          const prevWithoutApi = prev.filter((r) => !apiIds.has(r.id));
-          return [...mapped, ...prevWithoutApi];
-        });
-      } catch {
-        // Silently ignore — API may not be running
-      }
-    }
-    fetchApiInvoices();
+    setRechnungen(loadInvoices());
   }, []);
 
   const filtered = rechnungen.filter((r) =>
     r.nummer.toLowerCase().includes(search.toLowerCase()) ||
-    r.kunde.toLowerCase().includes(search.toLowerCase())
+    r.empfaengerFirma.toLowerCase().includes(search.toLowerCase())
   );
 
   const gesamtOffen = rechnungen
     .filter((r) => r.status === "offen" || r.status === "ueberfaellig")
-    .reduce((s, r) => s + r.gesamt, 0);
+    .reduce((s, r) => s + invoiceTotal(r.positionen), 0);
+
   const gesamtBezahlt = rechnungen
     .filter((r) => r.status === "bezahlt")
-    .reduce((s, r) => s + r.gesamt, 0);
-  const entwurfCount = rechnungen.filter((r) => r.status === "entwurf").length;
+    .reduce((s, r) => s + invoiceTotal(r.positionen), 0);
 
-  async function handleSendEmail(id: string) {
-    setSendingId(id);
-    setSendResult(null);
-    try {
-      const res = await fetch(`/api/invoices/${id}/send`, { method: "POST" });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setSendResult({ success: true });
-        // Update local state
-        setRechnungen((prev) =>
-          prev.map((r) => r.id === id ? { ...r, status: "offen" } : r)
-        );
-        if (selected?.id === id) {
-          setSelected((s) => s ? { ...s, status: "offen" } : s);
-        }
-      } else {
-        setSendResult({ success: false, error: data.error ?? "Unbekannter Fehler" });
-      }
-    } catch (err) {
-      setSendResult({ success: false, error: "Netzwerkfehler" });
-    } finally {
-      setSendingId(null);
-    }
+  function toggleBezahlt(inv: Invoice) {
+    const updated = { ...inv, status: inv.status === "bezahlt" ? "offen" as const : "bezahlt" as const };
+    saveInvoice(updated);
+    setRechnungen(loadInvoices());
   }
 
-  function handleDownloadPDF(id: string) {
-    window.open(`/api/invoices/${id}/pdf`, "_blank");
+  function handleDelete(id: string) {
+    if (!confirm("Rechnung wirklich löschen?")) return;
+    deleteInvoice(id);
+    setRechnungen(loadInvoices());
   }
 
   return (
@@ -134,190 +61,124 @@ export default function RechnungenOwnerPage() {
       <TopBar
         title="Rechnungen"
         actions={
-          <div className="flex items-center gap-2">
-            {entwurfCount > 0 && (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 text-amber-700 px-3 py-1 text-xs font-medium">
-                <Clock className="w-3.5 h-3.5" />
-                {entwurfCount} Entwurf{entwurfCount > 1 ? "e" : ""} zum Senden
-              </span>
-            )}
-            <Button size="sm">
-              <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline ml-1">Neue Rechnung</span>
-            </Button>
-          </div>
+          <Button size="sm" variant="primary" onClick={() => router.push("/owner/rechnungen/neu")}>
+            <Plus className="w-4 h-4" /> Neue Rechnung
+          </Button>
         }
       />
-      <div className="p-4 sm:p-6 max-w-5xl space-y-4">
-        <div className="grid grid-cols-3 gap-3">
+
+      <div className="p-6 max-w-5xl space-y-5">
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4">
           <div className="rounded-xl border border-border bg-card p-4">
             <p className="text-xs text-muted-foreground mb-1">Offen / Überfällig</p>
-            <p className="text-xl sm:text-2xl font-bold text-amber-600">{formatCurrency(gesamtOffen)}</p>
+            <p className="text-2xl font-bold text-amber-600">{fmt(gesamtOffen)}</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-4">
-            <p className="text-xs text-muted-foreground mb-1">Bezahlt (Monat)</p>
-            <p className="text-xl sm:text-2xl font-bold text-green-600">{formatCurrency(gesamtBezahlt)}</p>
+            <p className="text-xs text-muted-foreground mb-1">Bezahlt</p>
+            <p className="text-2xl font-bold text-green-600">{fmt(gesamtBezahlt)}</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-4">
             <p className="text-xs text-muted-foreground mb-1">Gesamt</p>
-            <p className="text-xl sm:text-2xl font-bold">{rechnungen.length}</p>
+            <p className="text-2xl font-bold">{rechnungen.length} Rechnungen</p>
           </div>
         </div>
 
+        {/* Search */}
         <div className="relative max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Suchen..."
+            placeholder="Nummer oder Kunde suchen…"
             className="w-full h-10 pl-9 pr-3 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
 
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border bg-muted/30">
-                <th className="text-left px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Nummer</th>
-                <th className="text-left px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide hidden md:table-cell">Kunde</th>
-                <th className="text-left px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide hidden lg:table-cell">Fällig</th>
-                <th className="text-right px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Betrag</th>
-                <th className="text-left px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Status</th>
-                <th className="w-10" />
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {filtered.map((r) => (
-                <tr
-                  key={r.id}
-                  onClick={() => { setSelected(r); setSendResult(null); }}
-                  className={`hover:bg-muted/20 cursor-pointer transition-colors ${r.status === "entwurf" ? "bg-amber-50/30" : ""}`}
-                >
-                  <td className="px-5 py-4 font-medium">
-                    <div className="flex items-center gap-2">
-                      {r.nummer}
-                      {r.status === "entwurf" && (
-                        <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-5 py-4 hidden md:table-cell text-muted-foreground">{r.kunde}</td>
-                  <td className={`px-5 py-4 hidden lg:table-cell text-xs ${r.status === "ueberfaellig" ? "text-red-600 font-semibold" : "text-muted-foreground"}`}>
-                    {formatDate(r.faellig)}
-                  </td>
-                  <td className="px-5 py-4 text-right font-semibold">{formatCurrency(r.gesamt)}</td>
-                  <td className="px-5 py-4"><StatusBadge type="invoice" status={r.status} /></td>
-                  <td className="px-3 py-4 text-right">
-                    {apiIds.has(r.id) ? (
-                      <Download className="w-4 h-4 text-muted-foreground" />
-                    ) : (
-                      <Download className="w-4 h-4 text-muted-foreground opacity-30" />
-                    )}
-                  </td>
+        {/* Table */}
+        {filtered.length === 0 ? (
+          <div className="rounded-xl border border-border bg-card p-16 text-center">
+            <FileText className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+            <p className="text-sm font-medium">Noch keine Rechnungen</p>
+            <p className="text-xs text-muted-foreground mt-1 mb-4">Erstelle deine erste Rechnung für einen Kunden.</p>
+            <Button size="sm" variant="primary" onClick={() => router.push("/owner/rechnungen/neu")}>
+              <Plus className="w-4 h-4" /> Erste Rechnung erstellen
+            </Button>
+          </div>
+        ) : (
+          <div className="rounded-xl border border-border bg-card overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border bg-muted/30">
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Nummer</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:table-cell">Kunde</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden lg:table-cell">Datum</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden lg:table-cell">Fällig</th>
+                  <th className="text-right px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Betrag</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Status</th>
+                  <th className="w-28 px-5 py-3" />
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {filtered.map((r) => {
+                  const faellig = (() => {
+                    const d = new Date(r.datum);
+                    d.setDate(d.getDate() + r.zahlungszielTage);
+                    return d.toISOString().split("T")[0];
+                  })();
+                  const st = STATUS_LABELS[r.status];
+                  return (
+                    <tr key={r.id} className="hover:bg-muted/20 transition-colors">
+                      <td className="px-5 py-4 font-medium font-mono text-xs">{r.nummer}</td>
+                      <td className="px-5 py-4 hidden md:table-cell text-muted-foreground">{r.empfaengerFirma || "—"}</td>
+                      <td className="px-5 py-4 hidden lg:table-cell text-muted-foreground text-xs">{fmtDate(r.datum)}</td>
+                      <td className="px-5 py-4 hidden lg:table-cell text-xs text-muted-foreground">{fmtDate(faellig)}</td>
+                      <td className="px-5 py-4 text-right font-semibold">{fmt(invoiceTotal(r.positionen))}</td>
+                      <td className="px-5 py-4">
+                        <button
+                          onClick={() => toggleBezahlt(r)}
+                          className={`px-2 py-0.5 rounded-full text-xs font-medium transition-colors ${st.cls}`}
+                          title="Klicken zum Umschalten"
+                        >
+                          {st.label}
+                        </button>
+                      </td>
+                      <td className="px-5 py-4">
+                        <div className="flex items-center gap-1 justify-end">
+                          <Button
+                            variant="ghost"
+                            size="icon-sm"
+                            title="PDF öffnen"
+                            onClick={() => router.push(`/owner/rechnungen/neu?id=${r.id}`)}
+                          >
+                            <Download className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon-sm"
+                            title="Löschen"
+                            onClick={() => handleDelete(r.id)}
+                            className="hover:text-red-600"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* Hinweis §19 */}
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800">
+          <strong>§ 19 UStG — Kleinunternehmerregelung:</strong> Alle Rechnungen werden ohne Umsatzsteuer ausgestellt.
+          Gültig solange der Jahresumsatz unter 25.000 € bleibt. Steuernummer immer aktuell halten.
         </div>
       </div>
-
-      <Modal open={!!selected} onOpenChange={() => { setSelected(null); setSendResult(null); }}>
-        <ModalContent>
-          {selected && (
-            <>
-              <ModalHeader>
-                <div className="flex items-center gap-3">
-                  <FileText className="w-5 h-5 text-muted-foreground" />
-                  <ModalTitle>{selected.nummer}</ModalTitle>
-                  <StatusBadge type="invoice" status={selected.status} />
-                </div>
-              </ModalHeader>
-              <div className="p-6 space-y-4">
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div><p className="text-xs text-muted-foreground mb-0.5">Kunde</p><p className="font-medium">{selected.kunde}</p></div>
-                  <div><p className="text-xs text-muted-foreground mb-0.5">E-Mail</p><p className="font-medium break-all">{selected.email}</p></div>
-                  <div><p className="text-xs text-muted-foreground mb-0.5">Erstellt</p><p className="font-medium">{formatDate(selected.erstellt)}</p></div>
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-0.5">Fällig</p>
-                    <p className={`font-medium ${selected.status === "ueberfaellig" ? "text-red-600" : ""}`}>
-                      {formatDate(selected.faellig)}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="rounded-lg border border-border overflow-hidden text-sm">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="bg-muted/30 border-b border-border">
-                        <th className="text-left px-4 py-2.5 text-xs font-semibold text-muted-foreground">Position</th>
-                        <th className="text-right px-4 py-2.5 text-xs font-semibold text-muted-foreground">Betrag</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {selected.positionen.map((p, i) => (
-                        <tr key={i} className="border-b border-border">
-                          <td className="px-4 py-3">{p.beschreibung}</td>
-                          <td className="px-4 py-3 text-right">{formatCurrency(p.einzelpreis)}</td>
-                        </tr>
-                      ))}
-                      <tr className="border-b border-border bg-muted/20">
-                        <td className="px-4 py-2.5 text-muted-foreground text-xs">Netto</td>
-                        <td className="px-4 py-2.5 text-right text-xs text-muted-foreground">{formatCurrency(selected.netto)}</td>
-                      </tr>
-                      <tr className="border-b border-border bg-muted/20">
-                        <td className="px-4 py-2.5 text-muted-foreground text-xs">MwSt. 19%</td>
-                        <td className="px-4 py-2.5 text-right text-xs text-muted-foreground">{formatCurrency(selected.mwst)}</td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-3 font-bold">Gesamt</td>
-                        <td className="px-4 py-3 text-right font-bold">{formatCurrency(selected.gesamt)}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Send result feedback */}
-                {sendResult && (
-                  <div className={`rounded-lg px-4 py-3 text-sm ${sendResult.success ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"}`}>
-                    {sendResult.success
-                      ? "E-Mail wurde erfolgreich gesendet."
-                      : `Fehler: ${sendResult.error}`}
-                  </div>
-                )}
-              </div>
-              <ModalFooter>
-                <Button variant="outline" onClick={() => { setSelected(null); setSendResult(null); }}>
-                  Schließen
-                </Button>
-                {apiIds.has(selected.id) && (
-                  <>
-                    <Button
-                      variant="outline"
-                      onClick={() => handleDownloadPDF(selected.id)}
-                    >
-                      <Download className="w-4 h-4" />
-                      PDF herunterladen
-                    </Button>
-                    <Button
-                      onClick={() => handleSendEmail(selected.id)}
-                      disabled={sendingId === selected.id}
-                    >
-                      <Send className="w-4 h-4" />
-                      {sendingId === selected.id ? "Wird gesendet…" : "Per E-Mail senden"}
-                    </Button>
-                  </>
-                )}
-                {!apiIds.has(selected.id) && (
-                  <Button>
-                    <Download className="w-4 h-4" />
-                    PDF herunterladen
-                  </Button>
-                )}
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
     </div>
   );
 }
