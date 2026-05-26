@@ -26,7 +26,7 @@ echo "--------------------------------------"
 # --- Verzeichnis anlegen ---
 PROJECT_DIR="/home/user/$REPO_NAME"
 if [ -d "$PROJECT_DIR" ]; then
-  echo "Verzeichnis $PROJECT_DIR existiert bereits!"
+  echo "⚠️  Verzeichnis $PROJECT_DIR existiert bereits!"
   exit 1
 fi
 
@@ -96,7 +96,7 @@ Stack: Next.js 14, TypeScript, Tailwind, Framer Motion"
 
 echo ""
 echo "======================================"
-echo "  Projekt bereit!"
+echo "  ✅ Projekt bereit!"
 echo "======================================"
 echo ""
 echo "NÄCHSTE SCHRITTE:"
