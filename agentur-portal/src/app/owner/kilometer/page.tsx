@@ -1,100 +1,133 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TopBar } from "@/components/layout/TopBar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Modal, ModalContent, ModalHeader, ModalTitle, ModalFooter } from "@/components/ui/modal";
-import { Plus, Trash2 } from "lucide-react";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { Plus, Trash2, MapPin } from "lucide-react";
 
-type Fahrt = { id: string; datum: string; von: string; nach: string; zweck: string; km: number; satz: number };
+interface Fahrt {
+  id: string;
+  zweck: string;
+  von: string;
+  nach: string;
+  km: number;
+  datum: string;
+}
 
-const initialFahrten: Fahrt[] = [
-  { id: "1", datum: "2025-06-24", von: "Lemgo", nach: "Bielefeld", zweck: "Kundengespräch — Café Central", km: 42, satz: 0.30 },
-  { id: "2", datum: "2025-06-20", von: "Lemgo", nach: "Detmold", zweck: "Fotoshooting — Parfümerie Müller", km: 18, satz: 0.30 },
-  { id: "3", datum: "2025-06-15", von: "Lemgo", nach: "Herford", zweck: "Onboarding — Friseur Schneider", km: 26, satz: 0.30 },
-];
+const KM_PAUSCHALE = 0.30;
+
+function fmt(n: number) {
+  return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(n);
+}
+
+function load(): Fahrt[] {
+  if (typeof window === "undefined") return [];
+  try { return JSON.parse(localStorage.getItem("kilometer") || "[]"); } catch { return []; }
+}
+function save(e: Fahrt[]) { localStorage.setItem("kilometer", JSON.stringify(e)); }
 
 export default function KilometerPage() {
-  const [fahrten, setFahrten] = useLocalStorage<Fahrt[]>("owner_kilometer", initialFahrten);
-  const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ datum: new Date().toISOString().split("T")[0], von: "", nach: "", zweck: "", km: "" });
+  const [fahrten, setFahrten] = useState<Fahrt[]>([]);
+  const [adding, setAdding] = useState(false);
+  const [form, setForm] = useState({ zweck: "", von: "", nach: "", km: "", datum: new Date().toISOString().split("T")[0] });
 
-  const gesamtKm = fahrten.reduce((s, f) => s + f.km, 0);
-  const gesamtAbzug = fahrten.reduce((s, f) => s + f.km * f.satz, 0);
+  useEffect(() => { setFahrten(load()); }, []);
 
-  function save() {
-    if (!form.zweck.trim() || !form.km) return;
-    setFahrten((prev) => [{ ...form, id: Date.now().toString(), km: parseFloat(form.km), satz: 0.30 }, ...prev]);
-    setOpen(false);
-    setForm({ datum: new Date().toISOString().split("T")[0], von: "", nach: "", zweck: "", km: "" });
+  function handleAdd() {
+    if (!form.km) return;
+    const f: Fahrt = { id: crypto.randomUUID(), zweck: form.zweck || "Kundenbesuch", von: form.von, nach: form.nach, km: parseFloat(form.km), datum: form.datum };
+    const updated = [f, ...fahrten];
+    setFahrten(updated);
+    save(updated);
+    setForm({ zweck: "", von: "", nach: "", km: "", datum: new Date().toISOString().split("T")[0] });
+    setAdding(false);
   }
 
-  function loeschen(id: string) {
-    setFahrten((prev) => prev.filter((f) => f.id !== id));
+  function handleDelete(id: string) {
+    const updated = fahrten.filter((f) => f.id !== id);
+    setFahrten(updated);
+    save(updated);
   }
+
+  const kmJahr = fahrten.filter((f) => f.datum.startsWith(new Date().getFullYear().toString())).reduce((s, f) => s + f.km, 0);
+  const absetzbar = kmJahr * KM_PAUSCHALE;
 
   return (
     <div>
-      <TopBar title="Kilometer-Nachweis" actions={<Button size="sm" onClick={() => setOpen(true)}><Plus className="w-4 h-4" /><span className="hidden sm:inline ml-1">Fahrt eintragen</span></Button>} />
-      <div className="p-4 sm:p-6 max-w-4xl space-y-6">
-        <div className="grid grid-cols-3 gap-3 sm:gap-4">
-          {[
-            { label: "Gesamtkilometer", value: `${gesamtKm} km` },
-            { label: "Steuerabzug (0,30 €/km)", value: `${gesamtAbzug.toFixed(2)} €` },
-            { label: "Fahrten gesamt", value: String(fahrten.length) },
-          ].map((s) => (
-            <div key={s.label} className="rounded-xl border border-border bg-card p-4 sm:p-5">
-              <p className="text-xs text-muted-foreground mb-1">{s.label}</p>
-              <p className="text-lg sm:text-xl font-bold">{s.value}</p>
-            </div>
-          ))}
-        </div>
+      <TopBar
+        title="Kilometer"
+        actions={<Button size="sm" variant="primary" onClick={() => setAdding(true)}><Plus className="w-4 h-4" /> Fahrt</Button>}
+      />
+      <div className="p-6 max-w-3xl space-y-5">
 
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-5 border-b border-border font-semibold">Fahrtennachweis</div>
-          <div className="divide-y divide-border">
-            {fahrten.map((f) => (
-              <div key={f.id} className="px-5 py-4 flex items-center justify-between gap-4 group">
-                <div className="min-w-0">
-                  <p className="text-sm font-medium">{f.zweck}</p>
-                  <p className="text-xs text-muted-foreground">{f.datum} {f.von && f.nach ? `· ${f.von} → ${f.nach}` : ""}</p>
-                </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <div className="text-right">
-                    <p className="text-sm font-semibold">{f.km} km</p>
-                    <p className="text-xs text-muted-foreground">{(f.km * f.satz).toFixed(2)} € abzugsfähig</p>
-                  </div>
-                  <button onClick={() => loeschen(f.id)} className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-red-500 transition-all">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
-            {fahrten.length === 0 && <div className="px-5 py-10 text-center text-sm text-muted-foreground">Noch keine Fahrten eingetragen.</div>}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="rounded-xl border border-border bg-card p-4">
+            <p className="text-xs text-muted-foreground mb-1">km dieses Jahr</p>
+            <p className="text-2xl font-bold">{kmJahr.toFixed(0)} km</p>
+          </div>
+          <div className="rounded-xl border border-border bg-card p-4">
+            <p className="text-xs text-muted-foreground mb-1">Absetzbar (0,30 €/km)</p>
+            <p className="text-2xl font-bold text-amber-400">{fmt(absetzbar)}</p>
           </div>
         </div>
+
+        {adding && (
+          <div className="rounded-xl border border-border bg-card p-5 space-y-3">
+            <h3 className="text-sm font-semibold">Neue Fahrt</h3>
+            <input value={form.zweck} onChange={(e) => setForm((p) => ({ ...p, zweck: e.target.value }))} placeholder="Zweck z.B. Kundentermin Restaurant Da Vinci" className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+            <div className="grid grid-cols-2 gap-3">
+              <input value={form.von} onChange={(e) => setForm((p) => ({ ...p, von: e.target.value }))} placeholder="Von (Ort)" className="h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+              <input value={form.nach} onChange={(e) => setForm((p) => ({ ...p, nach: e.target.value }))} placeholder="Nach (Ort)" className="h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <input type="number" step="0.1" value={form.km} onChange={(e) => setForm((p) => ({ ...p, km: e.target.value }))} placeholder="Kilometer" className="h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+              <input type="date" value={form.datum} onChange={(e) => setForm((p) => ({ ...p, datum: e.target.value }))} className="h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" size="sm" onClick={() => setAdding(false)}>Abbrechen</Button>
+              <Button variant="primary" size="sm" onClick={handleAdd}>Speichern</Button>
+            </div>
+          </div>
+        )}
+
+        {fahrten.length === 0 && !adding ? (
+          <div className="rounded-xl border border-border bg-card p-12 text-center">
+            <MapPin className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+            <p className="text-sm font-medium">Keine Fahrten erfasst</p>
+            <p className="text-xs text-muted-foreground mt-1 mb-4">Erfasse berufliche Fahrten (0,30 €/km steuerlich absetzbar).</p>
+            <Button size="sm" variant="primary" onClick={() => setAdding(true)}><Plus className="w-4 h-4" /> Erste Fahrt</Button>
+          </div>
+        ) : (
+          <div className="rounded-xl border border-border bg-card overflow-hidden">
+            <table className="w-full text-sm">
+              <thead><tr className="border-b border-border bg-muted/20">
+                <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Datum</th>
+                <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Zweck / Strecke</th>
+                <th className="text-right px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">km</th>
+                <th className="text-right px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Pauschale</th>
+                <th className="w-10 px-3" />
+              </tr></thead>
+              <tbody className="divide-y divide-border">
+                {fahrten.map((f) => (
+                  <tr key={f.id} className="hover:bg-muted/20">
+                    <td className="px-5 py-3 text-xs text-muted-foreground">{new Date(f.datum).toLocaleDateString("de-DE")}</td>
+                    <td className="px-5 py-3">
+                      <p className="font-medium">{f.zweck}</p>
+                      {(f.von || f.nach) && <p className="text-xs text-muted-foreground">{f.von}{f.von && f.nach ? " → " : ""}{f.nach}</p>}
+                    </td>
+                    <td className="px-5 py-3 text-right font-medium">{f.km} km</td>
+                    <td className="px-5 py-3 text-right font-semibold text-amber-400">{fmt(f.km * KM_PAUSCHALE)}</td>
+                    <td className="px-3 py-3">
+                      <button onClick={() => handleDelete(f.id)} className="text-muted-foreground hover:text-red-400 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        <p className="text-xs text-muted-foreground">Kilometerpauschale 2025/2026: 0,30 €/km für berufliche Fahrten mit Privat-PKW.</p>
       </div>
-
-      <Modal open={open} onOpenChange={setOpen}>
-        <ModalContent>
-          <ModalHeader><ModalTitle>Fahrt eintragen</ModalTitle></ModalHeader>
-          <div className="p-6 space-y-4">
-            <Input label="Zweck" required value={form.zweck} onChange={(e) => setForm((f) => ({ ...f, zweck: e.target.value }))} placeholder="z.B. Kundengespräch — Café Central" />
-            <div className="grid grid-cols-2 gap-4">
-              <Input label="Von" value={form.von} onChange={(e) => setForm((f) => ({ ...f, von: e.target.value }))} placeholder="Abfahrtsort" />
-              <Input label="Nach" value={form.nach} onChange={(e) => setForm((f) => ({ ...f, nach: e.target.value }))} placeholder="Zielort" />
-              <Input label="Kilometer" type="number" required value={form.km} onChange={(e) => setForm((f) => ({ ...f, km: e.target.value }))} placeholder="0" />
-              <Input label="Datum" type="date" value={form.datum} onChange={(e) => setForm((f) => ({ ...f, datum: e.target.value }))} />
-            </div>
-          </div>
-          <ModalFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>Abbrechen</Button>
-            <Button disabled={!form.zweck.trim() || !form.km} onClick={save}>Eintragen</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </div>
   );
 }
