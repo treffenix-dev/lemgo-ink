@@ -10,8 +10,8 @@ export default function OwnerLayout({ children }: { children: React.ReactNode })
   return (
     <div className="flex min-h-screen bg-muted/20">
 
-      {/* Desktop sidebar — always visible, in normal flow */}
-      <div className="hidden lg:block shrink-0">
+      {/* Sidebar — visible on tablet+ (md = 768px+), hidden on phones */}
+      <div className="hidden md:block shrink-0">
         <Sidebar role="owner" />
       </div>
 
@@ -19,24 +19,24 @@ export default function OwnerLayout({ children }: { children: React.ReactNode })
       {sidebarOpen && (
         <>
           <div
-            className="fixed inset-0 z-40 bg-black/70 lg:hidden"
+            className="fixed inset-0 z-40 bg-black/70 md:hidden"
             onClick={() => setSidebarOpen(false)}
           />
-          <div className="fixed inset-y-0 left-0 z-50 lg:hidden">
+          <div className="fixed inset-y-0 left-0 z-50 md:hidden">
             <Sidebar role="owner" onClose={() => setSidebarOpen(false)} />
           </div>
         </>
       )}
 
-      {/* Main content — always full width on mobile */}
+      {/* Main content */}
       <main className="flex-1 min-w-0 overflow-x-hidden">
         {children}
       </main>
 
-      {/* Mobile menu button */}
+      {/* Mobile menu button — only on phones */}
       <button
         onClick={() => setSidebarOpen(true)}
-        className="fixed bottom-5 left-4 z-30 lg:hidden flex items-center gap-2 bg-blue-600 text-white rounded-full px-4 py-2.5 text-sm font-semibold shadow-lg shadow-blue-500/30 active:scale-95 transition-transform"
+        className="fixed bottom-5 left-4 z-30 md:hidden flex items-center gap-2 bg-blue-600 text-white rounded-full px-4 py-2.5 text-sm font-semibold shadow-lg shadow-blue-500/30 active:scale-95 transition-transform"
       >
         <Menu className="w-4 h-4" />
         Menü
