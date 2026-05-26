@@ -17,8 +17,11 @@ export function OrderSection({ onAdd }: Props) {
         <h2 className="font-display font-light text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.0] text-cream mb-3">
           Online bestellen
         </h2>
-        <p className="font-sans text-[0.8rem] text-muted mb-14 max-w-sm leading-loose">
-          Abholung an der Kasse · Mittelstraße 144 · Barzahlung vor Ort
+        <p className="font-sans text-[0.8rem] text-muted mb-3 max-w-sm leading-loose">
+          Abholung an der Kasse · Mittelstraße 144
+        </p>
+        <p className="font-display font-light text-[1.4rem] text-cream tracking-[0.08em] mb-14">
+          Barzahlung vor Ort
         </p>
 
         <div className="flex flex-col divide-y divide-border">

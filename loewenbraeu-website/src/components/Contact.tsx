@@ -1,19 +1,19 @@
 const HOURS = [
-  { day: "Montag",     time: "Ruhetag",                     closed: true },
-  { day: "Dienstag",   time: "Ruhetag",                     closed: true },
-  { day: "Mittwoch",   time: "11:30–14:00  ·  17:00–22:30" },
-  { day: "Donnerstag", time: "11:30–14:00  ·  17:00–22:30" },
-  { day: "Freitag",    time: "11:30–14:00  ·  17:00–22:30" },
-  { day: "Samstag",    time: "11:30–14:00  ·  17:00–22:30" },
-  { day: "Sonntag",    time: "11:30–14:00  ·  17:00–22:30" },
+  { day: "Montag",     time: "Ruhetag",                        closed: true },
+  { day: "Dienstag",   time: "Ruhetag",                        closed: true },
+  { day: "Mittwoch",   time: "11:30 bis 14:00  ·  17:00 bis 22:30" },
+  { day: "Donnerstag", time: "11:30 bis 14:00  ·  17:00 bis 22:30" },
+  { day: "Freitag",    time: "11:30 bis 14:00  ·  17:00 bis 22:30" },
+  { day: "Samstag",    time: "11:30 bis 14:00  ·  17:00 bis 22:30" },
+  { day: "Sonntag",    time: "11:30 bis 14:00  ·  17:00 bis 22:30" },
 ];
 
 export function Contact() {
   return (
-    <section id="kontakt" className="py-36 px-[5%] bg-surface">
-      <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-20">
-
-        <div>
+    <>
+      {/* Öffnungszeiten — eigene Section */}
+      <section id="oeffnungszeiten" className="py-36 px-[5%] bg-surface">
+        <div className="max-w-3xl mx-auto">
           <span className="gold-rule" />
           <h2 className="font-display font-light text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.0] text-cream mb-12">
             Öffnungszeiten
@@ -32,9 +32,15 @@ export function Contact() {
               ))}
             </tbody>
           </table>
+          <p className="font-sans text-[0.72rem] text-muted mt-6">
+            Reservierung empfohlen · Barzahlung vor Ort
+          </p>
         </div>
+      </section>
 
-        <div>
+      {/* Kontakt — eigene Section */}
+      <section id="kontakt" className="py-36 px-[5%]">
+        <div className="max-w-3xl mx-auto">
           <span className="gold-rule" />
           <h2 className="font-display font-light text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.0] text-cream mb-12">
             Kontakt
@@ -43,8 +49,8 @@ export function Contact() {
             {[
               { label: "Adresse",      val: "Mittelstraße 144\n32657 Lemgo" },
               { label: "Telefon",      val: "05261 4267",                     href: "tel:+4952614267" },
-              { label: "Reservierung", val: "Tischreservierung empfohlen" },
-              { label: "Zahlung",      val: "Nur Barzahlung vor Ort" },
+              { label: "Inhaber",      val: "Danko Bradaric" },
+              { label: "Zahlung",      val: "Barzahlung vor Ort" },
             ].map((i) => (
               <div key={i.label}>
                 <span className="font-sans text-[0.6rem] tracking-[0.28em] uppercase text-gold block mb-1.5">{i.label}</span>
@@ -68,7 +74,7 @@ export function Contact() {
             </a>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

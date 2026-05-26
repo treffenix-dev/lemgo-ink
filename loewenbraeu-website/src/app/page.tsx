@@ -18,7 +18,6 @@ export default function Page() {
 
   function handleAdd(name: string, price: number) {
     setCartItems((prev) => addItem(prev, name, price));
-    setCartOpen(true);
   }
 
   function handleChangeQty(name: string, delta: number) {
@@ -58,7 +57,10 @@ export default function Page() {
         <footer className="border-t border-border px-[5%] py-10 flex flex-wrap justify-between items-center gap-4">
           <span className="font-display font-light text-[1.1rem] text-cream tracking-[0.12em]">Münchener Löwenbräu</span>
           <p className="font-sans text-[0.68rem] text-muted tracking-[0.1em]">Mittelstraße 144 · 32657 Lemgo · 05261 4267</p>
-          <p className="font-sans text-[0.62rem] text-muted/50">Impressum · Datenschutz</p>
+          <p className="font-sans text-[0.62rem] text-muted/50 flex gap-4">
+            <a href="/impressum" className="hover:text-cream transition-colors">Impressum</a>
+            <a href="/datenschutz" className="hover:text-cream transition-colors">Datenschutz</a>
+          </p>
         </footer>
       </main>
 
