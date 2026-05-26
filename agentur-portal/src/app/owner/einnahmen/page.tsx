@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { TopBar } from "@/components/layout/TopBar";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, TrendingUp } from "lucide-react";
+import { Plus, Trash2, TrendingUp, Download } from "lucide-react";
 
 interface Einnahme {
   id: string;
@@ -23,22 +23,45 @@ function load(): Einnahme[] {
 }
 function save(e: Einnahme[]) { localStorage.setItem("einnahmen", JSON.stringify(e)); }
 
-const KATEGORIEN = ["Webdesign", "Wartung", "Beratung", "SEO", "Sonstiges"];
+const PRESET_KATEGORIEN = ["Webdesign", "Wartung", "Beratung", "SEO", "Sonstiges"];
+
+function exportCSV(einnahmen: Einnahme[]) {
+  const rows = [
+    ["Datum", "Beschreibung", "Kategorie", "Betrag (€)"],
+    ...einnahmen.map((e) => [
+      new Date(e.datum).toLocaleDateString("de-DE"),
+      e.beschreibung,
+      e.kategorie,
+      e.betrag.toFixed(2).replace(".", ","),
+    ]),
+  ];
+  const csv = rows.map((r) => r.map((c) => `"${c}"`).join(";")).join("\n");
+  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `einnahmen-${new Date().getFullYear()}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 export default function EinnahmenPage() {
   const [einnahmen, setEinnahmen] = useState<Einnahme[]>([]);
   const [adding, setAdding] = useState(false);
+  const [customKategorie, setCustomKategorie] = useState("");
   const [form, setForm] = useState({ beschreibung: "", betrag: "", kategorie: "Webdesign", datum: new Date().toISOString().split("T")[0] });
 
   useEffect(() => { setEinnahmen(load()); }, []);
 
   function handleAdd() {
     if (!form.beschreibung || !form.betrag) return;
-    const e: Einnahme = { id: crypto.randomUUID(), beschreibung: form.beschreibung, betrag: parseFloat(form.betrag), kategorie: form.kategorie, datum: form.datum };
+    const kat = customKategorie.trim() || form.kategorie;
+    const e: Einnahme = { id: crypto.randomUUID(), beschreibung: form.beschreibung, betrag: parseFloat(form.betrag), kategorie: kat, datum: form.datum };
     const updated = [e, ...einnahmen];
     setEinnahmen(updated);
     save(updated);
     setForm({ beschreibung: "", betrag: "", kategorie: "Webdesign", datum: new Date().toISOString().split("T")[0] });
+    setCustomKategorie("");
     setAdding(false);
   }
 
@@ -55,7 +78,16 @@ export default function EinnahmenPage() {
     <div>
       <TopBar
         title="Einnahmen"
-        actions={<Button size="sm" variant="primary" onClick={() => setAdding(true)}><Plus className="w-4 h-4" /> Einnahme</Button>}
+        actions={
+          <div className="flex gap-2">
+            {einnahmen.length > 0 && (
+              <Button size="sm" variant="outline" onClick={() => exportCSV(einnahmen)}>
+                <Download className="w-4 h-4" /><span className="hidden sm:inline ml-1">CSV</span>
+              </Button>
+            )}
+            <Button size="sm" variant="primary" onClick={() => setAdding(true)}><Plus className="w-4 h-4" /> Einnahme</Button>
+          </div>
+        }
       />
       <div className="p-4 md:p-6 max-w-3xl space-y-5">
 
@@ -78,13 +110,24 @@ export default function EinnahmenPage() {
             <input value={form.beschreibung} onChange={(e) => setForm((p) => ({ ...p, beschreibung: e.target.value }))} placeholder="Beschreibung z.B. Website Restaurant Da Vinci" className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
             <div className="grid grid-cols-3 gap-3">
               <input type="number" step="0.01" value={form.betrag} onChange={(e) => setForm((p) => ({ ...p, betrag: e.target.value }))} placeholder="1499.00" className="h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
-              <select value={form.kategorie} onChange={(e) => setForm((p) => ({ ...p, kategorie: e.target.value }))} className="h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring">
-                {KATEGORIEN.map((k) => <option key={k}>{k}</option>)}
-              </select>
+              <div className="space-y-1.5">
+                <select value={form.kategorie} onChange={(e) => setForm((p) => ({ ...p, kategorie: e.target.value }))} className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                  {PRESET_KATEGORIEN.map((k) => <option key={k}>{k}</option>)}
+                  <option value="__custom">Eigene eingeben…</option>
+                </select>
+                {form.kategorie === "__custom" && (
+                  <input
+                    value={customKategorie}
+                    onChange={(e) => setCustomKategorie(e.target.value)}
+                    placeholder="Eigene Kategorie"
+                    className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  />
+                )}
+              </div>
               <input type="date" value={form.datum} onChange={(e) => setForm((p) => ({ ...p, datum: e.target.value }))} className="h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
             </div>
             <div className="flex gap-2 justify-end">
-              <Button variant="outline" size="sm" onClick={() => setAdding(false)}>Abbrechen</Button>
+              <Button variant="outline" size="sm" onClick={() => { setAdding(false); setCustomKategorie(""); }}>Abbrechen</Button>
               <Button variant="primary" size="sm" onClick={handleAdd}>Speichern</Button>
             </div>
           </div>

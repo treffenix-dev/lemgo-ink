@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Modal, ModalContent, ModalHeader, ModalTitle, ModalFooter } from "@/components/ui/modal";
-import { Plus, CheckCircle2, Circle, Clock, Trash2 } from "lucide-react";
+import { Plus, CheckCircle2, Circle, Clock, Trash2, Pencil } from "lucide-react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import type { TaskStatus, TaskPriority } from "@/types";
 
@@ -24,10 +24,25 @@ const initialTasks: Task[] = [
   { id: "3", titel: "Rechnung für Wagner erstellen", kunde: "Bäckerei Wagner", prioritaet: "niedrig", status: "erledigt", faellig_am: "2025-06-20" },
 ];
 
+const EMPTY_FORM = { titel: "", kunde: "", faellig_am: "", prioritaet: "mittel" as TaskPriority };
+
 export default function AufgabenPage() {
   const [tasks, setTasks] = useLocalStorage<Task[]>("owner_aufgaben", initialTasks);
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ titel: "", kunde: "", faellig_am: "", prioritaet: "mittel" as TaskPriority });
+  const [editId, setEditId] = useState<string | null>(null);
+  const [form, setForm] = useState<typeof EMPTY_FORM>(EMPTY_FORM);
+
+  function openCreate() {
+    setEditId(null);
+    setForm(EMPTY_FORM);
+    setOpen(true);
+  }
+
+  function openEdit(t: Task) {
+    setEditId(t.id);
+    setForm({ titel: t.titel, kunde: t.kunde, faellig_am: t.faellig_am, prioritaet: t.prioritaet });
+    setOpen(true);
+  }
 
   function toggle(id: string) {
     setTasks((prev) => prev.map((t) =>
@@ -41,9 +56,14 @@ export default function AufgabenPage() {
 
   function save() {
     if (!form.titel.trim()) return;
-    setTasks((prev) => [{ ...form, id: Date.now().toString(), status: "offen" as TaskStatus }, ...prev]);
+    if (editId) {
+      setTasks((prev) => prev.map((t) => t.id === editId ? { ...t, ...form } : t));
+    } else {
+      setTasks((prev) => [{ ...form, id: Date.now().toString(), status: "offen" as TaskStatus }, ...prev]);
+    }
     setOpen(false);
-    setForm({ titel: "", kunde: "", faellig_am: "", prioritaet: "mittel" });
+    setForm(EMPTY_FORM);
+    setEditId(null);
   }
 
   const offen = tasks.filter((t) => t.status !== "erledigt");
@@ -51,7 +71,7 @@ export default function AufgabenPage() {
 
   return (
     <div>
-      <TopBar title="Aufgaben" actions={<Button size="sm" onClick={() => setOpen(true)}><Plus className="w-4 h-4" /><span className="hidden sm:inline ml-1">Neue Aufgabe</span></Button>} />
+      <TopBar title="Aufgaben" actions={<Button size="sm" onClick={openCreate}><Plus className="w-4 h-4" /><span className="hidden sm:inline ml-1">Neue Aufgabe</span></Button>} />
       <div className="p-4 sm:p-6 max-w-3xl space-y-6">
         <div>
           <h3 className="font-semibold mb-3 text-sm text-muted-foreground uppercase tracking-wide">Offen ({offen.length})</h3>
@@ -72,6 +92,9 @@ export default function AufgabenPage() {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <StatusBadge type="task" status={t.status} />
+                  <button onClick={() => openEdit(t)} className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-foreground transition-all">
+                    <Pencil className="w-4 h-4" />
+                  </button>
                   <button onClick={() => loeschen(t.id)} className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-red-500 transition-all">
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -91,9 +114,14 @@ export default function AufgabenPage() {
                     <CheckCircle2 className="w-5 h-5 text-green-600" />
                   </button>
                   <p className="text-sm line-through text-muted-foreground flex-1">{t.titel}</p>
-                  <button onClick={() => loeschen(t.id)} className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-red-500 transition-all shrink-0">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  <div className="flex items-center gap-2 shrink-0 opacity-0 group-hover:opacity-100">
+                    <button onClick={() => openEdit(t)} className="text-muted-foreground hover:text-foreground transition-all">
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => loeschen(t.id)} className="text-muted-foreground hover:text-red-500 transition-all">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -101,9 +129,9 @@ export default function AufgabenPage() {
         )}
       </div>
 
-      <Modal open={open} onOpenChange={setOpen}>
+      <Modal open={open} onOpenChange={(v) => { setOpen(v); if (!v) { setEditId(null); setForm(EMPTY_FORM); } }}>
         <ModalContent>
-          <ModalHeader><ModalTitle>Neue Aufgabe</ModalTitle></ModalHeader>
+          <ModalHeader><ModalTitle>{editId ? "Aufgabe bearbeiten" : "Neue Aufgabe"}</ModalTitle></ModalHeader>
           <div className="p-6 space-y-4">
             <Input label="Titel" required value={form.titel} onChange={(e) => setForm((f) => ({ ...f, titel: e.target.value }))} placeholder="Was muss erledigt werden?" />
             <Input label="Kunde (optional)" value={form.kunde} onChange={(e) => setForm((f) => ({ ...f, kunde: e.target.value }))} />
@@ -121,8 +149,8 @@ export default function AufgabenPage() {
             </div>
           </div>
           <ModalFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>Abbrechen</Button>
-            <Button disabled={!form.titel.trim()} onClick={save}>Speichern</Button>
+            <Button variant="outline" onClick={() => { setOpen(false); setEditId(null); setForm(EMPTY_FORM); }}>Abbrechen</Button>
+            <Button disabled={!form.titel.trim()} onClick={save}>{editId ? "Speichern" : "Erstellen"}</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
