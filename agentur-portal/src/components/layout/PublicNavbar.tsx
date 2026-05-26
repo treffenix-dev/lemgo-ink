@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { label: "Pakete", href: "/pakete" },
   { label: "Leistungen", href: "/leistungen" },
   { label: "Ablauf", href: "/#ablauf" },
   { label: "FAQ", href: "/#faq" },
@@ -44,7 +43,7 @@ export function PublicNavbar({ dark = false }: { dark?: boolean }) {
               href="/login"
               className="px-4 py-2 text-sm text-white/50 hover:text-white transition-colors duration-200"
             >
-              Anmelden
+              Kundenportal
             </Link>
             <Link
               href="/pakete"
@@ -80,7 +79,7 @@ export function PublicNavbar({ dark = false }: { dark?: boolean }) {
                 href="/login"
                 className="py-2.5 px-3 text-sm text-white/55 hover:text-white text-center border border-white/10 rounded-lg hover:border-white/20 transition-colors"
               >
-                Anmelden
+                Kundenportal
               </Link>
               <Link
                 href="/pakete"
@@ -120,7 +119,7 @@ export function PublicNavbar({ dark = false }: { dark?: boolean }) {
 
         <div className="hidden md:flex items-center gap-3">
           <Link href="/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            Anmelden
+            Kundenportal
           </Link>
           <Link
             href="/pakete"
@@ -152,7 +151,7 @@ export function PublicNavbar({ dark = false }: { dark?: boolean }) {
           ))}
           <div className="flex flex-col gap-2 mt-3 pt-3 border-t border-border">
             <Link href="/login" className="py-2.5 px-3 text-sm text-center border border-border rounded-lg hover:bg-muted transition-colors">
-              Anmelden
+              Kundenportal
             </Link>
             <Link href="/pakete" className="py-2.5 px-3 bg-foreground text-background text-sm font-semibold rounded-lg text-center">
               Paket wählen →

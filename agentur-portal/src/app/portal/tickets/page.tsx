@@ -170,8 +170,8 @@ export default function TicketsPage() {
                 {activeTicket.antworten.map((a) => (
                   <div key={a.id} className={`rounded-lg p-4 ${a.user === "Du" ? "bg-muted/40 ml-4" : "bg-blue-50 border border-blue-100"}`}>
                     <p className={`text-xs font-medium mb-1 ${a.user === "Du" ? "text-muted-foreground" : "text-blue-600"}`}>{a.user}</p>
-                    <p className="text-sm">{a.text}</p>
-                    <p className="text-xs text-muted-foreground mt-2">{formatRelative(a.created_at)}</p>
+                    <p className={`text-sm ${a.user !== "Du" ? "text-gray-800" : ""}`}>{a.text}</p>
+                    <p className={`text-xs mt-2 ${a.user !== "Du" ? "text-gray-500" : "text-muted-foreground"}`}>{formatRelative(a.created_at)}</p>
                   </div>
                 ))}
               </div>

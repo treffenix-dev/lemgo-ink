@@ -158,8 +158,8 @@ export default function OwnerTicketsPage() {
                 {selected.antworten.map((a) => (
                   <div key={a.id} className={`rounded-lg p-4 ${a.user === "WebAgentur" ? "bg-blue-50 border border-blue-100 ml-4" : "bg-muted/40"}`}>
                     <p className={`text-xs font-medium mb-1 ${a.user === "WebAgentur" ? "text-blue-600" : "text-muted-foreground"}`}>{a.user}</p>
-                    <p className="text-sm">{a.text}</p>
-                    <p className="text-xs text-muted-foreground mt-2">{formatRelative(a.created_at)}</p>
+                    <p className={`text-sm ${a.user === "WebAgentur" ? "text-gray-800" : ""}`}>{a.text}</p>
+                    <p className={`text-xs mt-2 ${a.user === "WebAgentur" ? "text-gray-500" : "text-muted-foreground"}`}>{formatRelative(a.created_at)}</p>
                   </div>
                 ))}
               </div>

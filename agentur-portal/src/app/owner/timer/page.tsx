@@ -49,7 +49,7 @@ export default function TimerPage() {
   }, [running]);
 
   function handleStop() {
-    if (elapsed < 5) { setRunning(false); setElapsed(0); return; }
+    if (elapsed === 0) { setRunning(false); return; }
     const entry: TimeEntry = {
       id: crypto.randomUUID(),
       projekt: projekt || "Ohne Projekt",
