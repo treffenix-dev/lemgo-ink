@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg:       #06080F;
+  --surface:  #0C1020;
+  --surface2: #121829;
+  --navy:     #1A2B5C;
+  --gold:     #B8891F;
+  --gold-lt:  #D4A840;
+  --cream:    #EDE9DF;
+  --muted:    #5A6580;
+  --border:   #1A2240;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--cream);
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.4);
+  cursor: pointer;
+}
+
+/* Thin gold rule used in sections */
+.gold-rule {
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--gold);
+  margin-bottom: 1.5rem;
+}
+
+/* Menu dotted line between name and price */
+.menu-dots {
+  flex: 1;
+  border-bottom: 1px dotted rgba(90, 101, 128, 0.35);
+  margin: 0 0.75rem;
+  margin-bottom: 4px;
+}
