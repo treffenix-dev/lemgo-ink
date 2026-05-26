@@ -1,17 +1,27 @@
 "use client";
 
+import { useState } from "react";
 import { TopBar } from "@/components/layout/TopBar";
 import { Button } from "@/components/ui/button";
-import { Check, X, Eye } from "lucide-react";
+import { Check, X, Eye, ExternalLink, MessageSquare } from "lucide-react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 type FreigabeStatus = "ausstehend" | "freigegeben" | "abgelehnt";
-type Freigabe = { id: string; typ: string; titel: string; beschreibung: string; datum: string; status: FreigabeStatus };
+type Freigabe = {
+  id: string;
+  typ: string;
+  titel: string;
+  beschreibung: string;
+  datum: string;
+  status: FreigabeStatus;
+  vorschauUrl?: string;
+  kommentar?: string;
+};
 
 const initialFreigaben: Freigabe[] = [
-  { id: "1", typ: "Design", titel: "Homepage — Erster Entwurf", beschreibung: "Bitte prüfe das Design der Startseite und gib dein Feedback.", datum: "Heute, 10:00", status: "ausstehend" },
+  { id: "1", typ: "Design", titel: "Homepage — Erster Entwurf", beschreibung: "Bitte prüfe das Design der Startseite und gib dein Feedback.", datum: "Heute, 10:00", status: "ausstehend", vorschauUrl: "https://restaurant-da-vinci.vercel.app" },
   { id: "2", typ: "Inhalt", titel: "Über uns Seite — Textentwurf", beschreibung: "Der Textentwurf für deine Über-uns-Seite ist fertig.", datum: "Gestern, 15:30", status: "ausstehend" },
-  { id: "3", typ: "Design", titel: "Mobile Version — Startseite", beschreibung: "Mobile Ansicht der Startseite wurde fertiggestellt.", datum: "12.06.2025", status: "freigegeben" },
+  { id: "3", typ: "Design", titel: "Mobile Version — Startseite", beschreibung: "Mobile Ansicht der Startseite wurde fertiggestellt.", datum: "12.06.2025", status: "freigegeben", kommentar: "Sieht super aus!" },
 ];
 
 const statusMap: Record<FreigabeStatus, { label: string; cls: string }> = {
@@ -22,13 +32,30 @@ const statusMap: Record<FreigabeStatus, { label: string; cls: string }> = {
 
 export default function FreigabenPage() {
   const [items, setItems] = useLocalStorage<Freigabe[]>("portal_freigaben", initialFreigaben);
+  const [commentId, setCommentId] = useState<string | null>(null);
+  const [commentText, setCommentText] = useState("");
+  const [pendingAction, setPendingAction] = useState<"freigeben" | "ablehnen" | null>(null);
 
-  function freigeben(id: string) {
-    setItems((prev) => prev.map((i) => i.id === id ? { ...i, status: "freigegeben" as FreigabeStatus } : i));
+  function openComment(id: string, action: "freigeben" | "ablehnen") {
+    setCommentId(id);
+    setPendingAction(action);
+    setCommentText("");
   }
 
-  function ablehnen(id: string) {
-    setItems((prev) => prev.map((i) => i.id === id ? { ...i, status: "abgelehnt" as FreigabeStatus } : i));
+  function submitDecision() {
+    if (!commentId || !pendingAction) return;
+    setItems((prev) => prev.map((i) =>
+      i.id === commentId
+        ? { ...i, status: pendingAction === "freigeben" ? "freigegeben" : "abgelehnt" as FreigabeStatus, kommentar: commentText.trim() || undefined }
+        : i
+    ));
+    setCommentId(null);
+    setPendingAction(null);
+    setCommentText("");
+  }
+
+  function resetDecision(id: string) {
+    setItems((prev) => prev.map((i) => i.id === id ? { ...i, status: "ausstehend", kommentar: undefined } : i));
   }
 
   const ausstehend = items.filter((i) => i.status === "ausstehend").length;
@@ -42,7 +69,7 @@ export default function FreigabenPage() {
             <strong>{ausstehend} Freigabe{ausstehend !== 1 ? "n" : ""}</strong> warten auf deine Entscheidung.
           </div>
         )}
-        <p className="text-sm text-muted-foreground">Hier siehst du alle Entwürfe, die auf deine Freigabe warten.</p>
+
         {items.map((item) => {
           const s = statusMap[item.status];
           return (
@@ -57,21 +84,65 @@ export default function FreigabenPage() {
                   <p className="text-xs text-muted-foreground mt-0.5">{item.datum}</p>
                 </div>
               </div>
-              <p className="text-sm text-muted-foreground mb-4">{item.beschreibung}</p>
-              {item.status === "ausstehend" && (
+              <p className="text-sm text-muted-foreground mb-3">{item.beschreibung}</p>
+
+              {item.kommentar && (
+                <div className="flex items-start gap-2 bg-muted/40 rounded-lg p-3 mb-3 text-sm">
+                  <MessageSquare className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
+                  <p className="text-muted-foreground italic">{item.kommentar}</p>
+                </div>
+              )}
+
+              {item.status === "ausstehend" && commentId !== item.id && (
                 <div className="flex gap-2 flex-wrap">
-                  <Button size="sm" variant="outline"><Eye className="w-4 h-4" /> Vorschau</Button>
-                  <Button size="sm" onClick={() => freigeben(item.id)} className="bg-green-600 hover:bg-green-700 text-white">
+                  {item.vorschauUrl && (
+                    <Button size="sm" variant="outline" asChild>
+                      <a href={item.vorschauUrl} target="_blank" rel="noreferrer">
+                        <Eye className="w-4 h-4" /> Vorschau
+                        <ExternalLink className="w-3 h-3 ml-1" />
+                      </a>
+                    </Button>
+                  )}
+                  {!item.vorschauUrl && (
+                    <Button size="sm" variant="outline"><Eye className="w-4 h-4" /> Vorschau</Button>
+                  )}
+                  <Button size="sm" onClick={() => openComment(item.id, "freigeben")} className="bg-green-600 hover:bg-green-700 text-white">
                     <Check className="w-4 h-4" /> Freigeben
                   </Button>
-                  <Button size="sm" variant="outline" onClick={() => ablehnen(item.id)} className="text-red-600 border-red-200 hover:bg-red-50">
+                  <Button size="sm" variant="outline" onClick={() => openComment(item.id, "ablehnen")} className="text-red-600 border-red-200 hover:bg-red-50">
                     <X className="w-4 h-4" /> Ablehnen
                   </Button>
                 </div>
               )}
-              {item.status !== "ausstehend" && (
-                <button onClick={() => setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, status: "ausstehend" } : i))}
-                  className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+
+              {commentId === item.id && (
+                <div className="space-y-3">
+                  <textarea
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    placeholder={pendingAction === "ablehnen" ? "Was soll geändert werden? (optional)" : "Feedback oder Kommentar (optional)"}
+                    rows={3}
+                    className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+                  />
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="outline" onClick={() => { setCommentId(null); setPendingAction(null); }}>
+                      Abbrechen
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={submitDecision}
+                      className={pendingAction === "freigeben" ? "bg-green-600 hover:bg-green-700 text-white" : ""}
+                      variant={pendingAction === "ablehnen" ? "outline" : undefined}
+                    >
+                      {pendingAction === "freigeben" ? <><Check className="w-4 h-4" /> Jetzt freigeben</> : <><X className="w-4 h-4" /> Jetzt ablehnen</>}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {item.status !== "ausstehend" && commentId !== item.id && (
+                <button onClick={() => resetDecision(item.id)}
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors mt-2">
                   Entscheidung zurücksetzen
                 </button>
               )}

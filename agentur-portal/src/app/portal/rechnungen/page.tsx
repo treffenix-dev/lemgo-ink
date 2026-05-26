@@ -4,7 +4,7 @@ import { useState } from "react";
 import { TopBar } from "@/components/layout/TopBar";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Button } from "@/components/ui/button";
-import { FileText, Download, X, Printer } from "lucide-react";
+import { FileText, Download, X, Printer, Copy, Check } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils/format";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
@@ -45,7 +45,6 @@ function InvoicePrintView({ inv, onClose }: { inv: Invoice; onClose: () => void 
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4 py-8">
-      {/* Toolbar — hidden on print */}
       <div className="print:hidden fixed top-4 right-4 flex gap-2 z-50">
         <button
           onClick={() => window.print()}
@@ -61,13 +60,11 @@ function InvoicePrintView({ inv, onClose }: { inv: Invoice; onClose: () => void 
         </button>
       </div>
 
-      {/* Invoice document */}
       <div
         id="invoice-print"
         className="w-full max-w-2xl bg-white rounded-xl shadow-2xl print:shadow-none print:rounded-none print:max-w-none"
         style={{ fontFamily: "Arial, Helvetica, sans-serif", color: "#111" }}
       >
-        {/* Header */}
         <div style={{ padding: "40px 48px 24px", borderBottom: "2px solid #111", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "4px" }}>
@@ -91,7 +88,6 @@ function InvoicePrintView({ inv, onClose }: { inv: Invoice; onClose: () => void 
           </div>
         </div>
 
-        {/* Recipient */}
         <div style={{ padding: "24px 48px", borderBottom: "1px solid #e5e5e5" }}>
           <div style={{ fontSize: 10, color: "#888", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6 }}>Rechnungsempfänger</div>
           <div style={{ fontSize: 14, lineHeight: 1.7 }}>
@@ -102,7 +98,6 @@ function InvoicePrintView({ inv, onClose }: { inv: Invoice; onClose: () => void 
           </div>
         </div>
 
-        {/* Line items */}
         <div style={{ padding: "24px 48px" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead>
@@ -126,7 +121,6 @@ function InvoicePrintView({ inv, onClose }: { inv: Invoice; onClose: () => void 
           </table>
         </div>
 
-        {/* Totals */}
         <div style={{ padding: "0 48px 24px", display: "flex", justifyContent: "flex-end" }}>
           <div style={{ width: 280, fontSize: 13 }}>
             <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid #e5e5e5" }}>
@@ -144,7 +138,6 @@ function InvoicePrintView({ inv, onClose }: { inv: Invoice; onClose: () => void 
           </div>
         </div>
 
-        {/* Payment info */}
         <div style={{ margin: "0 48px 32px", background: "#f8f8f8", borderRadius: 8, padding: "16px 20px", fontSize: 12, color: "#555" }}>
           <div style={{ fontWeight: "bold", color: "#111", marginBottom: 6, fontSize: 13 }}>Zahlungsinformationen</div>
           <div style={{ lineHeight: 1.8 }}>
@@ -155,13 +148,11 @@ function InvoicePrintView({ inv, onClose }: { inv: Invoice; onClose: () => void 
           </div>
         </div>
 
-        {/* Footer */}
         <div style={{ padding: "16px 48px", borderTop: "1px solid #e5e5e5", fontSize: 11, color: "#888", textAlign: "center" }}>
           WebAgentur · Musterstraße 1 · 33602 Bielefeld · info@webagentur.de · Steuernummer auf Anfrage
         </div>
       </div>
 
-      {/* Print styles */}
       <style>{`
         @media print {
           body * { visibility: hidden; }
@@ -173,9 +164,82 @@ function InvoicePrintView({ inv, onClose }: { inv: Invoice; onClose: () => void 
   );
 }
 
+function PaymentModal({ inv, onClose }: { inv: Invoice; onClose: () => void }) {
+  const [copied, setCopied] = useState(false);
+
+  function loadIBAN(): string {
+    try {
+      const s = JSON.parse(localStorage.getItem("einstellungen") || "{}");
+      return s.iban || "DE89 4805 0161 XXXX XXXX XX";
+    } catch { return "DE89 4805 0161 XXXX XXXX XX"; }
+  }
+
+  const iban = loadIBAN();
+
+  function copy(text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-card border border-border rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-5">
+        <div className="flex items-center justify-between">
+          <h2 className="font-bold text-lg">Jetzt bezahlen</h2>
+          <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="bg-muted/40 rounded-xl p-4 space-y-1 text-sm">
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Rechnung</span>
+            <span className="font-medium">{inv.invoice_number}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Betrag</span>
+            <span className="font-bold text-lg">{formatCurrency(inv.gesamt)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Fällig am</span>
+            <span>{formatDate(inv.faellig_am)}</span>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <p className="text-sm font-semibold">Banküberweisung</p>
+          {[
+            { label: "IBAN", value: iban },
+            { label: "Verwendungszweck", value: inv.invoice_number },
+            { label: "Betrag", value: formatCurrency(inv.gesamt) },
+          ].map(({ label, value }) => (
+            <div key={label} className="flex items-center justify-between gap-3 rounded-lg border border-border bg-background px-4 py-2.5">
+              <div>
+                <p className="text-xs text-muted-foreground">{label}</p>
+                <p className="text-sm font-medium font-mono">{value}</p>
+              </div>
+              <button onClick={() => copy(value)} className="text-muted-foreground hover:text-foreground transition-colors shrink-0">
+                {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <p className="text-xs text-muted-foreground text-center">
+          Bitte gib den Verwendungszweck exakt so an, damit wir deine Zahlung zuordnen können.
+        </p>
+        <Button className="w-full" onClick={onClose}>Verstanden</Button>
+      </div>
+    </div>
+  );
+}
+
 export default function RechnungenPage() {
   const [invoices] = useLocalStorage<Invoice[]>("portal_rechnungen", initialInvoices);
   const [viewInvoice, setViewInvoice] = useState<Invoice | null>(null);
+  const [payInvoice, setPayInvoice] = useState<Invoice | null>(null);
 
   return (
     <div>
@@ -219,7 +283,9 @@ export default function RechnungenPage() {
                   <Button variant="outline" size="sm" onClick={() => setViewInvoice(inv)}>
                     <Download className="w-4 h-4" /> PDF ansehen
                   </Button>
-                  {inv.status === "offen" && <Button size="sm">Jetzt bezahlen</Button>}
+                  {inv.status === "offen" && (
+                    <Button size="sm" onClick={() => setPayInvoice(inv)}>Jetzt bezahlen</Button>
+                  )}
                 </div>
               </div>
             </div>
@@ -229,6 +295,9 @@ export default function RechnungenPage() {
 
       {viewInvoice && (
         <InvoicePrintView inv={viewInvoice} onClose={() => setViewInvoice(null)} />
+      )}
+      {payInvoice && (
+        <PaymentModal inv={payInvoice} onClose={() => setPayInvoice(null)} />
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { Button } from "@/components/ui/button";
 import { PAKETE } from "@/lib/data/pakete";
 import { formatCurrency } from "@/lib/utils/format";
-import { Check, Server } from "lucide-react";
+import { Check, Server, CreditCard, Percent, Calendar } from "lucide-react";
 
 export default function LeistungenPage() {
   return (
@@ -99,6 +99,67 @@ export default function LeistungenPage() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Flexible Zahlungsmodelle */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-bold mb-2">Flexible Zahlungsmodelle</h2>
+          <p className="text-muted-foreground mb-8">Wähle das Modell, das zu dir passt — ohne versteckte Kosten.</p>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="rounded-xl border border-border bg-card p-6 flex flex-col gap-4">
+              <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
+                <CreditCard className="w-5 h-5 text-green-600" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">Einmalzahlung</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Du zahlst den vollen Betrag nach Abnahme — kein Aufpreis, kein Risiko.
+                  Ideal wenn du schnell abrechnen möchtest.
+                </p>
+              </div>
+              <div className="bg-green-500/5 border border-green-500/20 rounded-lg p-3 text-sm text-green-700 font-medium">
+                ✓ Kein Aufpreis · Sofort fertig
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-foreground bg-card p-6 flex flex-col gap-4 relative">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-foreground text-background text-xs font-semibold px-3 py-1 rounded-full">
+                BELIEBT
+              </div>
+              <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                <Percent className="w-5 h-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">50 / 50</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  50% bei Projektstart, 50% nach Abnahme.
+                  So trägst du kein volles Risiko und wir starten sofort.
+                </p>
+              </div>
+              <div className="bg-blue-500/5 border border-blue-500/20 rounded-lg p-3 text-sm text-blue-700 font-medium">
+                ✓ Kein Aufpreis · Geteiltes Risiko
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-border bg-card p-6 flex flex-col gap-4">
+              <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                <Calendar className="w-5 h-5 text-amber-600" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">Ratenzahlung (3×)</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Zahle in 3 gleichen Raten — monatlich nach Projektstart.
+                  Kleiner Aufpreis von 10% auf den Gesamtpreis.
+                </p>
+              </div>
+              <div className="bg-amber-500/5 border border-amber-500/20 rounded-lg p-3 text-sm text-amber-700 font-medium">
+                +10% Aufpreis · Maximale Flexibilität
+              </div>
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground mt-6 text-center">
+            Alle Zahlungsmodelle werden vor Projektstart schriftlich vereinbart. Kein Kleingedrucktes.
+          </p>
         </div>
 
         {/* CTA */}

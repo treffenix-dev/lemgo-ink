@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { TopBar } from "@/components/layout/TopBar";
 import { Button } from "@/components/ui/button";
-import { Plus, Download, Trash2, Search, FileText } from "lucide-react";
+import { Plus, Printer, Trash2, Search, FileText, X, Pencil } from "lucide-react";
 import { Invoice, loadInvoices, saveInvoice, deleteInvoice, invoiceTotal } from "@/lib/invoice";
+import { InvoicePreview } from "@/components/rechnung/InvoicePreview";
 
 function fmt(n: number) {
   return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(n);
@@ -22,10 +23,42 @@ const STATUS_LABELS: Record<Invoice["status"], { label: string; cls: string }> =
   ueberfaellig:{ label: "Überfällig",  cls: "bg-red-500/10 text-red-400" },
 };
 
+function PrintModal({ inv, onClose }: { inv: Invoice; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4 py-8">
+      <style>{`
+        @media print {
+          body * { visibility: hidden; }
+          #invoice-print-area, #invoice-print-area * { visibility: visible; }
+          #invoice-print-area { position: fixed; top: 0; left: 0; width: 100%; }
+        }
+      `}</style>
+      <div className="print:hidden fixed top-4 right-4 flex gap-2 z-50">
+        <button
+          onClick={() => window.print()}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-foreground text-background text-sm font-medium hover:bg-foreground/90 transition-colors"
+        >
+          <Printer className="w-4 h-4" /> Als PDF drucken
+        </button>
+        <button
+          onClick={onClose}
+          className="p-2 rounded-lg bg-background border border-border hover:bg-muted transition-colors"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+      <div className="w-full max-w-2xl">
+        <InvoicePreview invoice={inv} mode="screen" />
+      </div>
+    </div>
+  );
+}
+
 export default function RechnungenOwnerPage() {
   const router = useRouter();
   const [rechnungen, setRechnungen] = useState<Invoice[]>([]);
   const [search, setSearch] = useState("");
+  const [printInv, setPrintInv] = useState<Invoice | null>(null);
 
   useEffect(() => {
     setRechnungen(loadInvoices());
@@ -69,7 +102,6 @@ export default function RechnungenOwnerPage() {
 
       <div className="p-4 md:p-6 max-w-5xl space-y-5">
 
-        {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="rounded-xl border border-border bg-card p-4">
             <p className="text-xs text-muted-foreground mb-1">Offen / Überfällig</p>
@@ -85,7 +117,6 @@ export default function RechnungenOwnerPage() {
           </div>
         </div>
 
-        {/* Search */}
         <div className="relative max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
@@ -96,7 +127,6 @@ export default function RechnungenOwnerPage() {
           />
         </div>
 
-        {/* Table */}
         {filtered.length === 0 ? (
           <div className="rounded-xl border border-border bg-card p-16 text-center">
             <FileText className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
@@ -150,10 +180,18 @@ export default function RechnungenOwnerPage() {
                           <Button
                             variant="ghost"
                             size="icon-sm"
-                            title="PDF öffnen"
+                            title="PDF drucken"
+                            onClick={() => setPrintInv(r)}
+                          >
+                            <Printer className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon-sm"
+                            title="Bearbeiten"
                             onClick={() => router.push(`/owner/rechnungen/neu?id=${r.id}`)}
                           >
-                            <Download className="w-4 h-4" />
+                            <Pencil className="w-4 h-4" />
                           </Button>
                           <Button
                             variant="ghost"
@@ -175,12 +213,13 @@ export default function RechnungenOwnerPage() {
           </div>
         )}
 
-        {/* Hinweis §19 */}
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800">
           <strong>§ 19 UStG — Kleinunternehmerregelung:</strong> Alle Rechnungen werden ohne Umsatzsteuer ausgestellt.
           Gültig solange der Jahresumsatz unter 25.000 € bleibt. Steuernummer immer aktuell halten.
         </div>
       </div>
+
+      {printInv && <PrintModal inv={printInv} onClose={() => setPrintInv(null)} />}
     </div>
   );
 }

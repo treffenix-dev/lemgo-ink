@@ -51,7 +51,15 @@ export default function NeueRechnungPage() {
 
   useEffect(() => {
     const all = loadInvoices();
-    setInv((prev) => ({ ...prev, nummer: nextRechnungsnummer(all) }));
+    const nummer = nextRechnungsnummer(all);
+    try {
+      const saved = JSON.parse(localStorage.getItem("invoice-absender") || "{}");
+      if (saved.absenderName) {
+        setInv((prev) => ({ ...prev, nummer, ...saved }));
+        return;
+      }
+    } catch { /* ignore */ }
+    setInv((prev) => ({ ...prev, nummer }));
   }, []);
 
   function set<K extends keyof Invoice>(key: K, value: Invoice[K]) {
@@ -89,9 +97,9 @@ export default function NeueRechnungPage() {
       {/* Print CSS — hides everything except the invoice */}
       <style>{`
         @media print {
-          body > * { display: none !important; }
-          #invoice-print-area { display: block !important; }
-          #invoice-print-area * { display: revert !important; }
+          body * { visibility: hidden; }
+          #invoice-print-area, #invoice-print-area * { visibility: visible; }
+          #invoice-print-area { position: fixed; top: 0; left: 0; width: 100%; }
         }
       `}</style>
 
@@ -119,7 +127,6 @@ export default function NeueRechnungPage() {
           {/* Scrollable form */}
           <div className="flex-1 overflow-y-auto p-5 space-y-4">
 
-            {/* Rechnungsdetails */}
             <Section title="Rechnungsdetails">
               <div className="grid grid-cols-2 gap-3">
                 <Field label="Rechnungsnummer">
@@ -137,7 +144,6 @@ export default function NeueRechnungPage() {
               </div>
             </Section>
 
-            {/* Empfänger */}
             <Section title="Kunde / Empfänger">
               <Field label="Firmenname">
                 <input className={inputCls} placeholder="Restaurant Da Vinci GmbH" value={inv.empfaengerFirma} onChange={(e) => set("empfaengerFirma", e.target.value)} />
@@ -146,16 +152,15 @@ export default function NeueRechnungPage() {
                 <input className={inputCls} placeholder="Max Mustermann" value={inv.empfaengerAnsprechpartner} onChange={(e) => set("empfaengerAnsprechpartner", e.target.value)} />
               </Field>
               <div className="grid grid-cols-2 gap-3">
-                <Field label="Straße & Hausnummer">
+                <Field label="Straße &amp; Hausnummer">
                   <input className={inputCls} placeholder="Hauptstraße 1" value={inv.empfaengerStrasse} onChange={(e) => set("empfaengerStrasse", e.target.value)} />
                 </Field>
-                <Field label="PLZ & Ort">
+                <Field label="PLZ &amp; Ort">
                   <input className={inputCls} placeholder="32657 Lemgo" value={inv.empfaengerOrt} onChange={(e) => set("empfaengerOrt", e.target.value)} />
                 </Field>
               </div>
             </Section>
 
-            {/* Positionen */}
             <Section title="Positionen">
               <div className="space-y-4">
                 {inv.positionen.map((pos, i) => (
@@ -199,7 +204,6 @@ export default function NeueRechnungPage() {
               </button>
             </Section>
 
-            {/* Absender */}
             <Section title="Deine Daten (Absender)">
               <div className="grid grid-cols-2 gap-3">
                 <Field label="Dein Name">
@@ -211,7 +215,7 @@ export default function NeueRechnungPage() {
                 <Field label="Straße">
                   <input className={inputCls} value={inv.absenderStrasse} onChange={(e) => set("absenderStrasse", e.target.value)} />
                 </Field>
-                <Field label="PLZ & Ort">
+                <Field label="PLZ &amp; Ort">
                   <input className={inputCls} value={inv.absenderOrt} onChange={(e) => set("absenderOrt", e.target.value)} />
                 </Field>
               </div>
@@ -237,12 +241,11 @@ export default function NeueRechnungPage() {
               </Field>
             </Section>
 
-            {/* Notiz */}
             <Section title="Interne Notiz (erscheint nicht auf der Rechnung)">
               <textarea
                 className="w-full px-3 py-2 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none"
                 rows={2}
-                placeholder="z.B. Projekt Löwenbräu Lemgo — Abnahme am 26.05."
+                placeholder="z.B. Projekt Löwenbrau Lemgo — Abnahme am 26.05."
                 value={inv.notiz}
                 onChange={(e) => set("notiz", e.target.value)}
               />
