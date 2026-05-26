@@ -1,18 +1,73 @@
-# ⚠️ ZWEI GETRENNTE PROJEKTE — NIEMALS MISCHEN
+# ⚠️ PROJEKTE — JEDES PROJEKT HAT SEIN EIGENES REPO. NIEMALS MISCHEN.
 
-## Projekt 1: Lemgo INK (DIESES Repo)
-- **Pfad:** `/home/user/3D-Animation-Webseiten-bauen/` (Root)
-- **Repo:** `treffenix-dev/3D-Animation-Webseiten-bauen`
-- **Branch:** `claude/3d-web-animations-P1GAF`
-- **Vercel:** Eigenes Deployment, Root Directory = `/`
-- **Zweck:** Tattoo-Studio Website für Natascha Lee
+## GOLDENE REGEL: 1 Projekt = 1 GitHub Repo = 1 Vercel Deployment = 1 Claude Code Session
 
-## Projekt 2: Agentur-Portal (SEPARATES Projekt)
-- **Pfad:** `/home/user/agentur-portal/`
-- **Repo:** Eigenes Repo (NICHT dieses hier)
-- **Vercel:** Eigenes Deployment, Root Directory = `agentur-portal`
-- **Zweck:** Kundenportal für WebAgentur (Supabase + Stripe)
-- **WICHTIG:** Alle Änderungen am Portal → separater Git-Kontext, niemals hier committen
+---
+
+## AKTIVE PROJEKTE
+
+| Projekt | GitHub Repo | Vercel URL | Zweck |
+|---------|------------|------------|-------|
+| **Lemgo INK** | `treffenix-dev/lemgo-ink` | lemgo-ink.vercel.app | Tattoo-Studio Website Natascha Lee |
+| **Löwenbräu Website** | `treffenix-dev/loewenbraeu-website` | loewenbraeu-lemgo.vercel.app | Restaurant Website Lemgo |
+| **Agentur Portal** | `treffenix-dev/Agentur-portal` | agentur-portal.vercel.app | Eigenes Command Center / CRM |
+
+---
+
+## DIESES REPO: lemgo-ink
+- **GitHub:** `treffenix-dev/lemgo-ink`
+- **Zweck:** Tattoo-Studio Website für Natascha Lee, Lemgo NRW
+- **Stack:** Next.js 14, Three.js, GSAP, Framer Motion, Anime.js v4, Tailwind
+
+---
+
+## NEUES PROJEKT STARTEN — PFLICHT-WORKFLOW
+
+Jedes neue Kundenprojekt MUSS diesem Workflow folgen:
+
+### Schritt 1 — GitHub Repo erstellen
+```
+Name-Schema: [kunde]-[typ]
+Beispiele:
+  mario-pizza-website
+  salon-anna-booking
+  zahnarzt-schmidt-website
+  fitnessstudio-lemgo-website
+```
+→ github.com/treffenix-dev → New Repository → Name eingeben → Public → Create
+
+### Schritt 2 — Claude Code Session starten
+→ code.claude.ai → New Project → GitHub Repo auswählen (das neue Repo)
+→ NIEMALS ein bestehendes Repo für ein neues Projekt verwenden
+
+### Schritt 3 — Vercel Deployment verbinden
+→ vercel.com → Add New Project → GitHub Repo importieren → Deploy
+→ Projektname = Repo-Name (z.B. `mario-pizza-website`)
+
+### Schritt 4 — Projekt in PROJECTS.md eintragen
+→ Die Datei `PROJECTS.md` in DIESEM Repo (`lemgo-ink`) pflegen
+→ Jedes Projekt mit Status, URL, Kunde, Startdatum eintragen
+
+---
+
+## NAMING CONVENTION
+
+| Was | Schema | Beispiel |
+|-----|--------|---------|
+| GitHub Repo | `[kunde]-[typ]` (lowercase, kein Leerzeichen) | `mario-pizza-website` |
+| Vercel Projekt | gleich wie Repo | `mario-pizza-website` |
+| Vercel URL | automatisch: `mario-pizza-website.vercel.app` | |
+| Claude Session | gleich wie Repo | |
+| package.json name | gleich wie Repo | `"name": "mario-pizza-website"` |
+
+---
+
+## WAS NIEMALS ERLAUBT IST
+
+- ❌ Zwei Kundenprojekte im selben GitHub Repo
+- ❌ Einen Kundenordner als Unterordner in einem anderen Projekt anlegen
+- ❌ "Ich mach das schnell hier rein" — IMMER eigenes Repo
+- ❌ In einer Session arbeiten die für ein anderes Projekt autorisiert ist
 
 ---
 
