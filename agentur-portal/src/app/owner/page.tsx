@@ -260,7 +260,7 @@ export default function OwnerDashboard() {
             <Zap className="w-4 h-4 text-muted-foreground" />
             <h3 className="font-semibold text-sm">Schnellzugriff</h3>
           </div>
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {[
               { label: "Rechnung",  href: "/owner/rechnungen/neu", icon: FileText,    color: "text-blue-400",   bg: "bg-blue-500/10" },
               { label: "Angebot",   href: "/owner/angebote",       icon: FileEdit,    color: "text-purple-400", bg: "bg-purple-500/10" },

@@ -58,7 +58,7 @@ export default function AusgabenPage() {
         title="Ausgaben"
         actions={<Button size="sm" variant="primary" onClick={() => setAdding(true)}><Plus className="w-4 h-4" /> Ausgabe</Button>}
       />
-      <div className="p-6 max-w-3xl space-y-5">
+      <div className="p-4 md:p-6 max-w-3xl space-y-5">
 
         <div className="grid grid-cols-2 gap-4">
           <div className="rounded-xl border border-border bg-card p-4">
@@ -102,7 +102,8 @@ export default function AusgabenPage() {
           </div>
         ) : (
           <div className="rounded-xl border border-border bg-card overflow-hidden">
-            <table className="w-full text-sm">
+            <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[480px]">
               <thead><tr className="border-b border-border bg-muted/20">
                 <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Datum</th>
                 <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Beschreibung</th>
@@ -127,6 +128,7 @@ export default function AusgabenPage() {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         )}
       </div>
