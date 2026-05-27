@@ -63,7 +63,7 @@ function MiniPreview({ colors }: { colors: ThemeColors }) {
       }}>
         <span style={{ color: cream, fontSize: 6, letterSpacing: "0.28em", opacity: 0.9 }}>LÖWENBRÄU · LEMGO</span>
         <div style={{ display: "flex", gap: 7 }}>
-          {​["—","—","—"].map((d, i) => <span key={i} style={{ color: muted, fontSize: 5 }}>{d}</span>)}
+          {["—","—","—"].map((d, i) => <span key={i} style={{ color: muted, fontSize: 5 }}>{d}</span>)}
         </div>
       </div>
 
