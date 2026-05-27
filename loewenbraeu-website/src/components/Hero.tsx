@@ -8,15 +8,14 @@ export function Hero() {
     <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-[5%] overflow-hidden">
       {/* Background */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-cover bg-center hero-bg-filter"
         style={{
           backgroundImage: `url(${FOOD_IMG})`,
-          filter: "brightness(0.12) saturate(0.4)",
           transform: "scale(1.05)",
         }}
       />
       {/* Gradient: fade out at bottom */}
-      <div className="absolute inset-0 bg-gradient-to-b from-bg/20 via-transparent to-bg" />
+      <div className="absolute inset-0 hero-overlay" />
 
       <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto">
 
