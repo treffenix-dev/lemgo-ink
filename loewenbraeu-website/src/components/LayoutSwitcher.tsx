@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Suspense } from "react";
 
 const LAYOUTS = [
@@ -21,12 +21,20 @@ function applyTheme(id: LayoutId) {
 
 function SwitcherInner({ backLink }: { backLink?: string }) {
   const router = useRouter();
+  const pathname = usePathname();
   const params = useSearchParams();
   const initial = (params.get("theme") ?? "default") as LayoutId;
   const [active, setActive] = useState<LayoutId>(
     LAYOUTS.some((l) => l.id === initial) ? initial : "default"
   );
   const [pitchMode, setPitchMode] = useState(false);
+
+  function handleThemeChange(id: LayoutId) {
+    setActive(id);
+    if (pathname === "/view") {
+      router.push(`/view?theme=${id}`, { scroll: false });
+    }
+  }
 
   useEffect(() => { applyTheme(active); }, [active]);
 
@@ -95,7 +103,7 @@ function SwitcherInner({ backLink }: { backLink?: string }) {
           return (
             <button
               key={l.id}
-              onClick={() => setActive(l.id)}
+              onClick={() => handleThemeChange(l.id)}
               className="flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all duration-200"
               style={{
                 background: isActive ? "rgba(255,255,255,0.12)" : "transparent",
