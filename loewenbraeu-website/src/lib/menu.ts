@@ -1,7 +1,7 @@
 export type MenuItem = {
   name: string;
   desc?: string;
-  price?: number; // undefined = "Preis auf Anfrage"
+  price?: number;
   orderable?: boolean;
 };
 
@@ -18,7 +18,7 @@ export const MENU: MenuCategory[] = [
     items: [
       { name: "Tagessuppe", desc: "Hausgemacht, täglich frisch" },
       { name: "Schafskäse gegrillt", desc: "Mit Oliven, Tomaten und Fladenbrot" },
-      { name: "Ajvar Brot", desc: "Geröstetes Brot mit hausgemachtem Ajvar" },
+      { name: "Ajvar-Brot", desc: "Geröstetes Brot mit hausgemachtem Ajvar" },
     ],
   },
   {
@@ -27,8 +27,8 @@ export const MENU: MenuCategory[] = [
     items: [
       { name: "Ćevapčići (10 Stück)", desc: "Mit Ajvar, Zwiebeln und Fladenbrot", price: 12.90, orderable: true },
       { name: "Mixed Grill Platte", desc: "Ćevapčići, Pljeskavica, Fleischspieß", price: 18.90, orderable: true },
-      { name: "Pljeskavica", desc: "Hausgemachter Balkan Burger mit Ajvar", price: 13.50, orderable: true },
-      { name: "Balkan Teller für 2", desc: "Auswahl der Spezialitäten mit Beilagen", price: 32.00, orderable: true },
+      { name: "Pljeskavica", desc: "Hausgemachter Balkan-Burger mit Ajvar", price: 13.50, orderable: true },
+      { name: "Balkan-Teller für 2", desc: "Auswahl der Spezialitäten mit Beilagen", price: 32.00, orderable: true },
       { name: "Fleischspieß", desc: "Mariniertes Hackfleisch am Spieß" },
     ],
   },
@@ -37,7 +37,7 @@ export const MENU: MenuCategory[] = [
     label: "Steaks & Grill",
     items: [
       { name: "Rumpsteak (250 g)", desc: "Mit Kräuterbutter, Pommes & Salat", price: 22.90, orderable: true },
-      { name: "T Bone Steak (400 g)", desc: "Auf dem Holzkohlegrill, Beilagen nach Wahl", price: 28.90, orderable: true },
+      { name: "T-Bone Steak (400 g)", desc: "Auf dem Holzkohlegrill, Beilagen nach Wahl", price: 28.90, orderable: true },
       { name: "Grillspieß vom Hähnchen", desc: "Mariniert, mit Reis und Salat", price: 14.90, orderable: true },
       { name: "Entrecôte (300 g)", desc: "Mit Pfeffersauce und Beilagen nach Wahl" },
     ],
@@ -48,7 +48,7 @@ export const MENU: MenuCategory[] = [
     items: [
       { name: "Wiener Schnitzel", desc: "Vom Kalb, Pommes & Preiselbeeren", price: 16.90, orderable: true },
       { name: "Jägerschnitzel", desc: "Mit Pilzrahmsauce und Kartoffeln", price: 15.90, orderable: true },
-      { name: "Zigeunerschnitzel", desc: "Mit Paprika Tomatensauce, Pommes", price: 15.90, orderable: true },
+      { name: "Zigeunerschnitzel", desc: "Mit Paprika-Tomaten-Sauce, Pommes", price: 15.90, orderable: true },
       { name: "Kinderschnitzel", desc: "Kleines Schnitzel mit Pommes", price: 8.50, orderable: true },
       { name: "Cordon Bleu", desc: "Mit Schinken und Käse gefüllt, Pommes" },
     ],
@@ -57,7 +57,7 @@ export const MENU: MenuCategory[] = [
     id: "salate",
     label: "Salate",
     items: [
-      { name: "Gemischter Salat", desc: "Frische Saisonsalate mit Hausdressing" },
+      { name: "Gemischter Salat", desc: "Frische Saison-Salate mit Hausdressing" },
       { name: "Griechischer Salat", desc: "Mit Schafskäse, Oliven und Tomaten" },
       { name: "Bauernsalat", desc: "Mit Gurken, Zwiebeln, Paprika und Feta" },
     ],
@@ -67,7 +67,7 @@ export const MENU: MenuCategory[] = [
     label: "Desserts",
     items: [
       { name: "Palatschinken", desc: "Gefüllte Pfannkuchen nach Art des Hauses" },
-      { name: "Eis Dessert", desc: "Gemischtes Eis mit Sahne" },
+      { name: "Eis-Dessert", desc: "Gemischtes Eis mit Sahne" },
       { name: "Hausgemachter Kuchen", desc: "Tageskuchen, bitte erfragen" },
     ],
   },

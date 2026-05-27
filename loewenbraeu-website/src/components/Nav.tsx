@@ -12,11 +12,10 @@ export function Nav() {
   }, []);
 
   const links = [
-    { href: "#speisekarte",    label: "Speisekarte"    },
-    { href: "#bestellen",      label: "Bestellen"      },
-    { href: "#reservierung",   label: "Reservierung"   },
-    { href: "#oeffnungszeiten",label: "Öffnungszeiten" },
-    { href: "#kontakt",        label: "Kontakt"        },
+    { href: "#speisekarte", label: "Speisekarte" },
+    { href: "#bestellen",   label: "Bestellen"   },
+    { href: "#reservierung",label: "Reservierung" },
+    { href: "#kontakt",     label: "Kontakt"      },
   ];
 
   return (

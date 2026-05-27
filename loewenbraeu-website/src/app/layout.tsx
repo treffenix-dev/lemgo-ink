@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
+import { LayoutSwitcher } from "@/components/LayoutSwitcher";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -24,7 +25,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="de" className={`${cormorant.variable} ${inter.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        {children}
+        <LayoutSwitcher />
+      </body>
     </html>
   );
 }
