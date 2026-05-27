@@ -2,16 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Dark Luxury (default) */
 :root {
-  --bg:       #06080F;
-  --surface:  #0C1020;
-  --surface2: #121829;
-  --navy:     #1A2B5C;
-  --gold:     #B8891F;
-  --gold-lt:  #D4A840;
-  --cream:    #EDE9DF;
-  --muted:    #5A6580;
-  --border:   #1A2240;
+  --color-bg:       6 8 15;
+  --color-surface:  12 16 32;
+  --color-surface2: 18 24 41;
+  --color-navy:     26 43 92;
+  --color-gold:     184 137 31;
+  --color-gold-lt:  212 168 64;
+  --color-cream:    237 233 223;
+  --color-muted:    90 101 128;
+  --color-border:   26 34 64;
+  --bg:      rgb(var(--color-bg));
+  --surface: rgb(var(--color-surface));
+  --gold:    rgb(var(--color-gold));
+  --gold-lt: rgb(var(--color-gold-lt));
+  --cream:   rgb(var(--color-cream));
+  --muted:   rgb(var(--color-muted));
+  --border:  rgb(var(--color-border));
+}
+
+/* Rustikales Bayern */
+html[data-theme="rustic"] {
+  --color-bg:       15 10 6;
+  --color-surface:  26 16 8;
+  --color-surface2: 38 22 12;
+  --color-navy:     60 32 16;
+  --color-gold:     196 124 28;
+  --color-gold-lt:  218 150 42;
+  --color-cream:    240 228 210;
+  --color-muted:    140 100 70;
+  --color-border:   60 32 16;
+}
+
+/* Modern Hell */
+html[data-theme="light"] {
+  --color-bg:       250 249 247;
+  --color-surface:  244 242 238;
+  --color-surface2: 236 232 226;
+  --color-navy:     220 215 205;
+  --color-gold:     160 110 20;
+  --color-gold-lt:  186 136 30;
+  --color-cream:    28 24 20;
+  --color-muted:    120 112 100;
+  --color-border:   220 215 205;
+}
+
+/* Abendrot */
+html[data-theme="abendrot"] {
+  --color-bg:       20 10 12;
+  --color-surface:  34 14 18;
+  --color-surface2: 50 18 22;
+  --color-navy:     80 20 28;
+  --color-gold:     196 72 60;
+  --color-gold-lt:  220 100 80;
+  --color-cream:    250 238 232;
+  --color-muted:    160 100 92;
+  --color-border:   80 24 28;
 }
 
 html { scroll-behavior: smooth; }
@@ -19,6 +66,7 @@ html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   color: var(--cream);
+  transition: background 0.5s ease, color 0.5s ease;
 }
 
 ::-webkit-scrollbar { width: 4px; }
@@ -30,19 +78,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 
-/* Thin gold rule used in sections */
 .gold-rule {
   display: block;
   width: 32px;
   height: 1px;
   background: var(--gold);
   margin-bottom: 1.5rem;
+  transition: background 0.5s ease;
 }
 
-/* Menu dotted line between name and price */
 .menu-dots {
   flex: 1;
-  border-bottom: 1px dotted rgba(90, 101, 128, 0.35);
+  border-bottom: 1px dotted rgb(var(--color-muted) / 0.35);
   margin: 0 0.75rem;
   margin-bottom: 4px;
 }
