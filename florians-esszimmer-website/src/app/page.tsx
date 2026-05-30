@@ -4,8 +4,9 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Lenis from "@studio-freight/lenis";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import Reviews from "@/components/Reviews";
-import Reservation from "@/components/Reservation";
+import Hours from "@/components/Hours";
 
 // 3D-Szene erst nach dem ersten Paint laden (schneller Start, kein SSR von WebGL)
 const Scene3D = dynamic(() => import("@/components/Scene3D"), { ssr: false });
@@ -35,6 +36,19 @@ const SIGNATURES = [
   { n: "Ente", d: "Klassisch, präzise gegart, ein Gästeliebling." },
   { n: "Scholle", d: "Fisch der Saison, ehrlich und fein." },
   { n: "Schnitzel", d: "Handwerk auf den Punkt, nichts Überflüssiges." },
+];
+
+// Beispielbilder (lizenzfrei, Unsplash) — durch echte Restaurant-Fotos ersetzbar
+const IMG = (id: string, w = 900) =>
+  `https://images.unsplash.com/photo-${id}?w=${w}&q=70&auto=format&fit=crop`;
+
+const KONZEPT_IMG = IMG("1466978913421-dad2ebd01d17", 1200); // Kerzenlicht-Dinner
+
+const GALERIE = [
+  { label: "Der Gastraum", src: IMG("1517248135467-4c7edcad34c4") },
+  { label: "Kerzenlicht", src: IMG("1551218808-94e220e084d2") },
+  { label: "Aus der Küche", src: IMG("1592861956120-e524fc739696") },
+  { label: "Aus der Brennerei", src: IMG("1424847651672-bf20a4b0982b") },
 ];
 
 /* ───────────────────────── Reveal-Helfer ───────────────────────── */
@@ -114,43 +128,49 @@ export default function Page() {
         </motion.div>
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_30%,transparent_40%,rgba(11,9,7,0.9)_100%)]" aria-hidden />
 
-        <motion.div style={{ y: heroTextY }} className="relative z-10 text-center px-6">
+        {/* Vertikales Seiten-Label (editorial) */}
+        <div className="hidden lg:block absolute right-10 top-1/2 -translate-y-1/2 z-10">
+          <span className="block rotate-90 origin-center whitespace-nowrap eyebrow text-muted/70">
+            Est. MMXXV · Lemgo · Lippe
+          </span>
+        </div>
+
+        <motion.div style={{ y: heroTextY }} className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-10">
           <Reveal>
-            <div className="flex items-center justify-center gap-4 mb-7">
-              <span className="h-px w-10 bg-gold/60" />
-              <span className="eyebrow">Lemgo · Mittelstraße 100</span>
-              <span className="h-px w-10 bg-gold/60" />
+            <div className="flex items-center gap-4 mb-8">
+              <span className="h-px w-12 bg-gold/60" />
+              <span className="eyebrow">Mittelstraße 100 · saisonal & regional</span>
             </div>
           </Reveal>
           <Reveal delay={0.1}>
-            <h1 className="font-display font-light leading-[0.95] text-cream text-[clamp(3rem,9vw,7rem)]">
-              Florian's
-              <br />
-              <span className="text-gold italic">Esszimmer</span>
+            <h1 className="font-display font-light leading-[0.82] tracking-[-0.02em] text-cream text-[clamp(3.5rem,13vw,11rem)]">
+              Florian&apos;s
+              <span className="block text-gold italic md:ml-[0.12em]">Esszimmer</span>
             </h1>
           </Reveal>
           <Reveal delay={0.22}>
-            <p className="mt-8 max-w-xl mx-auto text-muted text-lg leading-relaxed font-display">
+            <p className="mt-10 max-w-lg text-muted text-lg md:text-xl leading-relaxed font-display">
               Saisonal. Regional. Bei Kerzenlicht. Ein kleines Haus in der Lemgoer
               Altstadt, ehrliche Küche, begleitet von Spirituosen der eigenen Gutshof-Brennerei.
             </p>
           </Reveal>
           <Reveal delay={0.34}>
-            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="mt-10 flex flex-col sm:flex-row items-start gap-6">
               <a
                 href={`tel:${INFO.telLink}`}
-                className="bg-gold text-bg px-8 py-3.5 text-[0.72rem] uppercase tracking-[0.2em] font-medium hover:bg-gold-lt transition-colors"
+                className="inline-flex items-center gap-3 bg-gold text-bg pl-7 pr-6 py-4 text-[0.72rem] uppercase tracking-[0.18em] font-medium hover:bg-gold-lt transition-colors"
               >
                 Tisch reservieren
+                <span className="font-sans tracking-normal text-sm">{INFO.tel}</span>
               </a>
-              <a href="#kueche" className="text-[0.72rem] uppercase tracking-[0.2em] text-cream/80 border-b border-gold/40 pb-1 hover:text-cream transition-colors">
+              <a href="#kueche" className="self-center text-[0.72rem] uppercase tracking-[0.2em] text-cream/80 border-b border-gold/40 pb-1 hover:text-cream transition-colors">
                 {INFO.rating} ★ · zur Küche
               </a>
             </div>
           </Reveal>
         </motion.div>
 
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted text-[0.6rem] uppercase tracking-[0.3em] animate-pulse">
+        <div className="absolute bottom-8 right-10 text-muted text-[0.6rem] uppercase tracking-[0.3em] animate-pulse">
           scrollen
         </div>
       </section>
@@ -174,6 +194,27 @@ export default function Page() {
             eigenen Haus. Mehr braucht ein guter Abend nicht.
           </p>
         </Reveal>
+      </section>
+
+      {/* ── Feature-Bild (full-bleed) ── */}
+      <section className="relative h-[60vh] md:h-[82vh] overflow-hidden">
+        <Image
+          src={KONZEPT_IMG}
+          alt="Abend bei Kerzenlicht im Florian's Esszimmer"
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/30 to-bg/70" />
+        <div className="absolute inset-0 flex items-end">
+          <div className="mx-auto max-w-6xl w-full px-6 md:px-10 pb-12">
+            <Reveal>
+              <p className="font-display italic text-cream text-[clamp(1.6rem,4.5vw,3.2rem)] leading-tight max-w-3xl">
+                „Ein Tisch, ein Kerzenschein, ein Abend, der bleibt."
+              </p>
+            </Reveal>
+          </div>
+        </div>
       </section>
 
       {/* ── Herkunft / Seit 1284 ── */}
@@ -269,66 +310,79 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ── Galerie (Platzhalter für echte Fotos) ── */}
+      {/* ── Galerie (echte Bilder, ersetzbar durch Restaurant-Fotos) ── */}
       <section className="relative mx-auto max-w-6xl px-6 pb-28 md:pb-40">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {["Kerzenlicht", "Der Gastraum", "Aus der Küche", "Aus der Brennerei"].map((label, i) => (
-            <Reveal key={label} delay={i * 0.08}>
-              <div className="relative aspect-[3/4] overflow-hidden border border-border/60 bg-gradient-to-b from-surface2 to-bg flex items-end">
-                <div className="absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_20%,rgba(198,158,76,0.12),transparent)]" />
-                <span className="relative z-10 p-4 text-[0.62rem] uppercase tracking-[0.2em] text-muted">
-                  {label}
+          {GALERIE.map((g, i) => (
+            <Reveal key={g.label} delay={i * 0.08}>
+              <div className="group relative aspect-[3/4] overflow-hidden border border-border/60">
+                <Image
+                  src={g.src}
+                  alt={g.label}
+                  fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/20 to-transparent" />
+                <span className="absolute bottom-0 left-0 z-10 p-4 text-[0.62rem] uppercase tracking-[0.2em] text-cream">
+                  {g.label}
                 </span>
               </div>
             </Reveal>
           ))}
         </div>
-        <p className="mt-4 text-center text-[0.62rem] uppercase tracking-[0.2em] text-muted/60">
-          Platzhalter, echte Fotos vom Restaurant einsetzen
+        <p className="mt-4 text-center text-[0.62rem] uppercase tracking-[0.2em] text-muted/50">
+          Beispielbilder, durch echte Fotos vom Restaurant ersetzbar
         </p>
       </section>
 
       {/* ── Stimmen (echte Google-Rezensionen) ── */}
       <Reviews />
 
-      {/* ── Reservierung / Kontakt ── */}
+      {/* ── Reservierung (nur telefonisch) & Öffnungszeiten ── */}
       <section id="reservierung" className="relative mx-auto max-w-6xl px-6 py-28 md:py-40 grid md:grid-cols-2 gap-16 items-start">
         <Reveal>
           <div>
             <p className="eyebrow mb-6">Reservierung</p>
-            <h2 className="font-display text-cream text-[clamp(2rem,5vw,3.4rem)] font-light leading-tight">
-              Ein Abend,
+            <h2 className="font-display text-cream text-[clamp(2.2rem,6vw,4rem)] font-light leading-[0.95]">
+              Ein Anruf,
               <br />
-              <span className="text-gold italic">der bleibt.</span>
+              <span className="text-gold italic">ein Tisch.</span>
             </h2>
             <p className="mt-6 text-muted leading-relaxed max-w-md">
-              Wir haben Platz für nur 40 Gäste, Reservierung lohnt sich. Wähl rechts in wenigen
-              Schritten deinen Tisch, wir bestätigen persönlich.
+              Wir haben Platz für nur 40 Gäste. Reservierung läuft bei uns ganz persönlich,
+              ein Anruf genügt.
             </p>
 
-            <div className="mt-10 border-t border-border/60 pt-8">
-              <h3 className="font-display text-gold text-xl mb-5">Öffnungszeiten</h3>
-              <dl className="space-y-2">
-                {INFO.zeiten.map(([tag, zeit]) => (
-                  <div key={tag} className="flex justify-between border-b border-border/40 pb-2 text-sm">
-                    <dt className="text-cream">{tag}</dt>
-                    <dd className="text-muted">{zeit}</dd>
-                  </div>
-                ))}
-              </dl>
-              <div className="mt-6 space-y-1 text-sm">
-                <p className="text-cream">{INFO.strasse}, {INFO.plz}</p>
-                <a href={`tel:${INFO.telLink}`} className="text-muted hover:text-cream transition-colors block">{INFO.tel}</a>
-                <a href={INFO.maps} target="_blank" rel="noopener noreferrer" className="inline-block mt-2 text-gold border-b border-gold/40 hover:text-gold-lt">
-                  Auf der Karte ansehen →
-                </a>
-              </div>
+            <a
+              href={`tel:${INFO.telLink}`}
+              className="group mt-9 block rounded-lg border border-gold/40 hover:border-gold p-7 transition-colors"
+            >
+              <span className="eyebrow text-muted/80">Reservierung nur telefonisch</span>
+              <span className="mt-3 flex items-center gap-4">
+                <span className="text-gold text-3xl leading-none">☎</span>
+                <span className="font-display text-cream text-3xl md:text-[2.6rem] leading-none group-hover:text-gold transition-colors tabular-nums">
+                  {INFO.tel}
+                </span>
+              </span>
+              <span className="mt-4 block text-muted text-sm">
+                Mittwoch bis Sonntag erreichbar. Wir freuen uns auf deinen Anruf.
+              </span>
+            </a>
+
+            <div className="mt-8 space-y-1 text-sm">
+              <p className="text-cream">{INFO.strasse}, {INFO.plz}</p>
+              <a href={INFO.maps} target="_blank" rel="noopener noreferrer" className="inline-block mt-2 text-gold border-b border-gold/40 hover:text-gold-lt">
+                Auf der Karte ansehen →
+              </a>
             </div>
           </div>
         </Reveal>
 
         <Reveal delay={0.15}>
-          <Reservation />
+          <div className="rounded-lg border border-border/70 bg-surface2/40 p-8 md:p-10">
+            <Hours />
+          </div>
         </Reveal>
       </section>
 
