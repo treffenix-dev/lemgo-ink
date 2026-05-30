@@ -33,3 +33,8 @@ florians-esszimmer-website/next-env.d.ts
 florians-esszimmer-website/node_modules/
 florians-esszimmer-website/.next/
 florians-esszimmer-website/tsconfig.tsbuildinfo
+
+# Playwright / Screenshot-Artefakte
+.playwright-mcp/
+florian-hero.png
+florian-full.png
