@@ -62,3 +62,4 @@ gebaut/deployt): **awesome-claude-code**, **superpowers**, **awesome-claude-skil
 - `/design-review` — Award-Niveau-Kritik (Taste/Emil-Skills)
 - `/animate` — Animation nach dem Pflicht-Stack bauen
 - `/ship` — vollständige Pre-Ship-Checkliste
+- `/marketing` — Weltklasse-Marketing-Stratege (Strategie/Creative/Execution)
