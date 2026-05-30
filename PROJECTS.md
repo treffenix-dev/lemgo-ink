@@ -45,6 +45,19 @@ Jedes Projekt hat ein eigenes GitHub Repo, eigenes Vercel Deployment, eigene Cla
 
 ---
 
+### 4. Florian's Esszimmer
+| | |
+|---|---|
+| **Kunde** | Florian Grönnert (Restaurant, saisonal/regional, Lemgo) |
+| **GitHub** | ⚠️ aktuell Unterordner in `3d-animation-webseiten-bauen` → eigenes Repo `treffenix-dev/florians-esszimmer-website` geplant |
+| **Vercel** | noch nicht deployt (Root Directory: `florians-esszimmer-website`) |
+| **Stack** | Next.js 14, Framer Motion, Lenis |
+| **Status** | Demo-Entwurf (Kaltakquise-Pitch) |
+| **Gestartet** | Mai 2026 |
+| **Notizen** | Dark-Elegant/Kerzenlicht, „seit 1284"-Story (Gutshof Brennerei Begatal), SEO + Restaurant-Schema. 4,8★, keine echte Premium-Seite vorhanden |
+
+---
+
 ## NEUE PROJEKTE — HIER EINTRAGEN
 
 Kopiere diese Vorlage für jedes neue Projekt:
