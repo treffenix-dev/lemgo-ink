@@ -3,6 +3,9 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Lenis from "@studio-freight/lenis";
+import Embers from "@/components/Embers";
+import Reviews from "@/components/Reviews";
+import Reservation from "@/components/Reservation";
 
 /* ───────────────────────── Daten (öffentlich recherchiert) ───────────────────────── */
 
@@ -29,12 +32,6 @@ const SIGNATURES = [
   { n: "Ente", d: "Klassisch, präzise gegart — ein Gästeliebling." },
   { n: "Scholle", d: "Fisch der Saison, ehrlich und fein." },
   { n: "Schnitzel", d: "Handwerk auf den Punkt, nichts Überflüssiges." },
-];
-
-const STIMMEN = [
-  { t: "Eines der besten Restaurants in Lemgo!", a: "Marvin P." },
-  { t: "Eine Geschmacksexplosion in diesem urigen Restaurant. Wir sind begeistert!", a: "Silke M." },
-  { t: "Schnuckelig klein, aber fein — das Essen ein Geschmackserlebnis.", a: "Google-Gast" },
 ];
 
 /* ───────────────────────── Reveal-Helfer ───────────────────────── */
@@ -79,7 +76,8 @@ export default function Page() {
   const heroTextY = useTransform(scrollYProgress, [0, 1], [0, 80]);
 
   return (
-    <main className="grain relative overflow-x-hidden">
+    <main className="grain relative z-10 overflow-x-hidden">
+      <Embers />
       {/* ── Navigation ── */}
       <header className="fixed top-0 inset-x-0 z-40">
         <nav className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
@@ -235,6 +233,39 @@ export default function Page() {
         </Reveal>
       </section>
 
+      {/* ── Brennerei-Pairing (Alleinstellungsmerkmal) ── */}
+      <section className="relative border-y border-border/60 bg-surface/40 py-28 md:py-40">
+        <div className="mx-auto max-w-6xl px-6">
+          <Reveal>
+            <div className="text-center mb-16">
+              <p className="eyebrow mb-5">Küche & Brennerei aus einer Hand</p>
+              <h2 className="font-display text-cream text-[clamp(2rem,5vw,3.6rem)] font-light leading-tight">
+                Jeder Gang trifft sein <span className="text-gold italic">Destillat</span>
+              </h2>
+              <p className="mt-4 text-muted max-w-xl mx-auto">
+                Was die Begemanns seit 1284 im Begatal anbauen, brennen wir nebenan — und stellen es
+                an deinen Tisch. Ein Begleiter, den du nirgendwo sonst bekommst.
+              </p>
+            </div>
+          </Reveal>
+          <div className="grid md:grid-cols-3 gap-px bg-border/60 border border-border/60">
+            {[
+              { gang: "Zum Auftakt", spirit: "Be Gin Man", desc: "Hausgin aus 28 regionalen Zutaten — klar, wacholdrig, ein Weckruf für den Gaumen." },
+              { gang: "Zum Hauptgang", spirit: "Obstbrand", desc: "Reife Frucht aus eigenem Anbau, im Fass gereift — wärmt, ohne zu erschlagen." },
+              { gang: "Zum Ausklang", spirit: "Hauslikör", desc: "Süß, samtig, ehrlich. Der ruhige Schlusspunkt eines langen Abends." },
+            ].map((p, i) => (
+              <Reveal key={p.spirit} delay={i * 0.1}>
+                <div className="h-full bg-bg p-8 md:p-10 hover:bg-surface2/60 transition-colors">
+                  <div className="eyebrow mb-4">{p.gang}</div>
+                  <div className="font-display text-gold text-3xl mb-3">{p.spirit}</div>
+                  <p className="text-muted leading-relaxed text-sm">{p.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Galerie (Platzhalter für echte Fotos) ── */}
       <section className="relative mx-auto max-w-6xl px-6 pb-28 md:pb-40">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -254,34 +285,11 @@ export default function Page() {
         </p>
       </section>
 
-      {/* ── Stimmen ── */}
-      <section className="relative bg-surface border-y border-border/60 py-28 md:py-40">
-        <div className="mx-auto max-w-5xl px-6">
-          <Reveal>
-            <div className="text-center mb-16">
-              <div className="font-display text-gold text-5xl">{INFO.rating} ★</div>
-              <p className="eyebrow mt-3">Was Gäste sagen</p>
-            </div>
-          </Reveal>
-          <div className="grid md:grid-cols-3 gap-8">
-            {STIMMEN.map((s, i) => (
-              <Reveal key={s.a} delay={i * 0.12}>
-                <figure className="text-center md:text-left">
-                  <blockquote className="font-display text-cream text-xl leading-relaxed">
-                    „{s.t}"
-                  </blockquote>
-                  <figcaption className="mt-4 text-[0.7rem] uppercase tracking-[0.2em] text-muted">
-                    — {s.a}
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── Stimmen (echte Google-Rezensionen) ── */}
+      <Reviews />
 
       {/* ── Reservierung / Kontakt ── */}
-      <section id="reservierung" className="relative mx-auto max-w-6xl px-6 py-28 md:py-40 grid md:grid-cols-2 gap-16">
+      <section id="reservierung" className="relative mx-auto max-w-6xl px-6 py-28 md:py-40 grid md:grid-cols-2 gap-16 items-start">
         <Reveal>
           <div>
             <p className="eyebrow mb-6">Reservierung</p>
@@ -291,39 +299,33 @@ export default function Page() {
               <span className="text-gold italic">der bleibt.</span>
             </h2>
             <p className="mt-6 text-muted leading-relaxed max-w-md">
-              Wir haben Platz für 40 Gäste — Reservierung lohnt sich. Ruf einfach an oder schreib
-              uns, wir finden den passenden Tisch.
+              Wir haben Platz für nur 40 Gäste — Reservierung lohnt sich. Wähl rechts in wenigen
+              Schritten deinen Tisch, wir bestätigen persönlich.
             </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <a href={`tel:${INFO.telLink}`} className="bg-gold text-bg px-8 py-3.5 text-[0.72rem] uppercase tracking-[0.2em] font-medium hover:bg-gold-lt transition-colors text-center">
-                {INFO.tel}
-              </a>
-              <a href={`mailto:${INFO.mail}`} className="border border-gold/40 text-gold px-8 py-3.5 text-[0.72rem] uppercase tracking-[0.2em] hover:bg-gold hover:text-bg transition-colors text-center">
-                E-Mail schreiben
-              </a>
+
+            <div className="mt-10 border-t border-border/60 pt-8">
+              <h3 className="font-display text-gold text-xl mb-5">Öffnungszeiten</h3>
+              <dl className="space-y-2">
+                {INFO.zeiten.map(([tag, zeit]) => (
+                  <div key={tag} className="flex justify-between border-b border-border/40 pb-2 text-sm">
+                    <dt className="text-cream">{tag}</dt>
+                    <dd className="text-muted">{zeit}</dd>
+                  </div>
+                ))}
+              </dl>
+              <div className="mt-6 space-y-1 text-sm">
+                <p className="text-cream">{INFO.strasse}, {INFO.plz}</p>
+                <a href={`tel:${INFO.telLink}`} className="text-muted hover:text-cream transition-colors block">{INFO.tel}</a>
+                <a href={INFO.maps} target="_blank" rel="noopener noreferrer" className="inline-block mt-2 text-gold border-b border-gold/40 hover:text-gold-lt">
+                  Auf der Karte ansehen →
+                </a>
+              </div>
             </div>
           </div>
         </Reveal>
 
         <Reveal delay={0.15}>
-          <div className="border border-border/70 bg-surface2/50 p-8">
-            <h3 className="font-display text-gold text-2xl mb-6">Öffnungszeiten</h3>
-            <dl className="space-y-3">
-              {INFO.zeiten.map(([tag, zeit]) => (
-                <div key={tag} className="flex justify-between border-b border-border/50 pb-2 text-sm">
-                  <dt className="text-cream">{tag}</dt>
-                  <dd className="text-muted">{zeit}</dd>
-                </div>
-              ))}
-            </dl>
-            <div className="mt-8 space-y-2 text-sm">
-              <p className="text-cream">{INFO.strasse}</p>
-              <p className="text-muted">{INFO.plz}</p>
-              <a href={INFO.maps} target="_blank" rel="noopener noreferrer" className="inline-block mt-2 text-gold border-b border-gold/40 hover:text-gold-lt">
-                Auf der Karte ansehen →
-              </a>
-            </div>
-          </div>
+          <Reservation />
         </Reveal>
       </section>
 
