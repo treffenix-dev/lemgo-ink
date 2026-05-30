@@ -18,9 +18,9 @@ const inter = Inter({
   display: "swap",
 });
 
-const title = "Florian's Esszimmer · Restaurant in Lemgo — saisonal & regional";
+const title = "Florian's Esszimmer · Restaurant in Lemgo, saisonal & regional";
 const description =
-  "Kleines, feines Restaurant in der Lemgoer Altstadt (Mittelstraße 100). Saisonale, regionale Küche bei Kerzenlicht — begleitet von Spirituosen der Gutshof Brennerei Begatal. 4,8★. Reservierung: 01515 2495659.";
+  "Kleines, feines Restaurant in der Lemgoer Altstadt (Mittelstraße 100). Saisonale, regionale Küche bei Kerzenlicht, begleitet von Spirituosen der Gutshof Brennerei Begatal. 4,8★. Reservierung: 01515 2495659.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

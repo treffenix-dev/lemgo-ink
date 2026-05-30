@@ -24,15 +24,15 @@ const INFO = {
   maps: "https://www.google.com/maps/search/?api=1&query=Florians+Esszimmer+Mittelstra%C3%9Fe+100+Lemgo",
   rating: "4,8",
   zeiten: [
-    ["Montag", "17:00 – 22:00"],
+    ["Montag", "17:00 bis 22:00"],
     ["Dienstag", "Ruhetag"],
-    ["Mittwoch – Freitag", "17:00 – 22:00"],
-    ["Samstag & Sonntag", "12:00 – 22:00"],
+    ["Mittwoch bis Freitag", "17:00 bis 22:00"],
+    ["Samstag & Sonntag", "12:00 bis 22:00"],
   ],
 };
 
 const SIGNATURES = [
-  { n: "Ente", d: "Klassisch, präzise gegart — ein Gästeliebling." },
+  { n: "Ente", d: "Klassisch, präzise gegart, ein Gästeliebling." },
   { n: "Scholle", d: "Fisch der Saison, ehrlich und fein." },
   { n: "Schnitzel", d: "Handwerk auf den Punkt, nichts Überflüssiges." },
 ];
@@ -132,7 +132,7 @@ export default function Page() {
           <Reveal delay={0.22}>
             <p className="mt-8 max-w-xl mx-auto text-muted text-lg leading-relaxed font-display">
               Saisonal. Regional. Bei Kerzenlicht. Ein kleines Haus in der Lemgoer
-              Altstadt — ehrliche Küche, begleitet von Spirituosen der eigenen Gutshof-Brennerei.
+              Altstadt, ehrliche Küche, begleitet von Spirituosen der eigenen Gutshof-Brennerei.
             </p>
           </Reveal>
           <Reveal delay={0.34}>
@@ -162,14 +162,14 @@ export default function Page() {
         </Reveal>
         <Reveal delay={0.1}>
           <p className="font-display text-cream text-[clamp(1.6rem,4vw,2.8rem)] leading-[1.3]">
-            „Erdig, doch überraschend." Eine Karte, die mit der Saison wechselt —
+            „Erdig, doch überraschend." Eine Karte, die mit der Saison wechselt,
             <span className="text-gold"> regional eingekauft, frisch gedacht</span>,
             in einem Raum für nur 40 Gäste.
           </p>
         </Reveal>
         <Reveal delay={0.2}>
           <p className="mt-8 text-muted leading-relaxed max-w-2xl mx-auto">
-            Küchenchef Florian Grönnert kocht, was die Region hergibt — nichts liegt herum,
+            Küchenchef Florian Grönnert kocht, was die Region hergibt, nichts liegt herum,
             nichts ist beliebig. Dazu Kerzenlicht, ein paar gute Weine und Brände aus dem
             eigenen Haus. Mehr braucht ein guter Abend nicht.
           </p>
@@ -189,13 +189,13 @@ export default function Page() {
           <Reveal delay={0.15}>
             <div className="text-muted leading-relaxed space-y-5">
               <p>
-                Hinter dem Esszimmer steht die <span className="text-cream">Gutshof Brennerei Begatal</span> —
+                Hinter dem Esszimmer steht die <span className="text-cream">Gutshof Brennerei Begatal</span>,
                 die Familie Begemann bewirtschaftet das Begatal seit dem Jahr 1284. In einer
                 sanierten Fachwerkscheune entstehen feine Destillate aus regionalen Zutaten.
               </p>
               <p>
                 Diese Herkunft schmeckt man: Hausgebrannter Gin, Obstbrände und Liköre begleiten
-                das Menü — Küche und Brennerei aus einer Hand. Ein Stück Lippe auf dem Teller
+                das Menü, Küche und Brennerei aus einer Hand. Ein Stück Lippe auf dem Teller
                 und im Glas.
               </p>
             </div>
@@ -212,7 +212,7 @@ export default function Page() {
               Was unsere Gäste lieben
             </h2>
             <p className="mt-4 text-muted text-sm">
-              Die Karte wechselt mit der Saison — diese Klassiker kommen immer wieder gut an.
+              Die Karte wechselt mit der Saison, diese Klassiker kommen immer wieder gut an.
             </p>
           </div>
         </Reveal>
@@ -246,15 +246,15 @@ export default function Page() {
                 Jeder Gang trifft sein <span className="text-gold italic">Destillat</span>
               </h2>
               <p className="mt-4 text-muted max-w-xl mx-auto">
-                Was die Begemanns seit 1284 im Begatal anbauen, brennen wir nebenan — und stellen es
+                Was die Begemanns seit 1284 im Begatal anbauen, brennen wir nebenan, und stellen es
                 an deinen Tisch. Ein Begleiter, den du nirgendwo sonst bekommst.
               </p>
             </div>
           </Reveal>
           <div className="grid md:grid-cols-3 gap-px bg-border/60 border border-border/60">
             {[
-              { gang: "Zum Auftakt", spirit: "Be Gin Man", desc: "Hausgin aus 28 regionalen Zutaten — klar, wacholdrig, ein Weckruf für den Gaumen." },
-              { gang: "Zum Hauptgang", spirit: "Obstbrand", desc: "Reife Frucht aus eigenem Anbau, im Fass gereift — wärmt, ohne zu erschlagen." },
+              { gang: "Zum Auftakt", spirit: "Be Gin Man", desc: "Hausgin aus 28 regionalen Zutaten, klar, wacholdrig, ein Weckruf für den Gaumen." },
+              { gang: "Zum Hauptgang", spirit: "Obstbrand", desc: "Reife Frucht aus eigenem Anbau, im Fass gereift, wärmt, ohne zu erschlagen." },
               { gang: "Zum Ausklang", spirit: "Hauslikör", desc: "Süß, samtig, ehrlich. Der ruhige Schlusspunkt eines langen Abends." },
             ].map((p, i) => (
               <Reveal key={p.spirit} delay={i * 0.1}>
@@ -284,7 +284,7 @@ export default function Page() {
           ))}
         </div>
         <p className="mt-4 text-center text-[0.62rem] uppercase tracking-[0.2em] text-muted/60">
-          Platzhalter — echte Fotos vom Restaurant einsetzen
+          Platzhalter, echte Fotos vom Restaurant einsetzen
         </p>
       </section>
 
@@ -302,7 +302,7 @@ export default function Page() {
               <span className="text-gold italic">der bleibt.</span>
             </h2>
             <p className="mt-6 text-muted leading-relaxed max-w-md">
-              Wir haben Platz für nur 40 Gäste — Reservierung lohnt sich. Wähl rechts in wenigen
+              Wir haben Platz für nur 40 Gäste, Reservierung lohnt sich. Wähl rechts in wenigen
               Schritten deinen Tisch, wir bestätigen persönlich.
             </p>
 

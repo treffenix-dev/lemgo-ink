@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 /**
  * Echte Google-Rezensionen (Originaltexte) im Google-Look.
  * Für LIVE / automatisch aktualisierte Reviews: Google Places API (Place Details)
- * mit API-Key + place_id anbinden — dann hier per fetch ersetzen.
+ * mit API-Key + place_id anbinden, dann hier per fetch ersetzen.
  */
 
 const PLACE_URL =
@@ -37,7 +37,7 @@ const REVIEWS = [
     color: "#00897B",
     when: "vor 5 Monaten",
     stars: 5,
-    text: "Schnuckelig klein, aber feines Restaurant. Tolles und freundliches Personal — und das Essen ein echtes Geschmackserlebnis.",
+    text: "Schnuckelig klein, aber feines Restaurant. Tolles und freundliches Personal, und das Essen ein echtes Geschmackserlebnis.",
   },
 ];
 

@@ -145,10 +145,10 @@ export default function Reservation() {
                   className="w-full bg-bg border border-border rounded-md px-4 py-3 text-cream focus:border-gold outline-none placeholder:text-muted/50"
                 />
                 <div className="mt-6 rounded-md border border-border/60 bg-bg/50 p-4 text-sm text-muted">
-                  {s.personen} {s.personen === 1 ? "Person" : "Personen"} · {s.datum || "—"} · {s.uhrzeit || "—"} Uhr
+                  {s.personen} {s.personen === 1 ? "Person" : "Personen"} · {s.datum || "…"} · {s.uhrzeit || "…"} Uhr
                 </div>
                 {status === "error" && (
-                  <p className="mt-3 text-sm text-[#DC6450]">Etwas ist schiefgelaufen — bitte erneut versuchen oder anrufen.</p>
+                  <p className="mt-3 text-sm text-[#DC6450]">Etwas ist schiefgelaufen, bitte erneut versuchen oder anrufen.</p>
                 )}
               </div>
             )}
