@@ -8,18 +8,16 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ["var(--font-cormorant)", "Georgia", "serif"],
+        display: ["var(--font-anton)", "Impact", "sans-serif"],
         sans: ["var(--font-inter)", "sans-serif"],
       },
       colors: {
-        bg: "rgb(var(--color-bg) / <alpha-value>)",
-        surface: "rgb(var(--color-surface) / <alpha-value>)",
-        surface2: "rgb(var(--color-surface2) / <alpha-value>)",
-        gold: "rgb(var(--color-gold) / <alpha-value>)",
-        "gold-lt": "rgb(var(--color-gold-lt) / <alpha-value>)",
-        cream: "rgb(var(--color-cream) / <alpha-value>)",
+        paper: "rgb(var(--color-paper) / <alpha-value>)",
+        ink: "rgb(var(--color-ink) / <alpha-value>)",
+        red: "rgb(var(--color-red) / <alpha-value>)",
         muted: "rgb(var(--color-muted) / <alpha-value>)",
-        border: "rgb(var(--color-border) / <alpha-value>)",
+        line: "rgb(var(--color-line) / <alpha-value>)",
+        panel: "rgb(var(--color-panel) / <alpha-value>)",
       },
     },
   },

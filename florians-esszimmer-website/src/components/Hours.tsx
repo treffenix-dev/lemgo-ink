@@ -2,17 +2,11 @@
 
 import { useEffect, useState } from "react";
 
-/**
- * Öffnungszeiten pro Wochentag, mit Hervorhebung des heutigen Tages
- * und Live-Status „jetzt geöffnet / geschlossen".
- * Heute/Status werden erst nach dem Mount gesetzt (keine Hydration-Mismatch).
- */
-
 type Day = { key: number; label: string; open?: string; close?: string };
 
 const SCHEDULE: Day[] = [
   { key: 1, label: "Montag", open: "17:00", close: "22:00" },
-  { key: 2, label: "Dienstag" }, // Ruhetag
+  { key: 2, label: "Dienstag" },
   { key: 3, label: "Mittwoch", open: "17:00", close: "22:00" },
   { key: 4, label: "Donnerstag", open: "17:00", close: "22:00" },
   { key: 5, label: "Freitag", open: "17:00", close: "22:00" },
@@ -42,39 +36,35 @@ export default function Hours() {
 
   return (
     <div>
-      <div className="flex items-baseline justify-between mb-7">
-        <h3 className="font-display text-cream text-3xl">Öffnungszeiten</h3>
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="font-display uppercase text-ink text-3xl md:text-4xl">Öffnungszeiten</h3>
         {today !== null && (
           <span
-            className={`text-[0.62rem] uppercase tracking-[0.18em] px-3 py-1.5 rounded-full border ${
-              openNow ? "border-gold text-gold" : "border-border text-muted"
+            className={`label px-3 py-1.5 border-2 ${
+              openNow ? "border-red text-red" : "border-ink/40 text-muted"
             }`}
           >
-            <span className={`inline-block w-1.5 h-1.5 rounded-full mr-2 align-middle ${openNow ? "bg-gold" : "bg-muted"}`} />
-            {openNow ? "Jetzt geöffnet" : "Gerade geschlossen"}
+            {openNow ? "● Jetzt geöffnet" : "● Geschlossen"}
           </span>
         )}
       </div>
 
-      <ul>
+      <ul className="border-t-2 border-ink">
         {SCHEDULE.map((d) => {
           const isToday = today === d.key;
           const closed = !d.open;
           return (
             <li
               key={d.label}
-              className={`flex items-center justify-between py-3.5 border-b transition-colors ${
-                isToday ? "border-gold/40" : "border-border/40"
-              }`}
+              className={`flex items-center justify-between py-3.5 border-b border-line ${isToday ? "bg-red text-paper px-3 -mx-3" : ""}`}
             >
               <span className="flex items-center gap-3">
-                {isToday && <span className="w-1 h-4 bg-gold rounded-full" aria-hidden />}
-                <span className={`font-display text-lg ${isToday ? "text-gold" : "text-cream"}`}>
+                <span className={`font-display uppercase text-xl ${isToday ? "text-paper" : "text-ink"}`}>
                   {d.label}
                 </span>
-                {isToday && <span className="text-[0.55rem] uppercase tracking-[0.2em] text-gold/70">heute</span>}
+                {isToday && <span className="label text-paper/80">heute</span>}
               </span>
-              <span className={`tabular-nums text-sm ${closed ? "text-muted/60 italic" : isToday ? "text-cream" : "text-muted"}`}>
+              <span className={`tabular-nums text-sm ${isToday ? "text-paper" : closed ? "text-muted italic" : "text-ink"}`}>
                 {closed ? "Ruhetag" : `${d.open} bis ${d.close} Uhr`}
               </span>
             </li>
