@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Kerzenlicht / Dark-Elegant Palette */
+  --color-bg: 11 9 7;        /* #0B0907 — warmes Fast-Schwarz */
+  --color-surface: 20 16 12; /* #14100C */
+  --color-surface2: 30 24 17;/* #1E1811 */
+  --color-gold: 198 158 76;  /* #C69E4C — Kerzen-Gold */
+  --color-gold-lt: 233 203 130; /* #E9CB82 */
+  --color-cream: 238 230 215;/* #EEE6D7 */
+  --color-muted: 140 128 110;/* #8C806E */
+  --color-border: 58 48 36;  /* #3A3024 */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: rgb(var(--color-bg));
+  color: rgb(var(--color-cream));
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Warmer Film-Grain-/Vignette-Layer für die Kerzenlicht-Stimmung */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  background:
+    radial-gradient(120% 80% at 50% 0%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+  mix-blend-mode: multiply;
+}
+
+::selection {
+  background: rgb(var(--color-gold) / 0.3);
+  color: rgb(var(--color-cream));
+}
+
+/* Reduced motion respektieren */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+.eyebrow {
+  font-family: var(--font-inter);
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  font-size: 0.66rem;
+  color: rgb(var(--color-gold));
+}

@@ -29,3 +29,7 @@ agentur-portal/next-env.d.ts
 agentur-portal/node_modules/
 agentur-portal/.next/
 agentur-portal/tsconfig.tsbuildinfo
+florians-esszimmer-website/next-env.d.ts
+florians-esszimmer-website/node_modules/
+florians-esszimmer-website/.next/
+florians-esszimmer-website/tsconfig.tsbuildinfo

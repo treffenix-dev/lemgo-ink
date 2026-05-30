@@ -1,0 +1,348 @@
+"use client";
+
+import { useEffect, useRef, type ReactNode } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import Lenis from "@studio-freight/lenis";
+
+/* ───────────────────────── Daten (öffentlich recherchiert) ───────────────────────── */
+
+const INFO = {
+  name: "Florian's Esszimmer",
+  ort: "Lemgo",
+  strasse: "Mittelstraße 100",
+  plz: "32657 Lemgo",
+  tel: "01515 2495659",
+  telLink: "+4915152495659",
+  mail: "florians-esszimmer@web.de",
+  instagram: "https://www.instagram.com/florians_esszimmer_/",
+  maps: "https://www.google.com/maps/search/?api=1&query=Florians+Esszimmer+Mittelstra%C3%9Fe+100+Lemgo",
+  rating: "4,8",
+  zeiten: [
+    ["Montag", "17:00 – 22:00"],
+    ["Dienstag", "Ruhetag"],
+    ["Mittwoch – Freitag", "17:00 – 22:00"],
+    ["Samstag & Sonntag", "12:00 – 22:00"],
+  ],
+};
+
+const SIGNATURES = [
+  { n: "Ente", d: "Klassisch, präzise gegart — ein Gästeliebling." },
+  { n: "Scholle", d: "Fisch der Saison, ehrlich und fein." },
+  { n: "Schnitzel", d: "Handwerk auf den Punkt, nichts Überflüssiges." },
+];
+
+const STIMMEN = [
+  { t: "Eines der besten Restaurants in Lemgo!", a: "Marvin P." },
+  { t: "Eine Geschmacksexplosion in diesem urigen Restaurant. Wir sind begeistert!", a: "Silke M." },
+  { t: "Schnuckelig klein, aber fein — das Essen ein Geschmackserlebnis.", a: "Google-Gast" },
+];
+
+/* ───────────────────────── Reveal-Helfer ───────────────────────── */
+
+function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ───────────────────────── Seite ───────────────────────── */
+
+export default function Page() {
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  // Lenis Smooth-Scroll (SSR-sicher, mit Cleanup)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+    let id = requestAnimationFrame(function raf(time) {
+      lenis.raf(time);
+      id = requestAnimationFrame(raf);
+    });
+    return () => {
+      cancelAnimationFrame(id);
+      lenis.destroy();
+    };
+  }, []);
+
+  // Sanfter Parallax für den Kerzen-Glow im Hero
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const glowY = useTransform(scrollYProgress, [0, 1], [0, 160]);
+  const heroTextY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+
+  return (
+    <main className="grain relative overflow-x-hidden">
+      {/* ── Navigation ── */}
+      <header className="fixed top-0 inset-x-0 z-40">
+        <nav className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
+          <a href="#top" className="font-display text-xl tracking-wide text-cream">
+            Florian's <span className="text-gold italic">Esszimmer</span>
+          </a>
+          <div className="hidden md:flex items-center gap-8 text-[0.72rem] uppercase tracking-[0.2em] text-muted">
+            <a href="#konzept" className="hover:text-cream transition-colors">Konzept</a>
+            <a href="#herkunft" className="hover:text-cream transition-colors">Herkunft</a>
+            <a href="#kueche" className="hover:text-cream transition-colors">Küche</a>
+            <a href="#reservierung" className="hover:text-cream transition-colors">Reservierung</a>
+          </div>
+          <a
+            href={`tel:${INFO.telLink}`}
+            className="text-[0.7rem] uppercase tracking-[0.18em] border border-gold/40 text-gold px-4 py-2 hover:bg-gold hover:text-bg transition-colors"
+          >
+            Tisch reservieren
+          </a>
+        </nav>
+      </header>
+
+      {/* ── Hero ── */}
+      <section id="top" ref={heroRef} className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
+        {/* Kerzenlicht-Glow */}
+        <motion.div
+          style={{ y: glowY }}
+          className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[70vh] w-[70vh] rounded-full"
+          aria-hidden
+        >
+          <div className="h-full w-full rounded-full bg-gold/20 blur-[120px]" />
+        </motion.div>
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_30%,transparent_40%,rgba(11,9,7,0.9)_100%)]" aria-hidden />
+
+        <motion.div style={{ y: heroTextY }} className="relative z-10 text-center px-6">
+          <Reveal>
+            <div className="flex items-center justify-center gap-4 mb-7">
+              <span className="h-px w-10 bg-gold/60" />
+              <span className="eyebrow">Lemgo · Mittelstraße 100</span>
+              <span className="h-px w-10 bg-gold/60" />
+            </div>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h1 className="font-display font-light leading-[0.95] text-cream text-[clamp(3rem,9vw,7rem)]">
+              Florian's
+              <br />
+              <span className="text-gold italic">Esszimmer</span>
+            </h1>
+          </Reveal>
+          <Reveal delay={0.22}>
+            <p className="mt-8 max-w-xl mx-auto text-muted text-lg leading-relaxed font-display">
+              Saisonal. Regional. Bei Kerzenlicht. Ein kleines Haus in der Lemgoer
+              Altstadt — ehrliche Küche, begleitet von Spirituosen der eigenen Gutshof-Brennerei.
+            </p>
+          </Reveal>
+          <Reveal delay={0.34}>
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href={`tel:${INFO.telLink}`}
+                className="bg-gold text-bg px-8 py-3.5 text-[0.72rem] uppercase tracking-[0.2em] font-medium hover:bg-gold-lt transition-colors"
+              >
+                Tisch reservieren
+              </a>
+              <a href="#kueche" className="text-[0.72rem] uppercase tracking-[0.2em] text-cream/80 border-b border-gold/40 pb-1 hover:text-cream transition-colors">
+                {INFO.rating} ★ · zur Küche
+              </a>
+            </div>
+          </Reveal>
+        </motion.div>
+
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted text-[0.6rem] uppercase tracking-[0.3em] animate-pulse">
+          scrollen
+        </div>
+      </section>
+
+      {/* ── Konzept ── */}
+      <section id="konzept" className="relative mx-auto max-w-4xl px-6 py-32 md:py-44 text-center">
+        <Reveal>
+          <p className="eyebrow mb-6">Das Konzept</p>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <p className="font-display text-cream text-[clamp(1.6rem,4vw,2.8rem)] leading-[1.3]">
+            „Erdig, doch überraschend." Eine Karte, die mit der Saison wechselt —
+            <span className="text-gold"> regional eingekauft, frisch gedacht</span>,
+            in einem Raum für nur 40 Gäste.
+          </p>
+        </Reveal>
+        <Reveal delay={0.2}>
+          <p className="mt-8 text-muted leading-relaxed max-w-2xl mx-auto">
+            Küchenchef Florian Grönnert kocht, was die Region hergibt — nichts liegt herum,
+            nichts ist beliebig. Dazu Kerzenlicht, ein paar gute Weine und Brände aus dem
+            eigenen Haus. Mehr braucht ein guter Abend nicht.
+          </p>
+        </Reveal>
+      </section>
+
+      {/* ── Herkunft / Seit 1284 ── */}
+      <section id="herkunft" className="relative bg-surface border-y border-border/60">
+        <div className="mx-auto max-w-6xl px-6 py-28 md:py-40 grid md:grid-cols-2 gap-16 items-center">
+          <Reveal>
+            <div>
+              <p className="eyebrow mb-6">Herkunft</p>
+              <div className="font-display text-gold leading-none text-[clamp(4rem,12vw,9rem)]">1284</div>
+              <p className="mt-4 text-cream font-display text-2xl">Begatal. Seit über 700 Jahren.</p>
+            </div>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <div className="text-muted leading-relaxed space-y-5">
+              <p>
+                Hinter dem Esszimmer steht die <span className="text-cream">Gutshof Brennerei Begatal</span> —
+                die Familie Begemann bewirtschaftet das Begatal seit dem Jahr 1284. In einer
+                sanierten Fachwerkscheune entstehen feine Destillate aus regionalen Zutaten.
+              </p>
+              <p>
+                Diese Herkunft schmeckt man: Hausgebrannter Gin, Obstbrände und Liköre begleiten
+                das Menü — Küche und Brennerei aus einer Hand. Ein Stück Lippe auf dem Teller
+                und im Glas.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Küche / Signatures ── */}
+      <section id="kueche" className="relative mx-auto max-w-6xl px-6 py-28 md:py-40">
+        <Reveal>
+          <div className="text-center mb-16">
+            <p className="eyebrow mb-5">Die Küche</p>
+            <h2 className="font-display text-cream text-[clamp(2rem,5vw,3.4rem)] font-light">
+              Was unsere Gäste lieben
+            </h2>
+            <p className="mt-4 text-muted text-sm">
+              Die Karte wechselt mit der Saison — diese Klassiker kommen immer wieder gut an.
+            </p>
+          </div>
+        </Reveal>
+        <div className="grid md:grid-cols-3 gap-6">
+          {SIGNATURES.map((s, i) => (
+            <Reveal key={s.n} delay={i * 0.1}>
+              <div className="h-full border border-border/70 bg-surface2/60 p-8 hover:border-gold/40 transition-colors">
+                <div className="font-display text-gold text-3xl mb-3">{s.n}</div>
+                <p className="text-muted leading-relaxed">{s.d}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal delay={0.2}>
+          <p className="mt-12 text-center text-muted text-sm">
+            4-Gang-Menü & Candle-Light-Dinner auf Anfrage ·{" "}
+            <a href={`tel:${INFO.telLink}`} className="text-gold border-b border-gold/40 hover:text-gold-lt">
+              Tisch reservieren
+            </a>
+          </p>
+        </Reveal>
+      </section>
+
+      {/* ── Galerie (Platzhalter für echte Fotos) ── */}
+      <section className="relative mx-auto max-w-6xl px-6 pb-28 md:pb-40">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {["Kerzenlicht", "Der Gastraum", "Aus der Küche", "Aus der Brennerei"].map((label, i) => (
+            <Reveal key={label} delay={i * 0.08}>
+              <div className="relative aspect-[3/4] overflow-hidden border border-border/60 bg-gradient-to-b from-surface2 to-bg flex items-end">
+                <div className="absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_20%,rgba(198,158,76,0.12),transparent)]" />
+                <span className="relative z-10 p-4 text-[0.62rem] uppercase tracking-[0.2em] text-muted">
+                  {label}
+                </span>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <p className="mt-4 text-center text-[0.62rem] uppercase tracking-[0.2em] text-muted/60">
+          Platzhalter — echte Fotos vom Restaurant einsetzen
+        </p>
+      </section>
+
+      {/* ── Stimmen ── */}
+      <section className="relative bg-surface border-y border-border/60 py-28 md:py-40">
+        <div className="mx-auto max-w-5xl px-6">
+          <Reveal>
+            <div className="text-center mb-16">
+              <div className="font-display text-gold text-5xl">{INFO.rating} ★</div>
+              <p className="eyebrow mt-3">Was Gäste sagen</p>
+            </div>
+          </Reveal>
+          <div className="grid md:grid-cols-3 gap-8">
+            {STIMMEN.map((s, i) => (
+              <Reveal key={s.a} delay={i * 0.12}>
+                <figure className="text-center md:text-left">
+                  <blockquote className="font-display text-cream text-xl leading-relaxed">
+                    „{s.t}"
+                  </blockquote>
+                  <figcaption className="mt-4 text-[0.7rem] uppercase tracking-[0.2em] text-muted">
+                    — {s.a}
+                  </figcaption>
+                </figure>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Reservierung / Kontakt ── */}
+      <section id="reservierung" className="relative mx-auto max-w-6xl px-6 py-28 md:py-40 grid md:grid-cols-2 gap-16">
+        <Reveal>
+          <div>
+            <p className="eyebrow mb-6">Reservierung</p>
+            <h2 className="font-display text-cream text-[clamp(2rem,5vw,3.4rem)] font-light leading-tight">
+              Ein Abend,
+              <br />
+              <span className="text-gold italic">der bleibt.</span>
+            </h2>
+            <p className="mt-6 text-muted leading-relaxed max-w-md">
+              Wir haben Platz für 40 Gäste — Reservierung lohnt sich. Ruf einfach an oder schreib
+              uns, wir finden den passenden Tisch.
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+              <a href={`tel:${INFO.telLink}`} className="bg-gold text-bg px-8 py-3.5 text-[0.72rem] uppercase tracking-[0.2em] font-medium hover:bg-gold-lt transition-colors text-center">
+                {INFO.tel}
+              </a>
+              <a href={`mailto:${INFO.mail}`} className="border border-gold/40 text-gold px-8 py-3.5 text-[0.72rem] uppercase tracking-[0.2em] hover:bg-gold hover:text-bg transition-colors text-center">
+                E-Mail schreiben
+              </a>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.15}>
+          <div className="border border-border/70 bg-surface2/50 p-8">
+            <h3 className="font-display text-gold text-2xl mb-6">Öffnungszeiten</h3>
+            <dl className="space-y-3">
+              {INFO.zeiten.map(([tag, zeit]) => (
+                <div key={tag} className="flex justify-between border-b border-border/50 pb-2 text-sm">
+                  <dt className="text-cream">{tag}</dt>
+                  <dd className="text-muted">{zeit}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="mt-8 space-y-2 text-sm">
+              <p className="text-cream">{INFO.strasse}</p>
+              <p className="text-muted">{INFO.plz}</p>
+              <a href={INFO.maps} target="_blank" rel="noopener noreferrer" className="inline-block mt-2 text-gold border-b border-gold/40 hover:text-gold-lt">
+                Auf der Karte ansehen →
+              </a>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* ── Footer ── */}
+      <footer className="border-t border-border/60 py-12">
+        <div className="mx-auto max-w-6xl px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="font-display text-lg text-cream">
+            Florian's <span className="text-gold italic">Esszimmer</span>
+          </div>
+          <div className="flex items-center gap-6 text-[0.68rem] uppercase tracking-[0.18em] text-muted">
+            <a href={`tel:${INFO.telLink}`} className="hover:text-cream transition-colors">{INFO.tel}</a>
+            <a href={INFO.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-cream transition-colors">Instagram</a>
+            <span>{INFO.plz}</span>
+          </div>
+        </div>
+        <p className="mt-8 text-center text-[0.58rem] uppercase tracking-[0.25em] text-muted/50">
+          Entwurf · unverbindliche Design-Vorschau
+        </p>
+      </footer>
+    </main>
+  );
+}
