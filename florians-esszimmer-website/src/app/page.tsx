@@ -3,9 +3,12 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Lenis from "@studio-freight/lenis";
-import Embers from "@/components/Embers";
+import dynamic from "next/dynamic";
 import Reviews from "@/components/Reviews";
 import Reservation from "@/components/Reservation";
+
+// 3D-Szene erst nach dem ersten Paint laden (schneller Start, kein SSR von WebGL)
+const Scene3D = dynamic(() => import("@/components/Scene3D"), { ssr: false });
 
 /* ───────────────────────── Daten (öffentlich recherchiert) ───────────────────────── */
 
@@ -77,7 +80,7 @@ export default function Page() {
 
   return (
     <main className="grain relative z-10 overflow-x-hidden">
-      <Embers />
+      <Scene3D />
       {/* ── Navigation ── */}
       <header className="fixed top-0 inset-x-0 z-40">
         <nav className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
