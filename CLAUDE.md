@@ -49,3 +49,10 @@ Keine AI-Slop-Komponenten! Jede Entscheidung muss diesen Stack reflektieren.
 - **Niemals blind deployen:** Erst `npm run build` lokal ausführen.
 - **Fehler lokal lösen:** Erst wenn Build fehlerfrei → dann Vercel.
 - **Token-Bremse:** Nach 2 fehlgeschlagenen Versuchen STOPP — Benutzer fragen.
+
+## 📚 Ressourcen-Bibliothek (awesome-claude-code)
+
+Das komplette Repo [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code)
+ist unter `vendor/awesome-claude-code/` eingebunden — Slash-Commands, Hooks,
+Skills, Workflows und CLAUDE.md-Vorlagen als Referenz. Details & Update-Anleitung
+siehe `vendor/README.md`. Wird **nicht** vom Build kompiliert/ausgeliefert.
