@@ -63,3 +63,9 @@ gebaut/deployt): **awesome-claude-code**, **superpowers**, **awesome-claude-skil
 - `/animate` — Animation nach dem Pflicht-Stack bauen
 - `/ship` — vollständige Pre-Ship-Checkliste
 - `/marketing` — Weltklasse-Marketing-Stratege (Strategie/Creative/Execution)
+- `/recherche` — Pipeline Phase 1: Wettbewerb & Markt analysieren
+- `/referenz` — Pipeline Phase 2: Referenz → originales, besseres Konzept
+- `/pitch` — Pipeline Phase 5: fertige Seite verkaufsfertig präsentieren
+
+### Agentur-Pipeline
+Fester 5-Phasen-Ablauf für jeden Kundenauftrag: siehe `AGENCY-PIPELINE.md`.
