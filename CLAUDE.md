@@ -50,9 +50,15 @@ Keine AI-Slop-Komponenten! Jede Entscheidung muss diesen Stack reflektieren.
 - **Fehler lokal lösen:** Erst wenn Build fehlerfrei → dann Vercel.
 - **Token-Bremse:** Nach 2 fehlgeschlagenen Versuchen STOPP — Benutzer fragen.
 
-## 📚 Ressourcen-Bibliothek (awesome-claude-code)
+## 📚 Ressourcen-Bibliothek (vendor/)
 
-Das komplette Repo [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code)
-ist unter `vendor/awesome-claude-code/` eingebunden — Slash-Commands, Hooks,
-Skills, Workflows und CLAUDE.md-Vorlagen als Referenz. Details & Update-Anleitung
-siehe `vendor/README.md`. Wird **nicht** vom Build kompiliert/ausgeliefert.
+Fünf komplette Claude-Code-Repos sind unter `vendor/` eingebunden (Referenz, nicht
+gebaut/deployt): **awesome-claude-code**, **superpowers**, **awesome-claude-skills**,
+**AI-Projects-Index**, **ECC**. Übersicht & Update-Anleitung: `vendor/README.md`.
+
+### Aktive Slash-Commands (`.claude/commands/`)
+- `/build-check` — lokaler Build-Gate (Deployment-Gesetz)
+- `/deploy` — gegateter Vercel-Deploy
+- `/design-review` — Award-Niveau-Kritik (Taste/Emil-Skills)
+- `/animate` — Animation nach dem Pflicht-Stack bauen
+- `/ship` — vollständige Pre-Ship-Checkliste
